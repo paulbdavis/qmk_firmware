@@ -10,9 +10,10 @@ extern keymap_config_t keymap_config;
 // entirely and just use numbers.
 #define _QWERTY 0
 #define _COLEMAK 1
-#define _LOWER 3
-#define _RAISE 4
-#define _ADJUST 16
+#define _EMACS 3
+#define _LOWER 10
+#define _RAISE 11
+#define _ADJUST 30
 
 enum custom_keycodes {
   QWERTY = SAFE_RANGE,
@@ -20,6 +21,10 @@ enum custom_keycodes {
   LOWER,
   RAISE,
   ADJUST,
+  EMACS_WIN_1,
+  EMACS_WIN_2,
+  EMACS_WIN_3,
+  EMACS_WIN_4
 };
 
 enum  {
@@ -29,46 +34,55 @@ enum  {
 
 void dance_super_finished (qk_tap_dance_state_t *state, void *user_data) {
   if (state->count == 1) {
-    register_code (OSM(KC_LGUI));
+    register_code (KC_LGUI);
   } else {
     layer_on(_RAISE);
-    register_code (OSM(KC_LGUI));
+    register_code (KC_LGUI);
   }
 }
 
 void dance_super_reset (qk_tap_dance_state_t *state, void *user_data) {
   if (state->count == 1) {
-    unregister_code (OSM(KC_LGUI));
+    unregister_code (KC_LGUI);
   } else {
     layer_off(_RAISE);
-    unregister_code (OSC(KC_LGUI));
+    unregister_code (KC_LGUI);
   }
 }
 
 void dance_mod_builder_finished (qk_tap_dance_state_t *state, void *user_data) {
-    register_code (KC_LCTRL);
-    if (state->count >= 1) {
-      register_code (KC_LALT);
-    }
-    if (state->count >= 2) {
-      register_code (KC_LGUI);
-    }
-    if (state->count >= 3) {
-      register_code (KC_LSHIFT);
-    }
+  // 5 taps goes to adjustment layer
+  if (state->count == 5) {
+    layer_on(_ADJUST);
+    return;
+  }
+  register_code (KC_LCTRL);
+  if (state->count >= 1) {
+    register_code (KC_LALT);
+  }
+  if (state->count >= 2) {
+    register_code (KC_LGUI);
+  }
+  if (state->count >= 3) {
+    register_code (KC_LSHIFT);
+  }
 }
 
 void dance_mod_builder_reset (qk_tap_dance_state_t *state, void *user_data) {
-    unregister_code (KC_LCTRL);
-    if (state->count >= 1) {
-      unregister_code (KC_LALT);
-    }
-    if (state->count >= 2) {
-      unregister_code (KC_LGUI);
-    }
-    if (state->count >= 3) {
-      unregister_code (KC_LSHIFT);
-    }
+  if (state->count == 5) {
+    layer_off(_ADJUST);
+    return;
+  }
+  unregister_code (KC_LCTRL);
+  if (state->count >= 1) {
+    unregister_code (KC_LALT);
+  }
+  if (state->count >= 2) {
+    unregister_code (KC_LGUI);
+  }
+  if (state->count >= 3) {
+    unregister_code (KC_LSHIFT);
+  }
 }
 
 qk_tap_dance_action_t tap_dance_actions[] = {
@@ -79,6 +93,7 @@ qk_tap_dance_action_t tap_dance_actions[] = {
 // Fillers to make layering more clear
 #define _______ KC_TRNS
 #define XXXXXXX KC_NO
+
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
@@ -154,7 +169,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   _______ , _______ , _______ , _______ , _______ , _______ , _______ , _______ , KC_MNXT , KC_VOLD , KC_VOLU , KC_MUTE \
 ),
 
-/* Adjust (Lower + Raise)
+/* Adjust (mod builder 5 times)
  * ,-----------------------------------------.  ,-----------------------------------------.
  * |      | Reset|      |      |      |      |  |      |      |      |      |      |  Del |
  * |------+------+------+------+------+------|  |------+------+------+------+------+------|
@@ -170,6 +185,24 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   _______ , _______ , _______ , AU_ON   , AU_OFF  , AG_NORM , AG_SWAP , QWERTY  , COLEMAK , _______ , _______ , _______ , \
   _______ , _______ , _______ , _______ , _______ , _______ , _______ , _______ , _______ , _______ , _______ , _______ , \
   _______ , _______ , _______ , _______ , _______ , _______ , _______ , _______ , _______ , _______ , _______ , _______ \
+),
+
+/* Emacs (Lower + Raise)
+ * ,-----------------------------------------.  ,-----------------------------------------.
+ * |      |      |      |      |      |      |  |      |      |      |      |      |      |
+ * |------+------+------+------+------+------|  |------+------+------+------+------+------|
+ * |      |      |      |      |      |      |  |      |      |      |      |      |      |
+ * |------+------+------+------+------+------|  |------+------+------+------+------+------|
+ * |      |      |      |      |      |      |  |      |      |      |      |      |      |
+ * |------+------+------+------+------+------|  |------+------+------+------+------+------|
+ * |      |      |      |      |      |         |      |      |      |      |      |      |
+ * `-----------------------------------------'  `-----------------------------------------'
+ */
+[_EMACS] =  KEYMAP( \
+  RESET   , EMACS_WIN_1 , EMACS_WIN_2 , EMACS_WIN_3 , EMACS_WIN_4 , _______ , _______ , _______ , _______ , _______ , _______ , _______ , \
+  _______ , _______     , _______     , _______     , _______     , _______ , _______ , _______ , _______ , _______ , _______ , _______ , \
+  _______ , _______     , _______     , _______     , _______     , _______ , _______ , _______ , _______ , _______ , _______ , _______ , \
+  _______ , _______     , _______     , _______     , _______     , _______ , _______ , _______ , _______ , _______ , _______ , _______ \
 )
 
 
@@ -209,20 +242,20 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     case LOWER:
       if (record->event.pressed) {
         layer_on(_LOWER);
-        update_tri_layer(_LOWER, _RAISE, _ADJUST);
+        update_tri_layer(_LOWER, _RAISE, _EMACS);
       } else {
         layer_off(_LOWER);
-        update_tri_layer(_LOWER, _RAISE, _ADJUST);
+        update_tri_layer(_LOWER, _RAISE, _EMACS);
       }
       return false;
       break;
     case RAISE:
       if (record->event.pressed) {
         layer_on(_RAISE);
-        update_tri_layer(_LOWER, _RAISE, _ADJUST);
+        update_tri_layer(_LOWER, _RAISE, _EMACS);
       } else {
         layer_off(_RAISE);
-        update_tri_layer(_LOWER, _RAISE, _ADJUST);
+        update_tri_layer(_LOWER, _RAISE, _EMACS);
       }
       return false;
       break;
@@ -233,6 +266,22 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         layer_off(_ADJUST);
       }
       return false;
+      break;
+    case EMACS_WIN_1:
+      SEND_STRING(SS_LCTRL("x")"1");
+      return true;
+      break;
+    case EMACS_WIN_2:
+      SEND_STRING(SS_LCTRL("x")"2");
+      return true;
+      break;
+    case EMACS_WIN_3:
+      SEND_STRING(SS_LCTRL("x")"3");
+      return true;
+      break;
+    case EMACS_WIN_4:
+      SEND_STRING(SS_LCTRL("x")"4");
+      return true;
       break;
   }
   return true;
