@@ -29,19 +29,19 @@ enum  {
 
 void dance_super_finished (qk_tap_dance_state_t *state, void *user_data) {
   if (state->count == 1) {
-    register_code (KC_LGUI);
+    register_code (OSM(KC_LGUI));
   } else {
     layer_on(_RAISE);
-    register_code (KC_LGUI);
+    register_code (OSM(KC_LGUI));
   }
 }
 
 void dance_super_reset (qk_tap_dance_state_t *state, void *user_data) {
   if (state->count == 1) {
-    unregister_code (KC_LGUI);
+    unregister_code (OSM(KC_LGUI));
   } else {
     layer_off(_RAISE);
-    unregister_code (KC_LGUI);
+    unregister_code (OSC(KC_LGUI));
   }
 }
 
