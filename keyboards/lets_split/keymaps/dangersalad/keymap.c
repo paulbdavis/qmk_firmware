@@ -10,9 +10,9 @@ extern keymap_config_t keymap_config;
 // entirely and just use numbers.
 #define _QWERTY 0
 #define _COLEMAK 1
-#define _EMACS 3
 #define _LOWER 10
 #define _RAISE 11
+#define _EMACS 12
 #define _ADJUST 30
 
 enum custom_keycodes {
@@ -268,19 +268,27 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       return false;
       break;
     case EMACS_WIN_1:
-      SEND_STRING(SS_LCTRL("x")"1");
+      if (record->event.pressed) {
+        SEND_STRING(SS_LCTRL("x")"1");
+      }
       return true;
       break;
     case EMACS_WIN_2:
-      SEND_STRING(SS_LCTRL("x")"2");
+      if (record->event.pressed) {
+        SEND_STRING(SS_LCTRL("x")"2");
+      }
       return true;
       break;
     case EMACS_WIN_3:
-      SEND_STRING(SS_LCTRL("x")"3");
+      if (record->event.pressed) {
+        SEND_STRING(SS_LCTRL("x")"3");
+      }
       return true;
       break;
     case EMACS_WIN_4:
-      SEND_STRING(SS_LCTRL("x")"4");
+      if (record->event.pressed) {
+        SEND_STRING(SS_LCTRL("x")"4");
+      }
       return true;
       break;
   }
