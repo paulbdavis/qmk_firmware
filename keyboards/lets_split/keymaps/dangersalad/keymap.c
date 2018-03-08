@@ -64,13 +64,13 @@ void dance_mod_builder_finished (qk_tap_dance_state_t *state, void *user_data) {
     return;
   }
   register_code (KC_LCTRL);
-  if (state->count >= 1) {
+  if (state->count >= 2) {
     register_code (KC_LALT);
   }
-  if (state->count >= 2) {
+  if (state->count >= 3) {
     register_code (KC_LGUI);
   }
-  if (state->count >= 3) {
+  if (state->count >= 4) {
     register_code (KC_LSHIFT);
   }
 }
@@ -81,13 +81,13 @@ void dance_mod_builder_reset (qk_tap_dance_state_t *state, void *user_data) {
     return;
   }
   unregister_code (KC_LCTRL);
-  if (state->count >= 1) {
+  if (state->count >= 2) {
     unregister_code (KC_LALT);
   }
-  if (state->count >= 2) {
+  if (state->count >= 3) {
     unregister_code (KC_LGUI);
   }
-  if (state->count >= 3) {
+  if (state->count >= 4) {
     unregister_code (KC_LSHIFT);
   }
 }
