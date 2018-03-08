@@ -30,7 +30,8 @@ enum custom_keycodes {
   EMACS_PROJ_FILE,
   EMACS_PROJ_SEARCH,
   EMACS_PROJ_COMPILE,
-  EMACS_PROJ_SHELL
+  EMACS_PROJ_SHELL,
+  EMACS_PROJ_GIT,
 };
 
 enum  {
@@ -205,10 +206,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * `-----------------------------------------'  `-----------------------------------------'
  */
 [_EMACS] =  KEYMAP( \
-  RESET   , EMACS_WIN_1       , EMACS_WIN_2     , EMACS_WIN_3       , EMACS_WIN_4        , _______          , _______ , _______ , _______ , _______ , EMACS_WIN_0 , _______ , \
-  _______ , EMACS_PROJ_SWITCH , EMACS_PROJ_FILE , EMACS_PROJ_SEARCH , EMACS_PROJ_COMPILE , EMACS_PROJ_SHELL , _______ , _______ , _______ , _______ , _______     , _______ , \
-  _______ , _______           , _______         , _______           , _______            , _______          , _______ , _______ , _______ , _______ , _______     , _______ , \
-  _______ , _______           , _______         , _______           , _______            , _______          , _______ , _______ , _______ , _______ , _______     , _______ \
+  RESET          , EMACS_WIN_1       , EMACS_WIN_2     , EMACS_WIN_3       , EMACS_WIN_4        , _______          , _______ , _______ , _______ , _______ , EMACS_WIN_0 , _______ , \
+  EMACS_PROJ_GIT , EMACS_PROJ_SWITCH , EMACS_PROJ_FILE , EMACS_PROJ_SEARCH , EMACS_PROJ_COMPILE , EMACS_PROJ_SHELL , _______ , _______ , _______ , _______ , _______     , _______ , \
+  _______        , _______           , _______         , _______           , _______            , _______          , _______ , _______ , _______ , _______ , _______     , _______ , \
+  _______        , _______           , _______         , _______           , _______            , _______          , _______ , _______ , _______ , _______ , _______     , _______ \
 )
 
 
@@ -330,6 +331,12 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     case EMACS_PROJ_COMPILE:
       if (record->event.pressed) {
         SEND_STRING(SS_LCTRL("c")"pc");
+      }
+      return true;
+      break;
+    case EMACS_PROJ_GIT:
+      if (record->event.pressed) {
+        SEND_STRING(SS_LCTRL("c")"pv");
       }
       return true;
       break;
