@@ -10,9 +10,11 @@ extern keymap_config_t keymap_config;
 // entirely and just use numbers.
 #define _QWERTY 0
 #define _COLEMAK 1
+#define _NUMPAD 5
 #define _LOWER 10
 #define _RAISE 11
 #define _EMACS 12
+#define _MOUSE 13
 #define _ADJUST 30
 
 enum custom_keycodes {
@@ -37,6 +39,7 @@ enum custom_keycodes {
 enum  {
   SUPER_LAYER_CHANGE = 0,
   MOD_BUILDER,
+  NUMPAD_ADJUST
 };
 
 void dance_super_finished (qk_tap_dance_state_t *state, void *user_data) {
@@ -92,9 +95,32 @@ void dance_mod_builder_reset (qk_tap_dance_state_t *state, void *user_data) {
   }
 }
 
+void dance_numpad_adjust (qk_tap_dance_state_t *state, void *user_data) {
+  if (state->count == 1) {
+    layer_on(_NUMPAD);
+    return;
+  }
+  if (state->count == 2) {
+    layer_on(_ADJUST);
+    return;
+  }
+}
+
+void dance_numpad_adjust_reset (qk_tap_dance_state_t *state, void *user_data) {
+  if (state->count == 1) {
+    layer_off(_NUMPAD);
+    return;
+  }
+  if (state->count == 2) {
+    layer_off(_ADJUST);
+    return;
+  }
+}
+
 qk_tap_dance_action_t tap_dance_actions[] = {
   [SUPER_LAYER_CHANGE] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_super_finished, dance_super_reset),
-  [MOD_BUILDER] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_mod_builder_finished, dance_mod_builder_reset)
+  [MOD_BUILDER] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_mod_builder_finished, dance_mod_builder_reset),
+  [NUMPAD_ADJUST] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_numpad_adjust, dance_numpad_adjust_reset),
 };
 
 // Fillers to make layering more clear
@@ -116,10 +142,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * `-----------------------------------------'  `-----------------------------------------'
  */
 [_QWERTY] = KEYMAP( \
-  KC_ESC          , KC_Q          , KC_W    , KC_E                   , KC_R  , KC_T           , KC_Y           , KC_U  , KC_I    , KC_O    , KC_P    , KC_BSPC         , \
-  LCTL_T(KC_TAB)  , KC_A          , KC_S    , KC_D                   , KC_F  , KC_G           , KC_H           , KC_J  , KC_K    , KC_L    , KC_SCLN , RCTL_T(KC_QUOT) , \
-  KC_LSFT         , KC_Z          , KC_X    , KC_C                   , KC_V  , KC_B           , KC_N           , KC_M  , KC_COMM , KC_DOT  , KC_SLSH , RSFT_T(KC_ENT)  , \
-  TD(MOD_BUILDER) , LCTL(KC_LGUI) , KC_LALT , TD(SUPER_LAYER_CHANGE) , LOWER , LCTL_T(KC_SPC) , LALT_T(KC_SPC) , RAISE , KC_LEFT , KC_DOWN , KC_UP   , RCTL_T(KC_RGHT) \
+  KC_ESC            , KC_Q       , KC_W    , KC_E                   , KC_R  , KC_T           , KC_Y           , KC_U  , KC_I    , KC_O    , KC_P    , KC_BSPC         , \
+  LCTL_T(KC_TAB)    , KC_A       , KC_S    , KC_D                   , KC_F  , KC_G           , KC_H           , KC_J  , KC_K    , KC_L    , KC_SCLN , RCTL_T(KC_QUOT) , \
+  KC_LSFT           , KC_Z       , KC_X    , KC_C                   , KC_V  , KC_B           , KC_N           , KC_M  , KC_COMM , KC_DOT  , KC_SLSH , RSFT_T(KC_ENT)  , \
+  TD(NUMPAD_ADJUST) , MO(_MOUSE) , KC_LALT , TD(SUPER_LAYER_CHANGE) , LOWER , LCTL_T(KC_SPC) , LALT_T(KC_SPC) , RAISE , KC_LEFT , KC_DOWN , KC_UP   , RCTL_T(KC_RGHT) \
 ),
 
 /* Colemak
@@ -134,10 +160,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * `-----------------------------------------'  `-----------------------------------------'
  */
 [_COLEMAK] = KEYMAP( \
-  KC_ESC          , KC_Q          , KC_W    , KC_F                   , KC_P  , KC_G           , KC_J           , KC_L  , KC_U    , KC_Y    , KC_SCLN , KC_BSPC         , \
-  LCTL_T(KC_TAB)  , KC_A          , KC_R    , KC_S                   , KC_T  , KC_D           , KC_H           , KC_N  , KC_E    , KC_I    , KC_O    , RCTL_T(KC_QUOT) , \
-  KC_LSFT         , KC_Z          , KC_X    , KC_C                   , KC_V  , KC_B           , KC_K           , KC_M  , KC_COMM , KC_DOT  , KC_SLSH , RSFT_T(KC_ENT)  , \
-  TD(MOD_BUILDER) , LCTL(KC_LGUI) , KC_LALT , TD(SUPER_LAYER_CHANGE) , LOWER , LCTL_T(KC_SPC) , LALT_T(KC_SPC) , RAISE , KC_LEFT , KC_DOWN , KC_UP   , RCTL_T(KC_RGHT) \
+  KC_ESC            , KC_Q       , KC_W    , KC_F                   , KC_P  , KC_G           , KC_J           , KC_L  , KC_U    , KC_Y    , KC_SCLN , KC_BSPC         , \
+  LCTL_T(KC_TAB)    , KC_A       , KC_R    , KC_S                   , KC_T  , KC_D           , KC_H           , KC_N  , KC_E    , KC_I    , KC_O    , RCTL_T(KC_QUOT) , \
+  KC_LSFT           , KC_Z       , KC_X    , KC_C                   , KC_V  , KC_B           , KC_K           , KC_M  , KC_COMM , KC_DOT  , KC_SLSH , RSFT_T(KC_ENT)  , \
+  TD(NUMPAD_ADJUST) , MO(_MOUSE) , KC_LALT , TD(SUPER_LAYER_CHANGE) , LOWER , LCTL_T(KC_SPC) , LALT_T(KC_SPC) , RAISE , KC_LEFT , KC_DOWN , KC_UP   , RCTL_T(KC_RGHT) \
 ),
 
 /* Lower
@@ -210,7 +236,43 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   EMACS_PROJ_GIT , EMACS_PROJ_SWITCH , EMACS_PROJ_FILE , EMACS_PROJ_SEARCH , EMACS_PROJ_COMPILE , EMACS_PROJ_SHELL , _______ , _______ , _______ , _______ , _______     , _______ , \
   _______        , _______           , _______         , _______           , _______            , _______          , _______ , _______ , _______ , _______ , _______     , _______ , \
   _______        , _______           , _______         , _______           , _______            , _______          , _______ , _______ , _______ , _______ , _______     , _______ \
-)
+ ),
+
+/* Number Pad
+ * ,-----------------------------------------.  ,-----------------------------------------.
+ * |      |      |      |      |      |      |  |  7   |  8   |  9   |      |      |NmLck |
+ * |------+------+------+------+------+------|  |------+------+------+------+------+------|
+ * |      |      |      |      |      |      |  |  4   |  5   |  6   |      |      |      |
+ * |------+------+------+------+------+------|  |------+------+------+------+------+------|
+ * |      |      |      |      |      |      |  |  1   |  2   |  3   |      |      |      |
+ * |------+------+------+------+------+------|  |------+------+------+------+------+------|
+ * |      |      |      |      |      |         |      |  0   |      |      |      |      |
+ * `-----------------------------------------'  `-----------------------------------------'
+ */
+[_NUMPAD] =  KEYMAP( \
+  RESET   , _______ , _______ , _______ , _______ , _______ , KC_KP_7 , KC_KP_8 , KC_KP_9 , _______ , _______ , KC_NLCK , \
+  _______ , _______ , _______ , _______ , _______ , _______ , KC_KP_4 , KC_KP_5 , KC_KP_6 , _______ , _______ , _______ , \
+  _______ , _______ , _______ , _______ , _______ , _______ , KC_KP_1 , KC_KP_2 , KC_KP_3 , _______ , _______ , _______ , \
+  _______ , _______ , _______ , _______ , _______ , _______ , _______ , KC_KP_0 , _______ , _______ , _______ , _______ \
+ ),
+
+/* Number Pad
+ * ,-----------------------------------------.  ,-----------------------------------------.
+ * |      |      |      |      |      |      |  |  7   |  8   |  9   |      |      |NmLck |
+ * |------+------+------+------+------+------|  |------+------+------+------+------+------|
+ * |      |      |      |      |      |      |  |  4   |  5   |  6   |      |      |      |
+ * |------+------+------+------+------+------|  |------+------+------+------+------+------|
+ * |      |      |      |      |      |      |  |  1   |  2   |  3   |      |      |      |
+ * |------+------+------+------+------+------|  |------+------+------+------+------+------|
+ * |      |      |      |      |      |         |      |  0   |      |      |      |      |
+ * `-----------------------------------------'  `-----------------------------------------'
+ */
+[_MOUSE] =  KEYMAP( \
+  RESET   , _______ , _______ , _______ , _______ , _______ , _______ , _______ , _______ , _______ , _______ , _______ , \
+  _______ , _______ , _______ , _______ , _______ , _______ , _______ , KC_MS_L , KC_MS_D , KC_MS_U , KC_MS_R , _______ , \
+  _______ , _______ , _______ , _______ , _______ , _______ , _______ , KC_BTN1 , KC_BTN2 , KC_BTN3 , _______ , _______ , \
+  _______ , _______ , _______ , _______ , _______ , _______ , _______ , _______ , _______ , _______ , _______ , _______ \
+ )
 
 
 };
