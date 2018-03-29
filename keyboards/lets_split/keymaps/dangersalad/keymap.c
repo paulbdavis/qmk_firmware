@@ -43,8 +43,126 @@ enum custom_keycodes {
 enum  {
   SUPER_LAYER_CHANGE = 0,
   MOD_BUILDER,
-  NUMPAD_ADJUST
+  NUMPAD_ADJUST,
+  SUPER_CTRL,
+  SUPER_ALT,
 };
+
+
+//**************** Definitions needed for quad function to work *********************//
+//Enums used to clearly convey the state of the tap dance
+enum {
+  SINGLE_TAP = 1,
+  SINGLE_HOLD,
+  DOUBLE_TAP,
+  DOUBLE_HOLD,
+  TRIPLE_TAP,
+  TRIPLE_HOLD,
+  DOUBLE_SINGLE_TAP //send SINGLE_TAP twice - NOT DOUBLE_TAP
+  // Add more enums here if you want for triple, quadruple, etc.
+};
+
+typedef struct {
+  bool is_press_action;
+  int state;
+} tap;
+
+int cur_dance (qk_tap_dance_state_t *state) {
+  if (state->count == 1) {
+    //If count = 1, and it has been interrupted - it doesn't matter if it is pressed or not: Send SINGLE_TAP
+    if (state->pressed==0) return SINGLE_TAP;
+    else return SINGLE_HOLD;
+  }
+  //If count = 2, and it has been interrupted - assume that user is trying to type the letter associated
+  //with single tap. In example below, that means to send `xx` instead of `Escape`.
+  else if (state->count == 2) {
+    /* if (state->interrupted) return DOUBLE_SINGLE_TAP; */
+    if (state->pressed) return DOUBLE_HOLD;
+    else return DOUBLE_TAP;
+  }
+  else if (state->count == 3) {
+    if (state->pressed) return TRIPLE_HOLD;
+    else return TRIPLE_TAP;
+  }
+  else return 8; //magic number. At some point this method will expand to work for more presses
+}
+
+//**************** Definitions needed for quad function to work *********************//
+
+//instanalize an instance of 'tap' for the 'x' tap dance.
+static tap ctrl_tap_state = {
+  .is_press_action = true,
+  .state = 0
+};
+
+static tap alt_tap_state = {
+  .is_press_action = true,
+  .state = 0
+};
+
+void ctrl_finished (qk_tap_dance_state_t *state, void *user_data) {
+  ctrl_tap_state.state = cur_dance(state);
+  switch (ctrl_tap_state.state) {
+  case SINGLE_TAP: register_code(KC_SPC); break;
+  case SINGLE_HOLD: register_code(KC_LCTRL); break;
+  case DOUBLE_TAP:
+  case DOUBLE_SINGLE_TAP: register_code(KC_SPC); unregister_code(KC_SPC); register_code(KC_SPC); break;
+  case DOUBLE_HOLD: register_code(KC_LGUI); break;
+  case TRIPLE_TAP: register_code(KC_ENTER); break;
+  case TRIPLE_HOLD:
+    layer_on(_RAISE);
+    register_code (KC_LGUI);
+    break;
+  }
+}
+
+void ctrl_reset (qk_tap_dance_state_t *state, void *user_data) {
+  switch (ctrl_tap_state.state) {
+    case SINGLE_TAP: unregister_code(KC_SPC); break;
+    case SINGLE_HOLD: unregister_code(KC_LCTRL); break;
+    case DOUBLE_TAP: unregister_code(KC_SPC); break;
+    case DOUBLE_HOLD: unregister_code(KC_LGUI); break;
+    case TRIPLE_TAP: unregister_code(KC_ENTER); break;
+    case TRIPLE_HOLD:
+      layer_off(_RAISE);
+      unregister_code (KC_LGUI);
+      break;
+    case DOUBLE_SINGLE_TAP: unregister_code(KC_SPC);
+  }
+  ctrl_tap_state.state = 0;
+}
+
+void alt_finished (qk_tap_dance_state_t *state, void *user_data) {
+  alt_tap_state.state = cur_dance(state);
+  switch (alt_tap_state.state) {
+  case SINGLE_TAP: register_code(KC_SPC); break;
+  case SINGLE_HOLD: register_code(KC_LALT); break;
+  case DOUBLE_TAP:
+  case DOUBLE_SINGLE_TAP: register_code(KC_SPC); unregister_code(KC_SPC); register_code(KC_SPC); break;
+  case DOUBLE_HOLD: register_code(KC_LGUI); break;
+  case TRIPLE_TAP: register_code(KC_ENTER); break;
+  case TRIPLE_HOLD:
+    layer_on(_RAISE);
+    register_code (KC_LGUI);
+    break;
+  }
+}
+
+void alt_reset (qk_tap_dance_state_t *state, void *user_data) {
+  switch (alt_tap_state.state) {
+    case SINGLE_TAP: unregister_code(KC_SPC); break;
+    case SINGLE_HOLD: unregister_code(KC_LALT); break;
+    case DOUBLE_TAP: unregister_code(KC_SPC); break;
+    case DOUBLE_HOLD: unregister_code(KC_LGUI); break;
+    case TRIPLE_TAP: unregister_code(KC_ENTER); break;
+    case TRIPLE_HOLD:
+      layer_off(_RAISE);
+      unregister_code (KC_LGUI);
+      break;
+    case DOUBLE_SINGLE_TAP: unregister_code(KC_SPC);
+  }
+  alt_tap_state.state = 0;
+}
 
 void dance_super_finished (qk_tap_dance_state_t *state, void *user_data) {
   if (state->count == 1) {
@@ -127,6 +245,8 @@ qk_tap_dance_action_t tap_dance_actions[] = {
   [SUPER_LAYER_CHANGE] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_super_finished, dance_super_reset),
   [MOD_BUILDER] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_mod_builder_finished, dance_mod_builder_reset),
   [NUMPAD_ADJUST] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_numpad_adjust, dance_numpad_adjust_reset),
+  [SUPER_CTRL] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, ctrl_finished, ctrl_reset),
+  [SUPER_ALT] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, alt_finished, alt_reset),
 };
 
 // Fillers to make layering more clear
@@ -151,7 +271,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   KC_ESC            , KC_Q       , KC_W    , KC_E                   , KC_R  , KC_T           , KC_Y           , KC_U  , KC_I    , KC_O    , KC_P    , KC_BSPC         , \
   LCTL_T(KC_TAB)    , KC_A       , KC_S    , KC_D                   , KC_F  , KC_G           , KC_H           , KC_J  , KC_K    , KC_L    , KC_SCLN , RCTL_T(KC_QUOT) , \
   KC_LSFT           , KC_Z       , KC_X    , KC_C                   , KC_V  , KC_B           , KC_N           , KC_M  , KC_COMM , KC_DOT  , KC_SLSH , RSFT_T(KC_ENT)  , \
-  TD(NUMPAD_ADJUST) , MO(_MOUSE) , KC_LALT , TD(SUPER_LAYER_CHANGE) , LOWER , LCTL_T(KC_SPC) , LALT_T(KC_SPC) , RAISE , KC_LEFT , KC_DOWN , KC_UP   , RCTL_T(KC_RGHT) \
+  TD(NUMPAD_ADJUST) , MO(_MOUSE) , KC_LALT , TD(SUPER_LAYER_CHANGE) , LOWER , TD(SUPER_CTRL) , TD(SUPER_ALT)  , RAISE , KC_LEFT , KC_DOWN , KC_UP   , RCTL_T(KC_RGHT) \
 ),
 
 /* Colemak
@@ -169,7 +289,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   KC_ESC            , KC_Q       , KC_W    , KC_F                   , KC_P  , KC_G           , KC_J           , KC_L  , KC_U    , KC_Y    , KC_SCLN , KC_BSPC         , \
   LCTL_T(KC_TAB)    , KC_A       , KC_R    , KC_S                   , KC_T  , KC_D           , KC_H           , KC_N  , KC_E    , KC_I    , KC_O    , RCTL_T(KC_QUOT) , \
   KC_LSFT           , KC_Z       , KC_X    , KC_C                   , KC_V  , KC_B           , KC_K           , KC_M  , KC_COMM , KC_DOT  , KC_SLSH , RSFT_T(KC_ENT)  , \
-  TD(NUMPAD_ADJUST) , MO(_MOUSE) , KC_LALT , TD(SUPER_LAYER_CHANGE) , LOWER , LCTL_T(KC_SPC) , LALT_T(KC_SPC) , RAISE , KC_LEFT , KC_DOWN , KC_UP   , RCTL_T(KC_RGHT) \
+  TD(NUMPAD_ADJUST) , MO(_MOUSE) , KC_LALT , TD(SUPER_LAYER_CHANGE) , LOWER , TD(SUPER_CTRL) , TD(SUPER_ALT)  , RAISE , KC_LEFT , KC_DOWN , KC_UP   , RCTL_T(KC_RGHT) \
 ),
 
 /* Lower
