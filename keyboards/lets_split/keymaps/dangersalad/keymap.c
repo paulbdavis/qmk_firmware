@@ -366,7 +366,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 /* Number Pad
  * ,-----------------------------------------.  ,-----------------------------------------.
- * |      |      |      |      |      |      |  |  7   |  8   |  9   |      |      |NmLck |
+ * |      |      |      |      |      |      |  |  7   |  8   |  9   |      |NmLck | Bksp |
  * |------+------+------+------+------+------|  |------+------+------+------+------+------|
  * |      |      |      |      |      |      |  |  4   |  5   |  6   |      |      |      |
  * |------+------+------+------+------+------|  |------+------+------+------+------+------|
@@ -376,7 +376,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * `-----------------------------------------'  `-----------------------------------------'
  */
 [_NUMPAD] =  KEYMAP( \
-  RESET   , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , KC_KP_7 , KC_KP_8 , KC_KP_9 , KC_PSLS , XXXXXXX , KC_NLCK , \
+  RESET   , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , KC_KP_7 , KC_KP_8 , KC_KP_9 , KC_PSLS , KC_NLCK , KC_BSPC , \
   XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , KC_KP_4 , KC_KP_5 , KC_KP_6 , KC_PAST , XXXXXXX , XXXXXXX , \
   XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , KC_KP_1 , KC_KP_2 , KC_KP_3 , KC_PMNS , KC_PENT , KC_PENT , \
   _______ , _______ , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , KC_KP_0 , KC_KP_0 , KC_PDOT , KC_PPLS , KC_PENT , KC_PENT \
