@@ -107,7 +107,10 @@ void ctrl_finished (qk_tap_dance_state_t *state, void *user_data) {
   case SINGLE_HOLD: register_code(KC_LCTRL); break;
   case DOUBLE_TAP:
   case DOUBLE_SINGLE_TAP: register_code(KC_SPC); unregister_code(KC_SPC); register_code(KC_SPC); break;
-  case DOUBLE_HOLD: register_code(KC_LGUI); break;
+  case DOUBLE_HOLD:
+    layer_on(_RAISE);
+    register_code (KC_LGUI);
+    break;
   case TRIPLE_TAP: register_code(KC_ENTER); break;
   case TRIPLE_HOLD:
     layer_on(_RAISE);
@@ -121,7 +124,10 @@ void ctrl_reset (qk_tap_dance_state_t *state, void *user_data) {
     case SINGLE_TAP: unregister_code(KC_SPC); break;
     case SINGLE_HOLD: unregister_code(KC_LCTRL); break;
     case DOUBLE_TAP: unregister_code(KC_SPC); break;
-    case DOUBLE_HOLD: unregister_code(KC_LGUI); break;
+    case DOUBLE_HOLD:
+      layer_off(_RAISE);
+      unregister_code (KC_LGUI);
+      break;
     case TRIPLE_TAP: unregister_code(KC_ENTER); break;
     case TRIPLE_HOLD:
       layer_off(_RAISE);
@@ -142,7 +148,6 @@ void alt_finished (qk_tap_dance_state_t *state, void *user_data) {
   case DOUBLE_HOLD: register_code(KC_LGUI); break;
   case TRIPLE_TAP: register_code(KC_ENTER); break;
   case TRIPLE_HOLD:
-    layer_on(_RAISE);
     register_code (KC_LGUI);
     break;
   }
@@ -156,7 +161,6 @@ void alt_reset (qk_tap_dance_state_t *state, void *user_data) {
     case DOUBLE_HOLD: unregister_code(KC_LGUI); break;
     case TRIPLE_TAP: unregister_code(KC_ENTER); break;
     case TRIPLE_HOLD:
-      layer_off(_RAISE);
       unregister_code (KC_LGUI);
       break;
     case DOUBLE_SINGLE_TAP: unregister_code(KC_SPC);
