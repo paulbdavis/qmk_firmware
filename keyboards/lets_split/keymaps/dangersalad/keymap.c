@@ -114,6 +114,7 @@ void ctrl_finished (qk_tap_dance_state_t *state, void *user_data) {
   case TRIPLE_TAP: register_code(KC_ENTER); break;
   case TRIPLE_HOLD:
     layer_on(_RAISE);
+    register_code(KC_LCTRL);
     register_code (KC_LGUI);
     break;
   }
@@ -131,6 +132,7 @@ void ctrl_reset (qk_tap_dance_state_t *state, void *user_data) {
     case TRIPLE_TAP: unregister_code(KC_ENTER); break;
     case TRIPLE_HOLD:
       layer_off(_RAISE);
+      unregister_code(KC_LCTRL);
       unregister_code (KC_LGUI);
       break;
     case DOUBLE_SINGLE_TAP: unregister_code(KC_SPC);
@@ -225,6 +227,7 @@ void dance_numpad_adjust (qk_tap_dance_state_t *state, void *user_data) {
   if (state->count == 1) {
     layer_off(_LOWER);
     layer_off(_RAISE);
+    unregister_code(KC_LALT);
     layer_on(_NUMPAD);
     return;
   }
