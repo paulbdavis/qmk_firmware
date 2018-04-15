@@ -80,7 +80,7 @@ int cur_dance (qk_tap_dance_state_t *state) {
     if (state->pressed) return DOUBLE_HOLD;
     else return DOUBLE_TAP;
   }
-  else if (state->count == 3) {
+  else if (state->count >= 3) {
     if (state->pressed) return TRIPLE_HOLD;
     else return TRIPLE_TAP;
   }
