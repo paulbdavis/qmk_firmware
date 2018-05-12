@@ -10,12 +10,12 @@ extern keymap_config_t keymap_config;
 // entirely and just use numbers.
 #define _QWERTY 0
 #define _COLEMAK 1
-#define _NUMPAD 5
 #define _LOWER 10
 #define _RAISE 11
 #define _EMACS 12
 #define _MOUSE 13
-#define _ADJUST 30
+#define _ADJUST 29
+#define _NUMPAD 30
 
 enum custom_keycodes {
   QWERTY = SAFE_RANGE,
@@ -223,26 +223,35 @@ void dance_mod_builder_reset (qk_tap_dance_state_t *state, void *user_data) {
   }
 }
 
+void pre_numpad_disable (void) {
+  // always deactivate these to prevent them getting stuck on since
+  // the numpad overrides them
+  layer_off(_RAISE);
+  unregister_code(KC_LALT);
+  unregister_code(KC_LGUI);
+}
+
 void dance_numpad_adjust (qk_tap_dance_state_t *state, void *user_data) {
-  if (state->count == 1) {
-    layer_off(_LOWER);
-    layer_off(_RAISE);
-    unregister_code(KC_LALT);
+  // one or two taps activates the numpad, two tap start is sticky
+  if (state->count < 3) {
+    pre_numpad_disable();
     layer_on(_NUMPAD);
     return;
   }
-  if (state->count == 2) {
+  if (state->count == 3) {
     layer_on(_ADJUST);
     return;
   }
 }
 
 void dance_numpad_adjust_reset (qk_tap_dance_state_t *state, void *user_data) {
+  // one tap reset turns off the numpad
   if (state->count == 1) {
+    pre_numpad_disable();
     layer_off(_NUMPAD);
     return;
   }
-  if (state->count == 2) {
+  if (state->count == 3) {
     layer_off(_ADJUST);
     return;
   }
@@ -383,13 +392,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * `-----------------------------------------'  `-----------------------------------------'
  */
 [_NUMPAD] =  LAYOUT( \
-  RESET   , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , KC_KP_7 , KC_KP_8 , KC_KP_9 , KC_PSLS , KC_NLCK , KC_BSPC , \
-  XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , KC_KP_4 , KC_KP_5 , KC_KP_6 , KC_PAST , XXXXXXX , XXXXXXX , \
-  XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , KC_KP_1 , KC_KP_2 , KC_KP_3 , KC_PMNS , KC_PENT , KC_PENT , \
-  _______ , _______ , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , KC_KP_0 , KC_KP_0 , KC_PDOT , KC_PPLS , KC_PENT , KC_PENT \
+  RESET   , _______ , _______ , _______ , _______ , _______ , KC_KP_7 , KC_KP_8 , KC_KP_9 , KC_PSLS , KC_NLCK , KC_BSPC , \
+  _______ , _______ , _______ , _______ , _______ , _______ , KC_KP_4 , KC_KP_5 , KC_KP_6 , KC_PAST , XXXXXXX , XXXXXXX , \
+  _______ , _______ , _______ , _______ , _______ , _______ , KC_KP_1 , KC_KP_2 , KC_KP_3 , KC_PMNS , KC_PENT , KC_PENT , \
+  _______ , _______ , _______ , _______ , _______ , _______ , KC_KP_0 , KC_KP_0 , KC_PDOT , KC_PPLS , KC_PENT , KC_PENT \
  ),
 
-/* Number Pad
+/* Mouse
  * ,-----------------------------------------.  ,-----------------------------------------.
  * |      |      |      |      |      |      |  |      |      |      |      |      |      |
  * |------+------+------+------+------+------|  |------+------+------+------+------+------|
