@@ -316,14 +316,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------|  |------+------+------+------+------+------|
  * |  F7  |  F8  |  F9  |  F10 |  F11 |  F12 |  |      |ISO ~ |ISO | |      |      |      |
  * |------+------+------+------+------+------|  |------+------+------+------+------+------|
- * |      |      |      |      |      |      |  |      |      | Next | Vol- | Vol+ | Mute |
+ * |      |      |      |      |      |      |  |      |      | Home | PgDn | PgUp | End  |
  * `-----------------------------------------'  `-----------------------------------------'
  */
 [_LOWER] = LAYOUT( \
   KC_TILD , KC_EXLM , KC_AT   , KC_HASH , KC_DLR  , KC_PERC , KC_CIRC , KC_AMPR    , KC_ASTR    , KC_LPRN , KC_RPRN , KC_DEL  , \
   KC_F1   , KC_F2   , KC_F3   , KC_F4   , KC_F5   , KC_F6   , KC_COLN , KC_UNDS    , KC_PLUS    , KC_LCBR , KC_RCBR , KC_PIPE , \
   KC_F7   , KC_F8   , KC_F9   , KC_F10  , KC_F11  , KC_F12  , XXXXXXX , S(KC_NUHS) , S(KC_NUBS) , _______ , _______ , _______ , \
-  _______ , _______ , _______ , _______ , _______ , _______ , _______ , _______    , KC_MNXT    , KC_VOLD , KC_VOLU , KC_MUTE \
+  _______ , _______ , _______ , _______ , _______ , _______ , _______ , _______    , KC_HOME    , KC_PGDN , KC_PGUP , KC_END  \
 ), 
 
 /* Raise
