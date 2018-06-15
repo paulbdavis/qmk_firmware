@@ -67,6 +67,14 @@ typedef struct {
   int state;
 } tap;
 
+void pre_numpad_disable (void) {
+  // always deactivate these to prevent them getting stuck on since
+  // the numpad overrides them
+  layer_off(_RAISE);
+  unregister_code(KC_LALT);
+  unregister_code(KC_LGUI);
+}
+
 int cur_dance (qk_tap_dance_state_t *state) {
   if (state->count == 1) {
     //If count = 1, and it has been interrupted - it doesn't matter if it is pressed or not: Send SINGLE_TAP
@@ -170,6 +178,34 @@ void alt_reset (qk_tap_dance_state_t *state, void *user_data) {
   alt_tap_state.state = 0;
 }
 
+void numpad_finished (qk_tap_dance_state_t *state, void *user_data) {
+  pre_numpad_disable();
+  alt_tap_state.state = cur_dance(state);
+  switch (alt_tap_state.state) {
+  case SINGLE_TAP: 
+  case SINGLE_HOLD: layer_on(_NUMPAD); break;
+  case DOUBLE_TAP:
+  case DOUBLE_SINGLE_TAP:
+  case DOUBLE_HOLD: 
+  case TRIPLE_TAP: 
+  case TRIPLE_HOLD: layer_on(_ADJUST); break;
+  }
+}
+
+void numpad_reset (qk_tap_dance_state_t *state, void *user_data) {
+  pre_numpad_disable();
+  switch (alt_tap_state.state) {
+  case SINGLE_TAP: break;
+  case SINGLE_HOLD: layer_off(_NUMPAD); break;
+  case DOUBLE_TAP:
+  case DOUBLE_SINGLE_TAP:
+  case DOUBLE_HOLD: 
+  case TRIPLE_TAP: 
+  case TRIPLE_HOLD: layer_off(_NUMPAD); layer_off(_ADJUST); break;
+  }
+  alt_tap_state.state = 0;
+}
+
 void dance_super_finished (qk_tap_dance_state_t *state, void *user_data) {
   if (state->count == 1) {
     register_code (KC_LGUI);
@@ -223,14 +259,6 @@ void dance_mod_builder_reset (qk_tap_dance_state_t *state, void *user_data) {
   }
 }
 
-void pre_numpad_disable (void) {
-  // always deactivate these to prevent them getting stuck on since
-  // the numpad overrides them
-  layer_off(_RAISE);
-  unregister_code(KC_LALT);
-  unregister_code(KC_LGUI);
-}
-
 void dance_numpad_adjust (qk_tap_dance_state_t *state, void *user_data) {
   // one or two taps activates the numpad, two tap start is sticky
   if (state->count < 3) {
@@ -260,7 +288,7 @@ void dance_numpad_adjust_reset (qk_tap_dance_state_t *state, void *user_data) {
 qk_tap_dance_action_t tap_dance_actions[] = {
   [SUPER_LAYER_CHANGE] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_super_finished, dance_super_reset),
   [MOD_BUILDER] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_mod_builder_finished, dance_mod_builder_reset),
-  [NUMPAD_ADJUST] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_numpad_adjust, dance_numpad_adjust_reset),
+  [NUMPAD_ADJUST] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, numpad_finished, numpad_reset),
   [SUPER_CTRL] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, ctrl_finished, ctrl_reset),
   [SUPER_ALT] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, alt_finished, alt_reset),
 };
