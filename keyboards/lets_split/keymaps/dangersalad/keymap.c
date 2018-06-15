@@ -11,6 +11,7 @@ extern keymap_config_t keymap_config;
 #define _QWERTY 0
 #define _COLEMAK 1
 #define _WORKMAN 2
+#define _NORMAN 3
 #define _LOWER 10
 #define _RAISE 11
 #define _EMACS 12
@@ -22,6 +23,7 @@ enum custom_keycodes {
   QWERTY = SAFE_RANGE,
   COLEMAK,
   WORKMAN,
+  NORMAN,
   LOWER,
   RAISE,
   ADJUST,
@@ -356,6 +358,24 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   TD(NUMPAD_ADJUST) , MO(_MOUSE) , KC_LALT , TD(SUPER_LAYER_CHANGE) , LOWER , TD(SUPER_CTRL) , TD(SUPER_ALT)  , RAISE , KC_LEFT , KC_DOWN , KC_UP   , KC_RGHT \
 ),
 
+/* Norman
+ * ,-----------------------------------------.  ,-----------------------------------------.
+ * | Esc  |   Q  |   W  |   D  |   F  |   K  |  |   J  |   U  |   R  |   L  |   ;  | Bksp |
+ * |------+------+------+------+------+------|  |------+------+------+------+------+------|
+ * | Ctrl |   A  |   S  |   E  |   T  |   G  |  |   Y  |   N  |   I  |   O  |   H  |  '   |
+ * |------+------+------+------+------+------|  |------+------+------+------+------+------|
+ * | Shift|   Z  |   X  |   C  |   V  |   B  |  |   P  |   M  |   ,  |   .  |   /  |Enter |
+ * |------+------+------+------+------+------|  |------+------+------+------+------+------|
+ * |      |      | Alt  | GUI  |Lower |Sp/Ctl|  |Sp/Alt|Raise | Left | Down |  Up  |Right |
+ * `-----------------------------------------'  `-----------------------------------------'
+ */
+[_NORMAN]  = LAYOUT(                                                   \
+  KC_ESC            , KC_Q       , KC_W    , KC_D                   , KC_F  , KC_K           , KC_J           , KC_U  , KC_R    , KC_L    , KC_SCLN , KC_BSPC         , \
+  LCTL_T(KC_TAB)    , KC_A       , KC_S    , KC_E                   , KC_T  , KC_G           , KC_Y           , KC_N  , KC_I    , KC_O    , KC_H    , RCTL_T(KC_QUOT) , \
+  KC_LSFT           , KC_Z       , KC_X    , KC_C                   , KC_V  , KC_B           , KC_P           , KC_M  , KC_COMM , KC_DOT  , KC_SLSH , RSFT_T(KC_ENT)  , \
+  TD(NUMPAD_ADJUST) , MO(_MOUSE) , KC_LALT , TD(SUPER_LAYER_CHANGE) , LOWER , TD(SUPER_CTRL) , TD(SUPER_ALT)  , RAISE , KC_LEFT , KC_DOWN , KC_UP   , KC_RGHT \
+),
+
 /* Lower
  * ,-----------------------------------------.  ,-----------------------------------------.
  * |   ~  |   !  |   @  |   #  |   $  |   %  |  |   ^  |   &  |   *  |   (  |   )  | Del  |
@@ -404,7 +424,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * `-----------------------------------------'  `-----------------------------------------'
  */
 [_ADJUST] =  LAYOUT( \
-  RESET   , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , KC_HOME , KC_PGUP   , KC_PSCREEN , KC_SCROLLLOCK , KC_PAUSE , \
+  RESET   , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , NORMAN  , KC_HOME , KC_PGUP   , KC_PSCREEN , KC_SCROLLLOCK , KC_PAUSE , \
   AG_SWAP , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , WORKMAN , KC_END  , KC_PGDOWN , KC_INSERT  , XXXXXXX       , XXXXXXX  , \
   AG_NORM , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , COLEMAK , XXXXXXX , XXXXXXX   , XXXXXXX    , XXXXXXX       , XXXXXXX  , \
   _______ , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , QWERTY  , XXXXXXX , XXXXXXX   , XXXXXXX    , XXXXXXX       , XXXXXXX \
@@ -504,6 +524,15 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
           PLAY_SONG(tone_dvorak);
         #endif
         persistent_default_layer_set(1UL<<_WORKMAN);
+      }
+      return false;
+      break;
+    case NORMAN:
+      if (record->event.pressed) {
+        #ifdef AUDIO_ENABLE
+          PLAY_SONG(tone_dvorak);
+        #endif
+        persistent_default_layer_set(1UL<<_NORMAN);
       }
       return false;
       break;
