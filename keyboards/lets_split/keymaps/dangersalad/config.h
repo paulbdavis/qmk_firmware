@@ -1,21 +1,21 @@
 /*
-This is the c configuration file for the keymap
+  This is the c configuration file for the keymap
 
-Copyright 2012 Jun Wako <wakojun@gmail.com>
-Copyright 2015 Jack Humbert
+  Copyright 2012 Jun Wako <wakojun@gmail.com>
+  Copyright 2015 Jack Humbert
 
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 2 of the License, or
-(at your option) any later version.
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 2 of the License, or
+  (at your option) any later version.
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
 
-You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #ifndef CONFIG_USER_H
@@ -33,8 +33,23 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // #define MASTER_RIGHT
 // #define EE_HANDS
 
+#define C6_AUDIO
+
 #define PREVENT_STUCK_MODIFIERS
 
 #define TAPPING_TERM 200
+
+#ifdef AUDIO_ENABLE
+#define BEEP                                    \
+  S__NOTE(_C3 )
+
+#define DOUBLE_BEEP                             \
+  S__NOTE(_C3 ),                                \
+    S__NOTE(_REST ),                            \
+    S__NOTE(_C3 )
+
+#define STARTUP_SONG SONG(BEEP)
+      
+#endif
 
 #endif

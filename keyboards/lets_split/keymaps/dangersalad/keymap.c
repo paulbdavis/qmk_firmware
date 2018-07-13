@@ -2,6 +2,14 @@
 #include "action_layer.h"
 #include "eeconfig.h"
 
+#ifdef AUDIO_ENABLE
+float tone_qwerty[][2]     = SONG(BEEP);
+float tone_dvorak[][2]     = SONG(BEEP);
+float tone_colemak[][2]    = SONG(BEEP);
+float tone_numpad[][2]     = SONG(DOUBLE_BEEP);
+float tone_numpad_exit[][2]     = SONG(BEEP);
+#endif
+
 extern keymap_config_t keymap_config;
 
 // Each layer gets a name for readability, which is then used in the keymap matrix below.
@@ -12,12 +20,12 @@ extern keymap_config_t keymap_config;
 #define _COLEMAK 1
 #define _WORKMAN 2
 #define _NORMAN 3
-#define _LOWER 10
-#define _RAISE 11
-#define _EMACS 12
-#define _MOUSE 13
-#define _ADJUST 29
-#define _NUMPAD 30
+#define _LOWER 4
+#define _RAISE 5
+#define _EMACS 6
+#define _MOUSE 7
+#define _ADJUST 8
+#define _NUMPAD 9
 
 enum custom_keycodes {
   QWERTY = SAFE_RANGE,
@@ -193,12 +201,25 @@ void numpad_finished (qk_tap_dance_state_t *state, void *user_data) {
   numpad_tap_state.state = cur_dance(state);
   switch (numpad_tap_state.state) {
   case SINGLE_TAP: 
-  case SINGLE_HOLD: layer_on(_NUMPAD); break;
+  case SINGLE_HOLD:
+    layer_on(_NUMPAD);
+#ifdef AUDIO_ENABLE
+    PLAY_SONG(tone_numpad);
+#endif
+    break;
   case DOUBLE_TAP:
   case DOUBLE_SINGLE_TAP:
   case DOUBLE_HOLD: 
   case TRIPLE_TAP: 
-  case TRIPLE_HOLD: layer_on(_ADJUST); break;
+  case TRIPLE_HOLD:
+    if (biton32(layer_state) == _NUMPAD) {
+#ifdef AUDIO_ENABLE
+    PLAY_SONG(tone_numpad_exit);
+#endif
+    }
+    layer_off(_NUMPAD);
+    layer_off(_ADJUST);
+    break;
   }
 }
 
@@ -206,7 +227,12 @@ void numpad_reset (qk_tap_dance_state_t *state, void *user_data) {
   pre_numpad_disable();
   switch (numpad_tap_state.state) {
   case SINGLE_TAP: break;
-  case SINGLE_HOLD: layer_off(_NUMPAD); break;
+  case SINGLE_HOLD:
+    layer_off(_NUMPAD);
+#ifdef AUDIO_ENABLE
+    PLAY_SONG(tone_numpad_exit);
+#endif
+    break;
   case DOUBLE_TAP:
   case DOUBLE_SINGLE_TAP:
   case DOUBLE_HOLD: 
@@ -492,12 +518,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 
 };
-
-#ifdef AUDIO_ENABLE
-float tone_qwerty[][2]     = SONG(QWERTY_SOUND);
-float tone_dvorak[][2]     = SONG(DVORAK_SOUND);
-float tone_colemak[][2]    = SONG(COLEMAK_SOUND);
-#endif
 
 void persistent_default_layer_set(uint16_t default_layer) {
   eeconfig_update_default_layer(default_layer);
