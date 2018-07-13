@@ -1,6 +1,14 @@
 #include "planck.h"
 #include "action_layer.h"
 
+#ifdef AUDIO_ENABLE
+float tone_qwerty[][2]     = SONG(COIN_SOUND);
+float tone_dvorak[][2]     = SONG(MARIO_THEME);
+float tone_colemak[][2]    = SONG(ZELDA_TREASURE);
+float tone_numpad[][2]     = SONG(ZELDA_PUZZLE);
+float tone_numpad_exit[][2]     = SONG(SONIC_RING);
+#endif
+
 extern keymap_config_t keymap_config;
 
 // Each layer gets a name for readability, which is then used in the keymap matrix below.
@@ -40,12 +48,11 @@ enum custom_keycodes {
   EMACS_FLYC_NEXT,
   EMACS_FLYC_PREV,
   EMACS_FLYC_LIST,
-  SSH_PUB,
+  NUMPAD_START,
 };
 
 enum  {
-  SUPER_LAYER_CHANGE = 0,
-  NUMPAD_ADJUST,
+  NUMPAD_ADJUST = 0,
   SUPER_CTRL,
   SUPER_ALT,
 };
@@ -106,6 +113,11 @@ static tap ctrl_tap_state = {
 };
 
 static tap alt_tap_state = {
+  .is_press_action = true,
+  .state = 0
+};
+
+static tap numpad_tap_state = {
   .is_press_action = true,
   .state = 0
 };
@@ -182,10 +194,15 @@ void alt_reset (qk_tap_dance_state_t *state, void *user_data) {
 
 void numpad_finished (qk_tap_dance_state_t *state, void *user_data) {
   pre_numpad_disable();
-  alt_tap_state.state = cur_dance(state);
-  switch (alt_tap_state.state) {
+  numpad_tap_state.state = cur_dance(state);
+  switch (numpad_tap_state.state) {
   case SINGLE_TAP: 
-  case SINGLE_HOLD: layer_on(_NUMPAD); break;
+  case SINGLE_HOLD:
+    layer_on(_NUMPAD);
+#ifdef AUDIO_ENABLE
+    PLAY_SONG(tone_numpad);
+#endif
+    break;
   case DOUBLE_TAP:
   case DOUBLE_SINGLE_TAP:
   case DOUBLE_HOLD: 
@@ -196,64 +213,32 @@ void numpad_finished (qk_tap_dance_state_t *state, void *user_data) {
 
 void numpad_reset (qk_tap_dance_state_t *state, void *user_data) {
   pre_numpad_disable();
-  switch (alt_tap_state.state) {
+  switch (numpad_tap_state.state) {
   case SINGLE_TAP: break;
-  case SINGLE_HOLD: layer_off(_NUMPAD); break;
+  case SINGLE_HOLD:
+    layer_off(_NUMPAD);
+#ifdef AUDIO_ENABLE
+    PLAY_SONG(tone_numpad_exit);
+#endif
+    break;
   case DOUBLE_TAP:
   case DOUBLE_SINGLE_TAP:
   case DOUBLE_HOLD: 
   case TRIPLE_TAP: 
-  case TRIPLE_HOLD: layer_off(_NUMPAD); layer_off(_ADJUST); break;
-  }
-  alt_tap_state.state = 0;
-}
-
-void dance_super_finished (qk_tap_dance_state_t *state, void *user_data) {
-  if (state->count == 1) {
-    register_code (KC_LGUI);
-  } else {
-    layer_on(_RAISE);
-    register_code (KC_LGUI);
-  }
-}
-
-void dance_super_reset (qk_tap_dance_state_t *state, void *user_data) {
-  if (state->count == 1) {
-    unregister_code (KC_LGUI);
-  } else {
-    layer_off(_RAISE);
-    unregister_code (KC_LGUI);
-  }
-}
-
-void dance_numpad_adjust (qk_tap_dance_state_t *state, void *user_data) {
-  // one or two taps activates the numpad, two tap start is sticky
-  if (state->count < 3) {
-    pre_numpad_disable();
-    layer_on(_NUMPAD);
-    return;
-  }
-  if (state->count == 3) {
-    layer_on(_ADJUST);
-    return;
-  }
-}
-
-void dance_numpad_adjust_reset (qk_tap_dance_state_t *state, void *user_data) {
-  // one tap reset turns off the numpad
-  if (state->count == 1) {
-    pre_numpad_disable();
+  case TRIPLE_HOLD:
+    if (biton32(layer_state) == _NUMPAD) {
+#ifdef AUDIO_ENABLE
+    PLAY_SONG(tone_numpad_exit);
+#endif
+    }
     layer_off(_NUMPAD);
-    return;
-  }
-  if (state->count == 3) {
     layer_off(_ADJUST);
-    return;
+    break;
   }
+  numpad_tap_state.state = 0;
 }
 
 qk_tap_dance_action_t tap_dance_actions[] = {
-  [SUPER_LAYER_CHANGE] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_super_finished, dance_super_reset),
   [NUMPAD_ADJUST] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, numpad_finished, numpad_reset),
   [SUPER_CTRL] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, ctrl_finished, ctrl_reset),
   [SUPER_ALT] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, alt_finished, alt_reset),
@@ -278,11 +263,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] =
   * |      |      | Alt  | GUI  |Lower |Sp/Ctl|  |Sp/Alt|Raise | Left | Down |  Up  |Right |
   * `-----------------------------------------'  `-----------------------------------------'
   */
- [_QWERTY] = {
-              {KC_ESC            , KC_Q    , KC_W    , KC_E                   , KC_R  , KC_T           , KC_Y           , KC_U  , KC_I    , KC_O    , KC_P    , KC_BSPC         },
-              {LCTL_T(KC_TAB)    , KC_A    , KC_S    , KC_D                   , KC_F  , KC_G           , KC_H           , KC_J  , KC_K    , KC_L    , KC_SCLN , RCTL_T(KC_QUOT) },
-              {KC_LSFT           , KC_Z    , KC_X    , KC_C                   , KC_V  , KC_B           , KC_N           , KC_M  , KC_COMM , KC_DOT  , KC_SLSH , RSFT_T(KC_ENT)  },
-              {TD(NUMPAD_ADJUST) , XXXXXXX , KC_LALT , TD(SUPER_LAYER_CHANGE) , LOWER , TD(SUPER_CTRL) , TD(SUPER_ALT)  , RAISE , KC_LEFT , KC_DOWN , KC_UP   , KC_RGHT }
+ [_QWERTY] =
+ {
+  {KC_ESC             , KC_Q     , KC_W     , KC_E     , KC_R   , KC_T            , KC_Y           , KC_U   , KC_I     , KC_O     , KC_P     , KC_BSPC         },
+  {LCTL_T(KC_TAB)     , KC_A     , KC_S     , KC_D     , KC_F   , KC_G            , KC_H           , KC_J   , KC_K     , KC_L     , KC_SCLN  , RCTL_T(KC_QUOT) },
+  {KC_LSFT            , KC_Z     , KC_X     , KC_C     , KC_V   , KC_B            , KC_N           , KC_M   , KC_COMM  , KC_DOT   , KC_SLSH  , RSFT_T(KC_ENT)  },
+  {TD(NUMPAD_ADJUST)  , XXXXXXX  , KC_LALT  , KC_LGUI  , LOWER  , TD(SUPER_CTRL)  , TD(SUPER_ALT)  , RAISE  , KC_LEFT  , KC_DOWN  , KC_UP    , KC_RGHT }
  },
 
  /* Colemak
@@ -296,11 +282,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] =
   * |      |      | Alt  | GUI  |Lower |Sp/Ctl|  |Sp/Alt|Raise | Left | Down |  Up  |Right |
   * `-----------------------------------------'  `-----------------------------------------'
   */
- [_COLEMAK] = {
-               {KC_ESC            , KC_Q    , KC_W    , KC_F                   , KC_P  , KC_G           , KC_J           , KC_L  , KC_U    , KC_Y    , KC_SCLN , KC_BSPC         },
-               {LCTL_T(KC_TAB)    , KC_A    , KC_R    , KC_S                   , KC_T  , KC_D           , KC_H           , KC_N  , KC_E    , KC_I    , KC_O    , RCTL_T(KC_QUOT) },
-               {KC_LSFT           , KC_Z    , KC_X    , KC_C                   , KC_V  , KC_B           , KC_K           , KC_M  , KC_COMM , KC_DOT  , KC_SLSH , RSFT_T(KC_ENT)  },
-               {TD(NUMPAD_ADJUST) , XXXXXXX , KC_LALT , TD(SUPER_LAYER_CHANGE) , LOWER , TD(SUPER_CTRL) , TD(SUPER_ALT)  , RAISE , KC_LEFT , KC_DOWN , KC_UP   , KC_RGHT }
+ [_COLEMAK] =
+ {
+  {KC_ESC             , KC_Q     , KC_W     , KC_F     , KC_P   , KC_G            , KC_J           , KC_L   , KC_U     , KC_Y     , KC_SCLN  , KC_BSPC         },
+  {LCTL_T(KC_TAB)     , KC_A     , KC_R     , KC_S     , KC_T   , KC_D            , KC_H           , KC_N   , KC_E     , KC_I     , KC_O     , RCTL_T(KC_QUOT) },
+  {KC_LSFT            , KC_Z     , KC_X     , KC_C     , KC_V   , KC_B            , KC_K           , KC_M   , KC_COMM  , KC_DOT   , KC_SLSH  , RSFT_T(KC_ENT)  },
+  {TD(NUMPAD_ADJUST)  , XXXXXXX  , KC_LALT  , KC_LGUI  , LOWER  , TD(SUPER_CTRL)  , TD(SUPER_ALT)  , RAISE  , KC_LEFT  , KC_DOWN  , KC_UP    , KC_RGHT }
  },
  
  /* Workman
@@ -314,11 +301,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] =
   * |      |      | Alt  | GUI  |Lower |Sp/Ctl|  |Sp/Alt|Raise | Left | Down |  Up  |Right |
   * `-----------------------------------------'  `-----------------------------------------'
   */
- [_WORKMAN]  = {
-                {KC_ESC            , KC_Q    , KC_D    , KC_R                   , KC_W  , KC_B           , KC_J           , KC_F  , KC_U    , KC_P    , KC_SCLN , KC_BSPC         },
-                {LCTL_T(KC_TAB)    , KC_A    , KC_S    , KC_H                   , KC_T  , KC_G           , KC_Y           , KC_N  , KC_E    , KC_O    , KC_I    , RCTL_T(KC_QUOT) },
-                {KC_LSFT           , KC_Z    , KC_X    , KC_M                   , KC_C  , KC_V           , KC_K           , KC_L  , KC_COMM , KC_DOT  , KC_SLSH , RSFT_T(KC_ENT)  },
-                {TD(NUMPAD_ADJUST) , XXXXXXX , KC_LALT , TD(SUPER_LAYER_CHANGE) , LOWER , TD(SUPER_CTRL) , TD(SUPER_ALT)  , RAISE , KC_LEFT , KC_DOWN , KC_UP   , KC_RGHT }
+ [_WORKMAN]  =
+ {
+  {KC_ESC             , KC_Q     , KC_D     , KC_R     , KC_W   , KC_B            , KC_J           , KC_F   , KC_U     , KC_P     , KC_SCLN  , KC_BSPC         },
+  {LCTL_T(KC_TAB)     , KC_A     , KC_S     , KC_H     , KC_T   , KC_G            , KC_Y           , KC_N   , KC_E     , KC_O     , KC_I     , RCTL_T(KC_QUOT) },
+  {KC_LSFT            , KC_Z     , KC_X     , KC_M     , KC_C   , KC_V            , KC_K           , KC_L   , KC_COMM  , KC_DOT   , KC_SLSH  , RSFT_T(KC_ENT)  },
+  {TD(NUMPAD_ADJUST)  , XXXXXXX  , KC_LALT  , KC_LGUI  , LOWER  , TD(SUPER_CTRL)  , TD(SUPER_ALT)  , RAISE  , KC_LEFT  , KC_DOWN  , KC_UP    , KC_RGHT }
  },
  
  /* Norman
@@ -332,11 +320,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] =
   * |      |      | Alt  | GUI  |Lower |Sp/Ctl|  |Sp/Alt|Raise | Left | Down |  Up  |Right |
   * `-----------------------------------------'  `-----------------------------------------'
   */
- [_NORMAN]  = {
-               {KC_ESC            , KC_Q    , KC_W    , KC_D                   , KC_F  , KC_K           , KC_J           , KC_U  , KC_R    , KC_L    , KC_SCLN , KC_BSPC         },
-               {LCTL_T(KC_TAB)    , KC_A    , KC_S    , KC_E                   , KC_T  , KC_G           , KC_Y           , KC_N  , KC_I    , KC_O    , KC_H    , RCTL_T(KC_QUOT) },
-               {KC_LSFT           , KC_Z    , KC_X    , KC_C                   , KC_V  , KC_B           , KC_P           , KC_M  , KC_COMM , KC_DOT  , KC_SLSH , RSFT_T(KC_ENT)  },
-               {TD(NUMPAD_ADJUST) , XXXXXXX , KC_LALT , TD(SUPER_LAYER_CHANGE) , LOWER , TD(SUPER_CTRL) , TD(SUPER_ALT)  , RAISE , KC_LEFT , KC_DOWN , KC_UP   , KC_RGHT }
+ [_NORMAN]  =
+ {
+  {KC_ESC             , KC_Q     , KC_W     , KC_D     , KC_F   , KC_K            , KC_J           , KC_U   , KC_R     , KC_L     , KC_SCLN  , KC_BSPC         },
+  {LCTL_T(KC_TAB)     , KC_A     , KC_S     , KC_E     , KC_T   , KC_G            , KC_Y           , KC_N   , KC_I     , KC_O     , KC_H     , RCTL_T(KC_QUOT) },
+  {KC_LSFT            , KC_Z     , KC_X     , KC_C     , KC_V   , KC_B            , KC_P           , KC_M   , KC_COMM  , KC_DOT   , KC_SLSH  , RSFT_T(KC_ENT)  },
+  {TD(NUMPAD_ADJUST)  , XXXXXXX  , KC_LALT  , KC_LGUI  , LOWER  , TD(SUPER_CTRL)  , TD(SUPER_ALT)  , RAISE  , KC_LEFT  , KC_DOWN  , KC_UP    , KC_RGHT }
  },
  
  /* Lower
@@ -350,11 +339,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] =
   * |      |      |      |      |      |      |  |      |      | Home | PgDn | PgUp | End  |
   * `-----------------------------------------'  `-----------------------------------------'
   */
- [_LOWER] = {
-             {KC_TILD , KC_EXLM , KC_AT   , KC_HASH , KC_DLR  , KC_PERC , KC_CIRC , KC_AMPR    , KC_ASTR    , KC_LPRN , KC_RPRN , KC_DEL  },
-             {KC_F1   , KC_F2   , KC_F3   , KC_F4   , KC_F5   , KC_F6   , KC_COLN , KC_UNDS    , KC_PLUS    , KC_LCBR , KC_RCBR , KC_PIPE },
-             {KC_F7   , KC_F8   , KC_F9   , KC_F10  , KC_F11  , KC_F12  , XXXXXXX , S(KC_NUHS) , S(KC_NUBS) , _______ , _______ , _______ },
-             {_______ , _______ , _______ , _______ , _______ , _______ , _______ , _______    , KC_HOME    , KC_PGDN , KC_PGUP , KC_END  }
+ [_LOWER] =
+ {
+  {KC_TILD , KC_EXLM , KC_AT   , KC_HASH , KC_DLR  , KC_PERC , KC_CIRC , KC_AMPR    , KC_ASTR    , KC_LPRN , KC_RPRN , KC_DEL  },
+  {KC_F1   , KC_F2   , KC_F3   , KC_F4   , KC_F5   , KC_F6   , KC_COLN , KC_UNDS    , KC_PLUS    , KC_LCBR , KC_RCBR , KC_PIPE },
+  {KC_F7   , KC_F8   , KC_F9   , KC_F10  , KC_F11  , KC_F12  , XXXXXXX , S(KC_NUHS) , S(KC_NUBS) , _______ , _______ , _______ },
+  {_______ , _______ , _______ , _______ , _______ , _______ , _______ , _______    , KC_HOME    , KC_PGDN , KC_PGUP , KC_END  }
  }, 
  
  /* Raise
@@ -368,11 +358,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] =
   * |      |      |      |      |      |      |  |      |      | Next | Vol- | Vol+ | Mute |
   * `-----------------------------------------'  `-----------------------------------------'
   */
- [_RAISE] = {
-             {KC_GRV  , KC_1    , KC_2    , KC_3    , KC_4    , KC_5    , KC_6    , KC_7    , KC_8    , KC_9    , KC_0    , KC_DEL  },
-             {KC_F1   , KC_F2   , KC_F3   , KC_F4   , KC_F5   , KC_F6   , KC_SCLN , KC_MINS , KC_EQL  , KC_LBRC , KC_RBRC , KC_BSLS },
-             {KC_F7   , KC_F8   , KC_F9   , KC_F10  , KC_F11  , KC_F12  , XXXXXXX , KC_NUHS , KC_NUBS , _______ , _______ , _______ },
-             {_______ , _______ , _______ , _______ , _______ , _______ , _______ , _______ , KC_MPLY , KC_VOLD , KC_VOLU , KC_MUTE }
+ [_RAISE] =
+ {
+  {KC_GRV  , KC_1    , KC_2    , KC_3    , KC_4    , KC_5    , KC_6    , KC_7    , KC_8    , KC_9    , KC_0    , KC_DEL  },
+  {KC_F1   , KC_F2   , KC_F3   , KC_F4   , KC_F5   , KC_F6   , KC_SCLN , KC_MINS , KC_EQL  , KC_LBRC , KC_RBRC , KC_BSLS },
+  {KC_F7   , KC_F8   , KC_F9   , KC_F10  , KC_F11  , KC_F12  , XXXXXXX , KC_NUHS , KC_NUBS , _______ , _______ , _______ },
+  {_______ , _______ , _______ , _______ , _______ , _______ , _______ , _______ , KC_MPLY , KC_VOLD , KC_VOLU , KC_MUTE }
  },
  
  /* Adjust
@@ -386,11 +377,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] =
   * |      |      |      |      |      |         |Qwerty|      |      |      |      |      |
   * `-----------------------------------------'  `-----------------------------------------'
   */
- [_ADJUST] =  {
-               {RESET   , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , NORMAN  , KC_HOME , KC_PGUP   , KC_PSCREEN , KC_SCROLLLOCK , KC_PAUSE },
-               {AG_SWAP , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , WORKMAN , KC_END  , KC_PGDOWN , KC_INSERT  , XXXXXXX       , XXXXXXX  },
-               {AG_NORM , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , COLEMAK , XXXXXXX , XXXXXXX   , XXXXXXX    , XXXXXXX       , XXXXXXX  },
-               {_______ , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , QWERTY  , XXXXXXX , XXXXXXX   , XXXXXXX    , XXXXXXX       , XXXXXXX }
+ [_ADJUST] =
+ {
+  {RESET   , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , NORMAN  , KC_HOME , KC_PGUP   , KC_PSCREEN , KC_SCROLLLOCK , KC_PAUSE },
+  {AG_SWAP , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , WORKMAN , KC_END  , KC_PGDOWN , KC_INSERT  , XXXXXXX       , XXXXXXX  },
+  {AG_NORM , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , COLEMAK , XXXXXXX , XXXXXXX   , XXXXXXX    , XXXXXXX       , XXXXXXX  },
+  {_______ , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , QWERTY  , XXXXXXX , XXXXXXX   , XXXXXXX    , XXXXXXX       , XXXXXXX }
  },
  
  /* Emacs (Lower + Raise)
@@ -404,11 +396,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] =
   * |      |      |      |      |      |         |      |      |      |      |      |      |
   * `-----------------------------------------'  `-----------------------------------------'
   */
- [_EMACS] =  {
-              {RESET          , EMACS_WIN_1       , EMACS_WIN_2     , EMACS_WIN_3       , EMACS_WIN_4        , XXXXXXX          , XXXXXXX          , XXXXXXX         , XXXXXXX         , XXXXXXX         , EMACS_WIN_0 , SSH_PUB },
-              {EMACS_PROJ_GIT , EMACS_PROJ_SWITCH , EMACS_PROJ_FILE , EMACS_PROJ_SEARCH , EMACS_PROJ_COMPILE , EMACS_PROJ_SHELL , EMACS_FLYC_CHECK , EMACS_FLYC_NEXT , EMACS_FLYC_PREV , EMACS_FLYC_LIST , XXXXXXX     , XXXXXXX },
-              {XXXXXXX        , XXXXXXX           , XXXXXXX         , XXXXXXX           , XXXXXXX            , XXXXXXX          , XXXXXXX          , XXXXXXX         , XXXXXXX         , XXXXXXX         , XXXXXXX     , XXXXXXX },
-              {_______        , _______           , XXXXXXX         , XXXXXXX           , _______            , XXXXXXX          , XXXXXXX          , _______         , XXXXXXX         , XXXXXXX         , XXXXXXX     , XXXXXXX }
+ [_EMACS] =
+ {
+  {RESET          , EMACS_WIN_1       , EMACS_WIN_2     , EMACS_WIN_3       , EMACS_WIN_4        , XXXXXXX          , XXXXXXX          , XXXXXXX         , XXXXXXX         , XXXXXXX         , EMACS_WIN_0 , XXXXXXX },
+  {EMACS_PROJ_GIT , EMACS_PROJ_SWITCH , EMACS_PROJ_FILE , EMACS_PROJ_SEARCH , EMACS_PROJ_COMPILE , EMACS_PROJ_SHELL , EMACS_FLYC_CHECK , EMACS_FLYC_NEXT , EMACS_FLYC_PREV , EMACS_FLYC_LIST , XXXXXXX     , XXXXXXX },
+  {XXXXXXX        , XXXXXXX           , XXXXXXX         , XXXXXXX           , XXXXXXX            , XXXXXXX          , XXXXXXX          , XXXXXXX         , XXXXXXX         , XXXXXXX         , XXXXXXX     , XXXXXXX },
+  {_______        , _______           , XXXXXXX         , XXXXXXX           , _______            , XXXXXXX          , XXXXXXX          , _______         , XXXXXXX         , XXXXXXX         , XXXXXXX     , XXXXXXX }
  },
  
  /* Number Pad
@@ -422,19 +415,15 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] =
   * |      |      |      |      |      |         |             |  +   |      0      |  .   |
   * `-----------------------------------------'  `-----------------------------------------'
   */
- [_NUMPAD] =  {
-               {RESET   , _______ , _______ , _______ , _______ , _______ , KC_NLCK , KC_BSPC , KC_PSLS , KC_KP_7 , KC_KP_8 , KC_KP_9 },
-               {_______ , _______ , _______ , _______ , _______ , _______ , XXXXXXX , XXXXXXX , KC_PAST , KC_KP_4 , KC_KP_5 , KC_KP_6 },
-               {_______ , _______ , _______ , _______ , _______ , _______ , KC_PENT , KC_PENT , KC_PMNS , KC_KP_1 , KC_KP_2 , KC_KP_3 },
-               {_______ , _______ , _______ , _______ , _______ , _______ , KC_PENT , KC_PENT , KC_PPLS , KC_KP_0 , KC_KP_0 , KC_PDOT }
+ [_NUMPAD] =
+ {
+  {RESET   , _______ , _______ , _______ , _______ , _______ , KC_NLCK , KC_BSPC , KC_PSLS , KC_KP_7 , KC_KP_8 , KC_KP_9 },
+  {_______ , _______ , _______ , _______ , _______ , _______ , XXXXXXX , XXXXXXX , KC_PAST , KC_KP_4 , KC_KP_5 , KC_KP_6 },
+  {_______ , _______ , _______ , _______ , _______ , _______ , KC_PENT , KC_PENT , KC_PMNS , KC_KP_1 , KC_KP_2 , KC_KP_3 },
+  {_______ , _______ , _______ , _______ , _______ , _______ , KC_PENT , KC_PENT , KC_PPLS , KC_KP_0 , KC_KP_0 , KC_PDOT }
  },
 };
 
-#ifdef AUDIO_ENABLE
-float tone_qwerty[][2]     = SONG(COIN_SOUND);
-float tone_dvorak[][2]     = SONG(ONE_UP_SOUND);
-float tone_colemak[][2]    = SONG(ZELDA_TREASURE);
-#endif
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
@@ -589,12 +578,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     case EMACS_FLYC_LIST:
       if (record->event.pressed) {
         SEND_STRING(SS_LCTRL("c")"!l");
-      }
-      return true;
-      break;
-    case SSH_PUB:
-      if (record->event.pressed) {
-        SEND_STRING("ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC8RjYOMQzmVfqACviToDhEcaGfzA+chsL0Ut+7ni18EFreduIVOfPX6iceRC9yaACNjbZxz0i5+ABhgDFXLEqOoLJczW1zlinRfeMaQEyGgTAuSyhYYBy8iZnHG5Y1yR2vUQW2PQjxmBP5KH9ctmFJG/Nahppag/WMcwto/VGcp0FhQUiwIumFt5g3rONXWhuF9iAK3a0mvVQbbCdHsAjK+K5jl6jDUAAxkY98WoPaHWkrt3rhYYKXWWja1I/d7r+wn3aRArN/9H7ciQohELykQbEGT/TTZK2Ahx6uS5oUhE+BW4ckGj4gY/+faOZqeRG3KMtbyEpU7K9IdHQ8Z+Ej");
       }
       return true;
       break;
