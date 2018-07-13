@@ -29,11 +29,35 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define TAPPING_TERM 200
 
 #ifdef AUDIO_ENABLE
-  #define STARTUP_SONG SONG(ZELDA_PUZZLE)
-#endif
+  #define MUSHROOM \
+    S__NOTE(_C5 ), \
+    S__NOTE(_G4 ), \
+    S__NOTE(_C5 ), \
+    S__NOTE(_E5 ), \
+    S__NOTE(_G5 ), \
+    S__NOTE(_C6 ), \
+    S__NOTE(_G5 ), \
+    S__NOTE(_GS4 ), \
+    S__NOTE(_C5 ), \
+    S__NOTE(_DS5 ), \
+    S__NOTE(_GS5 ), \
+    S__NOTE(_DS5 ), \
+    S__NOTE(_GS5 ), \
+    S__NOTE(_C6 ), \
+    S__NOTE(_DS6 ), \
+    S__NOTE(_GS6 ), \
+    S__NOTE(_DS6 ), \
+    S__NOTE(_AS4 ), \
+    S__NOTE(_D5 ), \
+    S__NOTE(_F5 ), \
+    S__NOTE(_AS5 ), \
+    S__NOTE(_D6 ), \
+    S__NOTE(_F6 ), \
+    S__NOTE(_AS6 ), \
+    S__NOTE(_F6 )
 
-#ifdef AUDIO_ENABLE
-  #define GOODBYE_SONG SONG(MARIO_GAMEOVER)
+  #define STARTUP_SONG SONG(MUSHROOM)
+      
 #endif
 
 #endif
