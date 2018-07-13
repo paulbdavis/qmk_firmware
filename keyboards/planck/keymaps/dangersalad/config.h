@@ -28,4 +28,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #define TAPPING_TERM 200
 
+#ifdef AUDIO_ENABLE
+  #define STARTUP_SONG SONG(ZELDA_PUZZLE)
+#endif
+
+#ifdef AUDIO_ENABLE
+  #define GOODBYE_SONG SONG(MARIO_GAMEOVER)
+#endif
+
 #endif
