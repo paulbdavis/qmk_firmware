@@ -211,15 +211,7 @@ void numpad_finished (qk_tap_dance_state_t *state, void *user_data) {
   case DOUBLE_SINGLE_TAP:
   case DOUBLE_HOLD: 
   case TRIPLE_TAP: 
-  case TRIPLE_HOLD:
-    if (biton32(layer_state) == _NUMPAD) {
-#ifdef AUDIO_ENABLE
-    PLAY_SONG(tone_numpad_exit);
-#endif
-    }
-    layer_off(_NUMPAD);
-    layer_off(_ADJUST);
-    break;
+  case TRIPLE_HOLD: layer_on(_ADJUST); break;
   }
 }
 
@@ -237,7 +229,15 @@ void numpad_reset (qk_tap_dance_state_t *state, void *user_data) {
   case DOUBLE_SINGLE_TAP:
   case DOUBLE_HOLD: 
   case TRIPLE_TAP: 
-  case TRIPLE_HOLD: layer_off(_NUMPAD); layer_off(_ADJUST); break;
+  case TRIPLE_HOLD:
+    if (biton32(layer_state) == _NUMPAD) {
+#ifdef AUDIO_ENABLE
+    PLAY_SONG(tone_numpad_exit);
+#endif
+    }
+    layer_off(_NUMPAD);
+    layer_off(_ADJUST);
+    break;
   }
   numpad_tap_state.state = 0;
 }
