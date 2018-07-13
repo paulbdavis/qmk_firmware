@@ -113,6 +113,11 @@ static tap alt_tap_state = {
   .state = 0
 };
 
+static tap numpad_tap_state = {
+  .is_press_action = true,
+  .state = 0
+};
+
 void ctrl_finished (qk_tap_dance_state_t *state, void *user_data) {
   ctrl_tap_state.state = cur_dance(state);
   switch (ctrl_tap_state.state) {
@@ -185,8 +190,8 @@ void alt_reset (qk_tap_dance_state_t *state, void *user_data) {
 
 void numpad_finished (qk_tap_dance_state_t *state, void *user_data) {
   pre_numpad_disable();
-  alt_tap_state.state = cur_dance(state);
-  switch (alt_tap_state.state) {
+  numpad_tap_state.state = cur_dance(state);
+  switch (numpad_tap_state.state) {
   case SINGLE_TAP: 
   case SINGLE_HOLD: layer_on(_NUMPAD); break;
   case DOUBLE_TAP:
@@ -199,7 +204,7 @@ void numpad_finished (qk_tap_dance_state_t *state, void *user_data) {
 
 void numpad_reset (qk_tap_dance_state_t *state, void *user_data) {
   pre_numpad_disable();
-  switch (alt_tap_state.state) {
+  switch (numpad_tap_state.state) {
   case SINGLE_TAP: break;
   case SINGLE_HOLD: layer_off(_NUMPAD); break;
   case DOUBLE_TAP:
@@ -208,7 +213,7 @@ void numpad_reset (qk_tap_dance_state_t *state, void *user_data) {
   case TRIPLE_TAP: 
   case TRIPLE_HOLD: layer_off(_NUMPAD); layer_off(_ADJUST); break;
   }
-  alt_tap_state.state = 0;
+  numpad_tap_state.state = 0;
 }
 
 void dance_super_finished (qk_tap_dance_state_t *state, void *user_data) {
