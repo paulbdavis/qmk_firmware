@@ -3,4 +3,4 @@ ifndef QUANTUM_DIR
 endif
 
 AUDIO_ENABLE = yes
-TAP_DANCE_ENABLE = yes
+

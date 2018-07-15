@@ -35,20 +35,9 @@
 
 #define C6_AUDIO
 
-#define PREVENT_STUCK_MODIFIERS
-
-#define TAPPING_TERM 200
-
 #ifdef AUDIO_ENABLE
-#define BEEP                                    \
-  S__NOTE(_C3 )
 
-#define DOUBLE_BEEP                             \
-  S__NOTE(_C3 ),                                \
-    S__NOTE(_REST ),                            \
-    S__NOTE(_C3 )
-
-#define STARTUP_SONG SONG(BEEP)
+#define STARTUP_SONG SONG(BEEP_BEEP)
       
 #endif
 
