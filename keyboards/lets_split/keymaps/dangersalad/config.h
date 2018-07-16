@@ -35,10 +35,5 @@
 
 #define C6_AUDIO
 
-#ifdef AUDIO_ENABLE
-
-#define STARTUP_SONG SONG(BEEP_BEEP)
-      
-#endif
 
 #endif

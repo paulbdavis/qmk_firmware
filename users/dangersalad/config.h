@@ -44,7 +44,11 @@
   S__NOTE(_A4 ),                                \
     S__NOTE(_REST ),                            \
     S__NOTE(_A4 )
+
+#define STARTUP_SONG SONG(MUSHROOM)
+
 #endif
+
 
 
 #endif // !USERSPACE_CONFIG_H

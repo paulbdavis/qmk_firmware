@@ -4,10 +4,10 @@
 #include "eeconfig.h"
 
 #ifdef AUDIO_ENABLE
-float tone_qwerty[][2]       = SONG(BEEP);
-float tone_workman[][2]       = SONG(BEEP_BEEP);
-float tone_numpad[][2]       = SONG(BEEP_BEEP);
-float tone_numpad_exit[][2]  = SONG(BEEP);
+float tone_qwerty[][2]      = SONG(COIN_SOUND);
+float tone_workman[][2]     = SONG(MARIO_THEME);
+float tone_numpad[][2]      = SONG(ZELDA_PUZZLE);
+float tone_numpad_exit[][2] = SONG(BEEP_BEEP);
 #endif
 
 extern keymap_config_t keymap_config;
