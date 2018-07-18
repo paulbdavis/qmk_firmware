@@ -248,24 +248,6 @@ qk_tap_dance_action_t tap_dance_actions[] = {
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
-/* Qwerty
- * ,-----------------------------------------.  ,-----------------------------------------.
- * | Esc  |   Q  |   W  |   E  |   R  |   T  |  |   Y  |   U  |   I  |   O  |   P  | Bksp |
- * |------+------+------+------+------+------|  |------+------+------+------+------+------|
- * | Ctrl |   A  |   S  |   D  |   F  |   G  |  |   H  |   J  |   K  |   L  |   ;  |  '   |
- * |------+------+------+------+------+------|  |------+------+------+------+------+------|
- * | Shift|   Z  |   X  |   C  |   V  |   B  |  |   N  |   M  |   ,  |   .  |   /  |Enter |
- * |------+------+------+------+------+------|  |------+------+------+------+------+------|
- * |      |      | Alt  | GUI  |Lower |Sp/Ctl|  |Sp/Alt|Raise | Left | Down |  Up  |Right |
- * `-----------------------------------------'  `-----------------------------------------'
- */
-[_QWERTY] = LAYOUT_ortho_4x12( \
-  KC_ESC             , KC_Q     , KC_W     , KC_E                    , KC_R   , KC_T            , KC_Y           , KC_U   , KC_I     , KC_O     , KC_P     , KC_BSPC          , \
-  LCTL_T(KC_TAB)     , KC_A     , KC_S     , KC_D                    , KC_F   , KC_G            , KC_H           , KC_J   , KC_K     , KC_L     , KC_SCLN  , RCTL_T(KC_QUOT)  , \
-  KC_LSFT            , KC_Z     , KC_X     , KC_C                    , KC_V   , KC_B            , KC_N           , KC_M   , KC_COMM  , KC_DOT   , KC_SLSH  , RSFT_T(KC_ENT)   , \
-  TD(NUMPAD_ADJUST)  , XXXXXXX  , KC_LALT  , TD(SUPER_LAYER_CHANGE)  , LOWER  , TD(SUPER_CTRL)  , TD(SUPER_ALT)  , RAISE  , KC_LEFT  , KC_DOWN  , KC_UP    , KC_RGHT \
-),
-
 /* Workman
  * ,-----------------------------------------.  ,-----------------------------------------.
  * | Esc  |   Q  |   D  |   R  |   W  |   B  |  |   J  |   F  |   U  |   P  |   ;  | Bksp |
@@ -281,6 +263,24 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   KC_ESC             , KC_Q     , KC_D     , KC_R                    , KC_W   , KC_B            , KC_J           , KC_F   , KC_U     , KC_P     , KC_SCLN  , KC_BSPC          , \
   LCTL_T(KC_TAB)     , KC_A     , KC_S     , KC_H                    , KC_T   , KC_G            , KC_Y           , KC_N   , KC_E     , KC_O     , KC_I     , RCTL_T(KC_QUOT)  , \
   KC_LSFT            , KC_Z     , KC_X     , KC_M                    , KC_C   , KC_V            , KC_K           , KC_L   , KC_COMM  , KC_DOT   , KC_SLSH  , RSFT_T(KC_ENT)   , \
+  TD(NUMPAD_ADJUST)  , XXXXXXX  , KC_LALT  , TD(SUPER_LAYER_CHANGE)  , LOWER  , TD(SUPER_CTRL)  , TD(SUPER_ALT)  , RAISE  , KC_LEFT  , KC_DOWN  , KC_UP    , KC_RGHT \
+),
+
+/* Qwerty
+ * ,-----------------------------------------.  ,-----------------------------------------.
+ * | Esc  |   Q  |   W  |   E  |   R  |   T  |  |   Y  |   U  |   I  |   O  |   P  | Bksp |
+ * |------+------+------+------+------+------|  |------+------+------+------+------+------|
+ * | Ctrl |   A  |   S  |   D  |   F  |   G  |  |   H  |   J  |   K  |   L  |   ;  |  '   |
+ * |------+------+------+------+------+------|  |------+------+------+------+------+------|
+ * | Shift|   Z  |   X  |   C  |   V  |   B  |  |   N  |   M  |   ,  |   .  |   /  |Enter |
+ * |------+------+------+------+------+------|  |------+------+------+------+------+------|
+ * |      |      | Alt  | GUI  |Lower |Sp/Ctl|  |Sp/Alt|Raise | Left | Down |  Up  |Right |
+ * `-----------------------------------------'  `-----------------------------------------'
+ */
+[_QWERTY] = LAYOUT_ortho_4x12( \
+  KC_ESC             , KC_Q     , KC_W     , KC_E                    , KC_R   , KC_T            , KC_Y           , KC_U   , KC_I     , KC_O     , KC_P     , KC_BSPC          , \
+  LCTL_T(KC_TAB)     , KC_A     , KC_S     , KC_D                    , KC_F   , KC_G            , KC_H           , KC_J   , KC_K     , KC_L     , KC_SCLN  , RCTL_T(KC_QUOT)  , \
+  KC_LSFT            , KC_Z     , KC_X     , KC_C                    , KC_V   , KC_B            , KC_N           , KC_M   , KC_COMM  , KC_DOT   , KC_SLSH  , RSFT_T(KC_ENT)   , \
   TD(NUMPAD_ADJUST)  , XXXXXXX  , KC_LALT  , TD(SUPER_LAYER_CHANGE)  , LOWER  , TD(SUPER_CTRL)  , TD(SUPER_ALT)  , RAISE  , KC_LEFT  , KC_DOWN  , KC_UP    , KC_RGHT \
 ),
 

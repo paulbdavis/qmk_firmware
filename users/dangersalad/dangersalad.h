@@ -3,8 +3,8 @@
 
 #include "quantum.h"
 
-#define _QWERTY 0
-#define _WORKMAN 1
+#define _WORKMAN 0
+#define _QWERTY 1
 #define _LOWER 2
 #define _RAISE 3
 #define _EMACS 4
@@ -17,8 +17,8 @@
 
 // Define all of
 enum custom_keycodes {
-  QWERTY = SAFE_RANGE,
-  WORKMAN,
+  WORKMAN = SAFE_RANGE,
+  QWERTY,
   LOWER,
   RAISE,
   ADJUST,
