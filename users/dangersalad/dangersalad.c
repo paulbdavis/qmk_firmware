@@ -331,21 +331,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |      |      |      |      |      |         |Qwerty|      |      |      |      |      |
  * `-----------------------------------------'  `-----------------------------------------'
  */
-#ifdef KEYBOARD_lets_split_eh_eh
 [_ADJUST] =  LAYOUT_ortho_4x12( \
   RESET   , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , KC_HOME , KC_PGUP   , KC_PSCREEN , KC_SCROLLLOCK , KC_PAUSE , \
   AG_SWAP , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , WORKMAN , KC_END  , KC_PGDOWN , KC_INSERT  , XXXXXXX       , XXXXXXX  , \
   AG_NORM , RGB_TOG , RGB_MOD , RGB_HUI , RGB_SAI , RGB_VAI , XXXXXXX , XXXXXXX , XXXXXXX   , XXXXXXX    , XXXXXXX       , XXXXXXX  , \
   _______ , AU_ON   , AU_OFF  , RGB_HUD , RGB_SAD , RGB_VAD , QWERTY  , XXXXXXX , XXXXXXX   , XXXXXXX    , XXXXXXX       , XXXXXXX \
                                 ),
-#else
-[_ADJUST] =  LAYOUT_ortho_4x12( \
-  RESET   , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , KC_HOME , KC_PGUP   , KC_PSCREEN , KC_SCROLLLOCK , KC_PAUSE , \
-  AG_SWAP , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , WORKMAN , KC_END  , KC_PGDOWN , KC_INSERT  , XXXXXXX       , XXXXXXX  , \
-  AG_NORM , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX   , XXXXXXX    , XXXXXXX       , XXXXXXX  , \
-  _______ , AU_ON   , AU_OFF  , XXXXXXX , XXXXXXX , XXXXXXX , QWERTY  , XXXXXXX , XXXXXXX   , XXXXXXX    , XXXXXXX       , XXXXXXX \
-),
-#endif
 /* Emacs (Lower + Raise)
  * ,-----------------------------------------.  ,-----------------------------------------.
  * |      |      |      |      |      |      |  |      |      |      |      |      |      |
