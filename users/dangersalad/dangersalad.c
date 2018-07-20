@@ -26,6 +26,34 @@ void play_numpad_exit_sound(void) {
 }
 
 
+void set_bg_color (uint16_t color) {
+#ifdef RGBLIGHT_ENABLE
+  switch (color) {
+  case COLOR_DEFAULT:
+    rgblight_sethsv_green();
+    break;
+  case COLOR_RAISE:
+    rgblight_sethsv_orange();
+    break;
+  case COLOR_LOWER:
+    rgblight_sethsv_azure();
+    break;
+  case COLOR_ADJUST:
+    rgblight_sethsv_magenta();
+    break;
+  case COLOR_NUMPAD:
+    rgblight_sethsv_red();
+    break;
+  case COLOR_EMACS:
+    rgblight_sethsv_yellow();
+    break;
+  }
+#ifdef SPLIT_KEYBOARD
+  RGB_DIRTY = true;
+#endif
+#endif
+}
+
 typedef struct {
   bool is_press_action;
   int state;
@@ -154,6 +182,7 @@ void numpad_finished (qk_tap_dance_state_t *state, void *user_data) {
   case SINGLE_TAP: 
   case SINGLE_HOLD:
     layer_on(_NUMPAD);
+    set_bg_color(COLOR_NUMPAD);
 #ifdef AUDIO_ENABLE
     play_numpad_sound();
 #endif
@@ -162,7 +191,10 @@ void numpad_finished (qk_tap_dance_state_t *state, void *user_data) {
   case DOUBLE_SINGLE_TAP:
   case DOUBLE_HOLD: 
   case TRIPLE_TAP: 
-  case TRIPLE_HOLD: layer_on(_ADJUST); break;
+  case TRIPLE_HOLD:
+    set_bg_color(COLOR_ADJUST);
+    layer_on(_ADJUST);
+    break;
   }
 }
 
@@ -172,6 +204,7 @@ void numpad_reset (qk_tap_dance_state_t *state, void *user_data) {
   case SINGLE_TAP: break;
   case SINGLE_HOLD:
     layer_off(_NUMPAD);
+    set_bg_color(COLOR_DEFAULT);
 #ifdef AUDIO_ENABLE
     play_numpad_exit_sound();
 #endif
@@ -188,6 +221,7 @@ void numpad_reset (qk_tap_dance_state_t *state, void *user_data) {
     }
     layer_off(_NUMPAD);
     layer_off(_ADJUST);
+    set_bg_color(COLOR_DEFAULT);
     break;
   }
   numpad_tap_state.state = 0;
@@ -211,32 +245,6 @@ void dance_super_reset (qk_tap_dance_state_t *state, void *user_data) {
   }
 }
 
-
-void dance_numpad_adjust (qk_tap_dance_state_t *state, void *user_data) {
-  // one or two taps activates the numpad, two tap start is sticky
-  if (state->count < 3) {
-    pre_numpad_disable();
-    layer_on(_NUMPAD);
-    return;
-  }
-  if (state->count == 3) {
-    layer_on(_ADJUST);
-    return;
-  }
-}
-
-void dance_numpad_adjust_reset (qk_tap_dance_state_t *state, void *user_data) {
-  // one tap reset turns off the numpad
-  if (state->count == 1) {
-    pre_numpad_disable();
-    layer_off(_NUMPAD);
-    return;
-  }
-  if (state->count == 3) {
-    layer_off(_ADJUST);
-    return;
-  }
-}
 
 qk_tap_dance_action_t tap_dance_actions[] = {
   [SUPER_LAYER_CHANGE] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_super_finished, dance_super_reset),
@@ -332,10 +340,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * `-----------------------------------------'  `-----------------------------------------'
  */
 [_ADJUST] =  LAYOUT_ortho_4x12( \
-  RESET   , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , KC_HOME , KC_PGUP   , KC_PSCREEN , KC_SCROLLLOCK , KC_PAUSE , \
-  AG_SWAP , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , WORKMAN , KC_END  , KC_PGDOWN , KC_INSERT  , XXXXXXX       , XXXXXXX  , \
-  AG_NORM , RGB_TOG , RGB_MOD , RGB_HUI , RGB_SAI , RGB_VAI , XXXXXXX , XXXXXXX , XXXXXXX   , XXXXXXX    , XXXXXXX       , XXXXXXX  , \
-  _______ , AU_ON   , AU_OFF  , RGB_HUD , RGB_SAD , RGB_VAD , QWERTY  , XXXXXXX , XXXXXXX   , XXXXXXX    , XXXXXXX       , XXXXXXX \
+  RESET   , XXXXXXX , XXXXXXX  , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , KC_HOME , KC_PGUP   , KC_PSCREEN , KC_SCROLLLOCK , KC_PAUSE , \
+  AG_SWAP , XXXXXXX , RGB_RMOD , XXXXXXX , XXXXXXX , XXXXXXX , WORKMAN , KC_END  , KC_PGDOWN , KC_INSERT  , XXXXXXX       , XXXXXXX  , \
+  AG_NORM , RGB_TOG , RGB_MOD  , RGB_HUI , RGB_SAI , RGB_VAI , XXXXXXX , XXXXXXX , XXXXXXX   , XXXXXXX    , XXXXXXX       , XXXXXXX  , \
+  _______ , AU_ON   , AU_OFF   , RGB_HUD , RGB_SAD , RGB_VAD , QWERTY  , XXXXXXX , XXXXXXX   , XXXXXXX    , XXXXXXX       , XXXXXXX \
                                 ),
 /* Emacs (Lower + Raise)
  * ,-----------------------------------------.  ,-----------------------------------------.
@@ -377,148 +385,152 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
-    case QWERTY:
-      if (record->event.pressed) {
-        #ifdef AUDIO_ENABLE
-        play_qwerty_sound();
-        #endif
-        set_single_persistent_default_layer(_QWERTY);
-      }
-      return false;
-      break;
-    case WORKMAN:
-      if (record->event.pressed) {
-        #ifdef AUDIO_ENABLE
-        play_workman_sound();
-        #endif
-        set_single_persistent_default_layer(_WORKMAN);
-      }
-      return false;
-      break;
-    case LOWER:
-      if (record->event.pressed) {
-        layer_on(_LOWER);
-        update_tri_layer(_LOWER, _RAISE, _EMACS);
-      } else {
-        layer_off(_LOWER);
-        update_tri_layer(_LOWER, _RAISE, _EMACS);
-      }
-      return false;
-      break;
-    case RAISE:
-      if (record->event.pressed) {
-        layer_on(_RAISE);
-        update_tri_layer(_LOWER, _RAISE, _EMACS);
-      } else {
-        layer_off(_RAISE);
-        update_tri_layer(_LOWER, _RAISE, _EMACS);
-      }
-      return false;
-      break;
-    case ADJUST:
-      if (record->event.pressed) {
-        layer_on(_ADJUST);
-      } else {
-        layer_off(_ADJUST);
-      }
-      return false;
-      break;
-    case EMACS_WIN_1:
-      if (record->event.pressed) {
-        SEND_STRING(SS_LCTRL("x")"1");
-      }
-      return true;
-      break;
-    case EMACS_WIN_2:
-      if (record->event.pressed) {
-        SEND_STRING(SS_LCTRL("x")"2");
-      }
-      return true;
-      break;
-    case EMACS_WIN_3:
-      if (record->event.pressed) {
-        SEND_STRING(SS_LCTRL("x")"3");
-      }
-      return true;
-      break;
-    case EMACS_WIN_4:
-      if (record->event.pressed) {
-        SEND_STRING(SS_LCTRL("x")"4");
-      }
-      return true;
-      break;
-    case EMACS_WIN_0:
-      if (record->event.pressed) {
-        SEND_STRING(SS_LCTRL("x")"0");
-      }
-      return true;
-      break;
-    case EMACS_PROJ_SWITCH:
-      if (record->event.pressed) {
-        SEND_STRING(SS_LCTRL("c")"pp");
-      }
-      return true;
-      break;
-    case EMACS_PROJ_SHELL:
-      if (record->event.pressed) {
-        SEND_STRING(SS_LCTRL("c")"pxe");
-      }
-      return true;
-      break;
-    case EMACS_PROJ_FILE:
-      if (record->event.pressed) {
-        SEND_STRING(SS_LCTRL("c")"pf");
-      }
-      return true;
-      break;
-    case EMACS_PROJ_SEARCH:
-      if (record->event.pressed) {
-        SEND_STRING(SS_LCTRL("c")"pss");
-      }
-      return true;
-      break;
-    case EMACS_PROJ_COMPILE:
-      if (record->event.pressed) {
-        SEND_STRING(SS_LCTRL("c")"pc");
-      }
-      return true;
-      break;
-    case EMACS_PROJ_GIT:
-      if (record->event.pressed) {
-        SEND_STRING(SS_LCTRL("c")"pv");
-      }
-      return true;
-      break;
-    case EMACS_FLYC_CHECK:
-      if (record->event.pressed) {
-        SEND_STRING(SS_LCTRL("c")"!c");
-      }
-      return true;
-      break;
-    case EMACS_FLYC_NEXT:
-      if (record->event.pressed) {
-        SEND_STRING(SS_LCTRL("c")"!n");
-      }
-      return true;
-      break;
-    case EMACS_FLYC_PREV:
-      if (record->event.pressed) {
-        SEND_STRING(SS_LCTRL("c")"!p");
-      }
-      return true;
-      break;
-    case EMACS_FLYC_LIST:
-      if (record->event.pressed) {
-        SEND_STRING(SS_LCTRL("c")"!l");
-      }
-      return true;
-      break;
-    case SSH_PUB:
-      if (record->event.pressed) {
-        SEND_STRING("ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC8RjYOMQzmVfqACviToDhEcaGfzA+chsL0Ut+7ni18EFreduIVOfPX6iceRC9yaACNjbZxz0i5+ABhgDFXLEqOoLJczW1zlinRfeMaQEyGgTAuSyhYYBy8iZnHG5Y1yR2vUQW2PQjxmBP5KH9ctmFJG/Nahppag/WMcwto/VGcp0FhQUiwIumFt5g3rONXWhuF9iAK3a0mvVQbbCdHsAjK+K5jl6jDUAAxkY98WoPaHWkrt3rhYYKXWWja1I/d7r+wn3aRArN/9H7ciQohELykQbEGT/TTZK2Ahx6uS5oUhE+BW4ckGj4gY/+faOZqeRG3KMtbyEpU7K9IdHQ8Z+Ej");
-      }
-      return true;
-      break;
+  case QWERTY:
+    if (record->event.pressed) {
+#ifdef AUDIO_ENABLE
+      play_qwerty_sound();
+#endif
+      set_single_persistent_default_layer(_QWERTY);
+    }
+    return false;
+    break;
+  case WORKMAN:
+    if (record->event.pressed) {
+#ifdef AUDIO_ENABLE
+      play_workman_sound();
+#endif
+      set_single_persistent_default_layer(_WORKMAN);
+    }
+    return false;
+    break;
+  case LOWER:
+    if (record->event.pressed) {
+      layer_on(_LOWER);
+      set_bg_color(COLOR_LOWER);
+      update_tri_layer(_LOWER, _RAISE, _EMACS);
+    } else {
+      layer_off(_LOWER);
+      set_bg_color(COLOR_DEFAULT);
+      update_tri_layer(_LOWER, _RAISE, _EMACS);
+    }
+    return false;
+    break;
+  case RAISE:
+    if (record->event.pressed) {
+      layer_on(_RAISE);
+      set_bg_color(COLOR_RAISE);
+      update_tri_layer(_LOWER, _RAISE, _EMACS);
+    } else {
+      layer_off(_RAISE);
+      set_bg_color(COLOR_DEFAULT);
+      update_tri_layer(_LOWER, _RAISE, _EMACS);
+    }
+    return false;
+    break;
+  case ADJUST:
+    if (record->event.pressed) {
+      layer_on(_ADJUST);
+    } else {
+      layer_off(_ADJUST);
+    }
+    return false;
+    break;
+  case EMACS_WIN_1:
+    if (record->event.pressed) {
+      SEND_STRING(SS_LCTRL("x")"1");
+    }
+    return true;
+    break;
+  case EMACS_WIN_2:
+    if (record->event.pressed) {
+      SEND_STRING(SS_LCTRL("x")"2");
+    }
+    return true;
+    break;
+  case EMACS_WIN_3:
+    if (record->event.pressed) {
+      SEND_STRING(SS_LCTRL("x")"3");
+    }
+    return true;
+    break;
+  case EMACS_WIN_4:
+    if (record->event.pressed) {
+      SEND_STRING(SS_LCTRL("x")"4");
+    }
+    return true;
+    break;
+  case EMACS_WIN_0:
+    if (record->event.pressed) {
+      SEND_STRING(SS_LCTRL("x")"0");
+    }
+    return true;
+    break;
+  case EMACS_PROJ_SWITCH:
+    if (record->event.pressed) {
+      SEND_STRING(SS_LCTRL("c")"pp");
+    }
+    return true;
+    break;
+  case EMACS_PROJ_SHELL:
+    if (record->event.pressed) {
+      SEND_STRING(SS_LCTRL("c")"pxe");
+    }
+    return true;
+    break;
+  case EMACS_PROJ_FILE:
+    if (record->event.pressed) {
+      SEND_STRING(SS_LCTRL("c")"pf");
+    }
+    return true;
+    break;
+  case EMACS_PROJ_SEARCH:
+    if (record->event.pressed) {
+      SEND_STRING(SS_LCTRL("c")"pss");
+    }
+    return true;
+    break;
+  case EMACS_PROJ_COMPILE:
+    if (record->event.pressed) {
+      SEND_STRING(SS_LCTRL("c")"pc");
+    }
+    return true;
+    break;
+  case EMACS_PROJ_GIT:
+    if (record->event.pressed) {
+      SEND_STRING(SS_LCTRL("c")"pv");
+    }
+    return true;
+    break;
+  case EMACS_FLYC_CHECK:
+    if (record->event.pressed) {
+      SEND_STRING(SS_LCTRL("c")"!c");
+    }
+    return true;
+    break;
+  case EMACS_FLYC_NEXT:
+    if (record->event.pressed) {
+      SEND_STRING(SS_LCTRL("c")"!n");
+    }
+    return true;
+    break;
+  case EMACS_FLYC_PREV:
+    if (record->event.pressed) {
+      SEND_STRING(SS_LCTRL("c")"!p");
+    }
+    return true;
+    break;
+  case EMACS_FLYC_LIST:
+    if (record->event.pressed) {
+      SEND_STRING(SS_LCTRL("c")"!l");
+    }
+    return true;
+    break;
+  case SSH_PUB:
+    if (record->event.pressed) {
+      SEND_STRING("ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC8RjYOMQzmVfqACviToDhEcaGfzA+chsL0Ut+7ni18EFreduIVOfPX6iceRC9yaACNjbZxz0i5+ABhgDFXLEqOoLJczW1zlinRfeMaQEyGgTAuSyhYYBy8iZnHG5Y1yR2vUQW2PQjxmBP5KH9ctmFJG/Nahppag/WMcwto/VGcp0FhQUiwIumFt5g3rONXWhuF9iAK3a0mvVQbbCdHsAjK+K5jl6jDUAAxkY98WoPaHWkrt3rhYYKXWWja1I/d7r+wn3aRArN/9H7ciQohELykQbEGT/TTZK2Ahx6uS5oUhE+BW4ckGj4gY/+faOZqeRG3KMtbyEpU7K9IdHQ8Z+Ej");
+    }
+    return true;
+    break;
   }
   return process_record_keymap(keycode, record);
 }

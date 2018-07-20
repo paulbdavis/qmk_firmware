@@ -62,5 +62,13 @@ enum {
   // Add more enums here if you want for triple, quadruple, etc.
 };
 
-
+enum {
+      COLOR_DEFAULT = 0,
+      COLOR_RAISE,
+      COLOR_LOWER,
+      COLOR_EMACS,
+      COLOR_ADJUST,
+      COLOR_NUMPAD
+};
+  
 #endif
