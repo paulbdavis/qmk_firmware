@@ -268,10 +268,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * `-----------------------------------------'  `-----------------------------------------'
  */
 [_WORKMAN]  = LAYOUT_ortho_4x12(                                                   \
-  KC_ESC             , KC_Q     , KC_D     , KC_R                    , KC_W   , KC_B            , KC_J           , KC_F   , KC_U     , KC_P     , KC_SCLN  , KC_BSPC          , \
-  LCTL_T(KC_TAB)     , KC_A     , KC_S     , KC_H                    , KC_T   , KC_G            , KC_Y           , KC_N   , KC_E     , KC_O     , KC_I     , RCTL_T(KC_QUOT)  , \
-  KC_LSFT            , KC_Z     , KC_X     , KC_M                    , KC_C   , KC_V            , KC_K           , KC_L   , KC_COMM  , KC_DOT   , KC_SLSH  , RSFT_T(KC_ENT)   , \
-  TD(NUMPAD_ADJUST)  , XXXXXXX  , KC_LALT  , TD(SUPER_LAYER_CHANGE)  , LOWER  , TD(SUPER_CTRL)  , TD(SUPER_ALT)  , RAISE  , KC_LEFT  , KC_DOWN  , KC_UP    , KC_RGHT \
+  KC_ESC             , KC_Q   , KC_D     , KC_R                    , KC_W   , KC_B            , KC_J           , KC_F   , KC_U     , KC_P     , KC_SCLN  , KC_BSPC          , \
+  LCTL_T(KC_TAB)     , KC_A   , KC_S     , KC_H                    , KC_T   , KC_G            , KC_Y           , KC_N   , KC_E     , KC_O     , KC_I     , RCTL_T(KC_QUOT)  , \
+  KC_LSFT            , KC_Z   , KC_X     , KC_M                    , KC_C   , KC_V            , KC_K           , KC_L   , KC_COMM  , KC_DOT   , KC_SLSH  , RSFT_T(KC_ENT)   , \
+  TD(NUMPAD_ADJUST)  , EMACS  , KC_LALT  , TD(SUPER_LAYER_CHANGE)  , LOWER  , TD(SUPER_CTRL)  , TD(SUPER_ALT)  , RAISE  , KC_LEFT  , KC_DOWN  , KC_UP    , KC_RGHT \
 ),
 
 /* Qwerty
@@ -431,6 +431,15 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     } else {
       layer_off(_ADJUST);
     }
+    return false;
+    break;
+  case EMACS:
+    if (record->event.pressed) {
+      layer_on(_EMACS);
+    } else {
+      layer_off(_EMACS);
+    }
+    set_bg_color();
     return false;
     break;
   case EMACS_WIN_1:
