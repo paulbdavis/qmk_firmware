@@ -26,26 +26,26 @@ void play_numpad_exit_sound(void) {
 }
 
 
-void set_bg_color (uint16_t color) {
+void set_bg_color (void) {
 #ifdef RGBLIGHT_ENABLE
-  switch (color) {
-  case COLOR_DEFAULT:
-    rgblight_sethsv_green();
-    break;
-  case COLOR_RAISE:
+  switch (biton32(layer_state)) {
+  case _RAISE:
     rgblight_sethsv_orange();
     break;
-  case COLOR_LOWER:
+  case _LOWER:
     rgblight_sethsv_azure();
     break;
-  case COLOR_ADJUST:
+  case _ADJUST:
     rgblight_sethsv_magenta();
     break;
-  case COLOR_NUMPAD:
+  case _NUMPAD:
     rgblight_sethsv_red();
     break;
-  case COLOR_EMACS:
+  case _EMACS:
     rgblight_sethsv_yellow();
+    break;
+  default:
+    rgblight_sethsv_green();
     break;
   }
 #ifdef SPLIT_KEYBOARD
@@ -182,7 +182,7 @@ void numpad_finished (qk_tap_dance_state_t *state, void *user_data) {
   case SINGLE_TAP: 
   case SINGLE_HOLD:
     layer_on(_NUMPAD);
-    set_bg_color(COLOR_NUMPAD);
+    set_bg_color();
 #ifdef AUDIO_ENABLE
     play_numpad_sound();
 #endif
@@ -192,8 +192,8 @@ void numpad_finished (qk_tap_dance_state_t *state, void *user_data) {
   case DOUBLE_HOLD: 
   case TRIPLE_TAP: 
   case TRIPLE_HOLD:
-    set_bg_color(COLOR_ADJUST);
     layer_on(_ADJUST);
+    set_bg_color();
     break;
   }
 }
@@ -204,7 +204,7 @@ void numpad_reset (qk_tap_dance_state_t *state, void *user_data) {
   case SINGLE_TAP: break;
   case SINGLE_HOLD:
     layer_off(_NUMPAD);
-    set_bg_color(COLOR_DEFAULT);
+    set_bg_color();
 #ifdef AUDIO_ENABLE
     play_numpad_exit_sound();
 #endif
@@ -221,7 +221,7 @@ void numpad_reset (qk_tap_dance_state_t *state, void *user_data) {
     }
     layer_off(_NUMPAD);
     layer_off(_ADJUST);
-    set_bg_color(COLOR_DEFAULT);
+    set_bg_color();
     break;
   }
   numpad_tap_state.state = 0;
@@ -406,25 +406,23 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   case LOWER:
     if (record->event.pressed) {
       layer_on(_LOWER);
-      set_bg_color(COLOR_LOWER);
       update_tri_layer(_LOWER, _RAISE, _EMACS);
     } else {
       layer_off(_LOWER);
-      set_bg_color(COLOR_DEFAULT);
       update_tri_layer(_LOWER, _RAISE, _EMACS);
     }
+    set_bg_color();
     return false;
     break;
   case RAISE:
     if (record->event.pressed) {
       layer_on(_RAISE);
-      set_bg_color(COLOR_RAISE);
       update_tri_layer(_LOWER, _RAISE, _EMACS);
     } else {
       layer_off(_RAISE);
-      set_bg_color(COLOR_DEFAULT);
       update_tri_layer(_LOWER, _RAISE, _EMACS);
     }
+    set_bg_color();
     return false;
     break;
   case ADJUST:
