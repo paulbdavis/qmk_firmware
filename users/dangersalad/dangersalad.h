@@ -23,6 +23,7 @@ enum custom_keycodes {
   RAISE,
   ADJUST,
   SSH_PUB,
+  EMACS,
   EMACS_WIN_1,
   EMACS_WIN_2,
   EMACS_WIN_3,
