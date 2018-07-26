@@ -420,29 +420,21 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     if (record->event.pressed) {
       layer_on(_LOWER);
       update_tri_layer(_LOWER, _RAISE, _EMACS);
+      set_bg_color();
     } else {
       layer_off(_LOWER);
       update_tri_layer(_LOWER, _RAISE, _EMACS);
     }
-    set_bg_color();
     return false;
     break;
   case RAISE:
     if (record->event.pressed) {
       layer_on(_RAISE);
       update_tri_layer(_LOWER, _RAISE, _EMACS);
+      set_bg_color();
     } else {
       layer_off(_RAISE);
       update_tri_layer(_LOWER, _RAISE, _EMACS);
-    }
-    set_bg_color();
-    return false;
-    break;
-  case ADJUST:
-    if (record->event.pressed) {
-      layer_on(_ADJUST);
-    } else {
-      layer_off(_ADJUST);
     }
     return false;
     break;
@@ -555,5 +547,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     return true;
     break;
   }
+  set_bg_color();
   return process_record_keymap(keycode, record);
 }
