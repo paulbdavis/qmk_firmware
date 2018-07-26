@@ -5,9 +5,11 @@
 
 #ifdef AUDIO_ENABLE
 float tone_qwerty[][2]      = SONG(COIN_SOUND);
-float tone_workman[][2]     = SONG(MARIO_THEME);
-float tone_numpad[][2]      = SONG(ZELDA_PUZZLE);
-float tone_numpad_exit[][2] = SONG(BEEP_BEEP);
+float tone_workman[][2]     = SONG(ZELDA_TREASURE);
+float tone_numpad[][2]      = SONG(AUDIO_ON_SOUND);
+float tone_numpad_exit[][2] = SONG(AUDIO_OFF_SOUND);
+float tone_emacs[][2]       = SONG(BEEP);
+float tone_adjust[][2]      = SONG(ZELDA_PUZZLE);
 #endif
 
 extern keymap_config_t keymap_config;
@@ -33,6 +35,18 @@ void play_numpad_sound(void) {
 void play_numpad_exit_sound(void) {
 #ifdef AUDIO_ENABLE
     PLAY_SONG(tone_numpad_exit);
+#endif
+}
+
+void play_emacs_sound(void) {
+#ifdef AUDIO_ENABLE
+    PLAY_SONG(tone_emacs);
+#endif
+}
+
+void play_adjust_sound(void) {
+#ifdef AUDIO_ENABLE
+    PLAY_SONG(tone_adjust);
 #endif
 }
 

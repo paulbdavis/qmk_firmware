@@ -25,6 +25,14 @@ __attribute__ ((weak))
 void play_numpad_exit_sound(void) {
 }
 
+__attribute__ ((weak))
+void play_emacs_sound(void) {
+}
+
+__attribute__ ((weak))
+void play_adjust_sound(void) {
+}
+
 
 void set_bg_color (void) {
 #ifdef RGBLIGHT_ENABLE
@@ -192,6 +200,11 @@ void numpad_finished (qk_tap_dance_state_t *state, void *user_data) {
   case DOUBLE_HOLD: 
   case TRIPLE_TAP: 
   case TRIPLE_HOLD:
+    if (biton32(layer_state) != _NUMPAD) {
+#ifdef AUDIO_ENABLE
+    play_adjust_sound();
+#endif
+    }
     layer_on(_ADJUST);
     set_bg_color();
     break;
@@ -436,6 +449,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   case EMACS:
     if (record->event.pressed) {
       layer_on(_EMACS);
+#ifdef AUDIO_ENABLE
+      play_emacs_sound();
+#endif
     } else {
       layer_off(_EMACS);
     }
