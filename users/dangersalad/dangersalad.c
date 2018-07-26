@@ -474,37 +474,37 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     break;
   case EMACS_PROJ_SWITCH:
     if (record->event.pressed) {
-      SEND_STRING(SS_LCTRL("c")"pp");
+      SEND_STRING(SS_LCTRL("c")SS_LCTRL("p")"p");
     }
     return true;
     break;
   case EMACS_PROJ_SHELL:
     if (record->event.pressed) {
-      SEND_STRING(SS_LCTRL("c")"pxe");
+      SEND_STRING(SS_LCTRL("c")SS_LCTRL("p")"xe");
     }
     return true;
     break;
   case EMACS_PROJ_FILE:
     if (record->event.pressed) {
-      SEND_STRING(SS_LCTRL("c")"pf");
+      SEND_STRING(SS_LCTRL("c")SS_LCTRL("p")"f");
     }
     return true;
     break;
   case EMACS_PROJ_SEARCH:
     if (record->event.pressed) {
-      SEND_STRING(SS_LCTRL("c")"pss");
+      SEND_STRING(SS_LCTRL("c")SS_LCTRL("p")"ss");
     }
     return true;
     break;
   case EMACS_PROJ_COMPILE:
     if (record->event.pressed) {
-      SEND_STRING(SS_LCTRL("c")"pc");
+      SEND_STRING(SS_LCTRL("c")SS_LCTRL("p")"c");
     }
     return true;
     break;
   case EMACS_PROJ_GIT:
     if (record->event.pressed) {
-      SEND_STRING(SS_LCTRL("c")"pv");
+      SEND_STRING(SS_LCTRL("c")SS_LCTRL("p")"v");
     }
     return true;
     break;
