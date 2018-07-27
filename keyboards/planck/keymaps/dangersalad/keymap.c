@@ -4,9 +4,9 @@
 
 #ifdef AUDIO_ENABLE
 float tone_qwerty[][2]      = SONG(COIN_SOUND);
-float tone_workman[][2]     = SONG(MARIO_THEME);
-float tone_numpad[][2]      = SONG(ZELDA_PUZZLE);
-float tone_numpad_exit[][2] = SONG(SONIC_RING);
+float tone_workman[][2]     = SONG(ZELDA_TREASURE);
+float tone_numpad[][2]      = SONG(AUDIO_ON_SOUND);
+float tone_numpad_exit[][2] = SONG(AUDIO_OFF_SOUND);
 #endif
 
 extern keymap_config_t keymap_config;
