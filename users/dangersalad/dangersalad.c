@@ -287,6 +287,42 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   TD(NUMPAD_ADJUST)  , EMACS  , KC_LALT  , TD(SUPER_LAYER_CHANGE)  , LOWER  , TD(SUPER_CTRL)  , TD(SUPER_ALT)  , RAISE  , KC_LEFT  , KC_DOWN  , KC_UP    , KC_RGHT \
 ),
 
+/* Colemak
+ * ,-----------------------------------------.  ,-----------------------------------------.
+ * | Esc  |   Q  |   D  |   R  |   W  |   B  |  |   J  |   F  |   U  |   P  |   ;  | Bksp |
+ * |------+------+------+------+------+------|  |------+------+------+------+------+------|
+ * | Ctrl |   A  |   S  |   H  |   T  |   G  |  |   Y  |   N  |   E  |   O  |   I  |  '   |
+ * |------+------+------+------+------+------|  |------+------+------+------+------+------|
+ * | Shift|   Z  |   X  |   M  |   C  |   V  |  |   K  |   L  |   ,  |   .  |   /  |Enter |
+ * |------+------+------+------+------+------|  |------+------+------+------+------+------|
+ * |      |      | Alt  | GUI  |Lower |Sp/Ctl|  |Sp/Alt|Raise | Left | Down |  Up  |Right |
+ * `-----------------------------------------'  `-----------------------------------------'
+ */
+[_COLEMAK]  = LAYOUT_ortho_4x12(                                                   \
+  KC_ESC             ,  KC_Q  ,    KC_W  ,    KC_F                 ,    KC_P  ,    KC_G         ,    KC_J        ,    KC_L  ,    KC_U     ,    KC_Y  ,    KC_SCLN  , KC_BSPC             , \
+  LCTL_T(KC_TAB)     ,  KC_A  ,    KC_R  ,    KC_S                 ,    KC_T  ,    KC_D         ,    KC_H        ,    KC_N  ,    KC_E     ,    KC_I  ,    KC_O     ,    RCTL_T(KC_QUOT)  , \
+  KC_LSFT            , KC_Z   ,    KC_X  ,    KC_C                 ,    KC_V  ,    KC_B         ,    KC_K        ,    KC_M  ,    KC_COMM  , KC_DOT   ,  KC_SLSH    , RSFT_T(KC_ENT)      , \
+  TD(NUMPAD_ADJUST)  , EMACS  , KC_LALT  , TD(SUPER_LAYER_CHANGE)  , LOWER    , TD(SUPER_CTRL)  , TD(SUPER_ALT)  , RAISE    , KC_LEFT     , KC_DOWN  , KC_UP       , KC_RGHT \
+),
+
+/* Colemak
+ * ,-----------------------------------------.  ,-----------------------------------------.
+ * | Esc  |   Q  |   D  |   R  |   W  |   B  |  |   J  |   F  |   U  |   P  |   ;  | Bksp |
+ * |------+------+------+------+------+------|  |------+------+------+------+------+------|
+ * | Ctrl |   A  |   S  |   H  |   T  |   G  |  |   Y  |   N  |   E  |   O  |   I  |  '   |
+ * |------+------+------+------+------+------|  |------+------+------+------+------+------|
+ * | Shift|   Z  |   X  |   M  |   C  |   V  |  |   K  |   L  |   ,  |   .  |   /  |Enter |
+ * |------+------+------+------+------+------|  |------+------+------+------+------+------|
+ * |      |      | Alt  | GUI  |Lower |Sp/Ctl|  |Sp/Alt|Raise | Left | Down |  Up  |Right |
+ * `-----------------------------------------'  `-----------------------------------------'
+ */
+[_COLEMAK_MOD_DH]  = LAYOUT_ortho_4x12(                                                   \
+  KC_ESC             ,  KC_Q  ,    KC_W  ,    KC_F                 ,    KC_P  ,    KC_B         ,    KC_J        ,    KC_L  ,    KC_U     ,    KC_Y  ,    KC_SCLN  , KC_BSPC             , \
+  LCTL_T(KC_TAB)     ,  KC_A  ,    KC_R  ,    KC_S                 ,    KC_T  ,    KC_G         ,    KC_K        ,    KC_N  ,    KC_E     ,    KC_I  ,    KC_O     ,    RCTL_T(KC_QUOT)  , \
+  KC_LSFT            , KC_Z   ,    KC_X  ,    KC_C                 ,    KC_D  ,    KC_V         ,    KC_M        ,    KC_H  ,    KC_COMM  , KC_DOT   ,  KC_SLSH    , RSFT_T(KC_ENT)      , \
+  TD(NUMPAD_ADJUST)  , EMACS  , KC_LALT  , TD(SUPER_LAYER_CHANGE)  , LOWER    , TD(SUPER_CTRL)  , TD(SUPER_ALT)  , RAISE    , KC_LEFT     , KC_DOWN  , KC_UP       , KC_RGHT \
+),
+
 /* Qwerty
  * ,-----------------------------------------.  ,-----------------------------------------.
  * | Esc  |   Q  |   W  |   E  |   R  |   T  |  |   Y  |   U  |   I  |   O  |   P  | Bksp |
@@ -353,9 +389,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * `-----------------------------------------'  `-----------------------------------------'
  */
 [_ADJUST] =  LAYOUT_ortho_4x12( \
-  RESET   , XXXXXXX , XXXXXXX  , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , KC_HOME , KC_PGUP   , KC_PSCREEN , KC_SCROLLLOCK , KC_PAUSE , \
+  RESET   , XXXXXXX , XXXXXXX  , XXXXXXX , XXXXXXX , XXXXXXX , COLEMAK_MOD_DH , KC_HOME , KC_PGUP   , KC_PSCREEN , KC_SCROLLLOCK , KC_PAUSE , \
   AG_SWAP , XXXXXXX , RGB_RMOD , XXXXXXX , XXXXXXX , XXXXXXX , WORKMAN , KC_END  , KC_PGDOWN , KC_INSERT  , XXXXXXX       , XXXXXXX  , \
-  AG_NORM , RGB_TOG , RGB_MOD  , RGB_HUI , RGB_SAI , RGB_VAI , XXXXXXX , XXXXXXX , XXXXXXX   , XXXXXXX    , XXXXXXX       , XXXXXXX  , \
+  AG_NORM , RGB_TOG , RGB_MOD  , RGB_HUI , RGB_SAI , RGB_VAI , COLEMAK , XXXXXXX , XXXXXXX   , XXXXXXX    , XXXXXXX       , XXXXXXX  , \
   _______ , AU_ON   , AU_OFF   , RGB_HUD , RGB_SAD , RGB_VAD , QWERTY  , XXXXXXX , XXXXXXX   , XXXXXXX    , XXXXXXX       , XXXXXXX \
                                 ),
 /* Emacs (Lower + Raise)
@@ -413,6 +449,24 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       play_workman_sound();
 #endif
       set_single_persistent_default_layer(_WORKMAN);
+    }
+    return false;
+    break;
+  case COLEMAK:
+    if (record->event.pressed) {
+#ifdef AUDIO_ENABLE
+      play_workman_sound();
+#endif
+      set_single_persistent_default_layer(_COLEMAK);
+    }
+    return false;
+    break;
+  case COLEMAK_MOD_DH:
+    if (record->event.pressed) {
+#ifdef AUDIO_ENABLE
+      play_workman_sound();
+#endif
+      set_single_persistent_default_layer(_COLEMAK_MOD_DH);
     }
     return false;
     break;
@@ -537,12 +591,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   case EMACS_FLYC_LIST:
     if (record->event.pressed) {
       SEND_STRING(SS_LCTRL("c")"!l");
-    }
-    return true;
-    break;
-  case SSH_PUB:
-    if (record->event.pressed) {
-      SEND_STRING("ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC8RjYOMQzmVfqACviToDhEcaGfzA+chsL0Ut+7ni18EFreduIVOfPX6iceRC9yaACNjbZxz0i5+ABhgDFXLEqOoLJczW1zlinRfeMaQEyGgTAuSyhYYBy8iZnHG5Y1yR2vUQW2PQjxmBP5KH9ctmFJG/Nahppag/WMcwto/VGcp0FhQUiwIumFt5g3rONXWhuF9iAK3a0mvVQbbCdHsAjK+K5jl6jDUAAxkY98WoPaHWkrt3rhYYKXWWja1I/d7r+wn3aRArN/9H7ciQohELykQbEGT/TTZK2Ahx6uS5oUhE+BW4ckGj4gY/+faOZqeRG3KMtbyEpU7K9IdHQ8Z+Ej");
     }
     return true;
     break;
