@@ -474,11 +474,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     if (record->event.pressed) {
       layer_on(_LOWER);
       update_tri_layer(_LOWER, _RAISE, _EMACS);
-      set_bg_color();
     } else {
       layer_off(_LOWER);
       update_tri_layer(_LOWER, _RAISE, _EMACS);
     }
+    set_bg_color();
     return false;
     break;
   case RAISE:
