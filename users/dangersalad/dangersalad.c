@@ -478,14 +478,12 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       layer_off(_LOWER);
       update_tri_layer(_LOWER, _RAISE, _EMACS);
     }
-    set_bg_color();
     return false;
     break;
   case RAISE:
     if (record->event.pressed) {
       layer_on(_RAISE);
       update_tri_layer(_LOWER, _RAISE, _EMACS);
-      set_bg_color();
     } else {
       layer_off(_RAISE);
       update_tri_layer(_LOWER, _RAISE, _EMACS);
@@ -501,7 +499,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     } else {
       layer_off(_EMACS);
     }
-    set_bg_color();
     return false;
     break;
   case EMACS_WIN_1:
@@ -595,6 +592,5 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     return true;
     break;
   }
-  set_bg_color();
   return process_record_keymap(keycode, record);
 }
