@@ -595,7 +595,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     break;
   case EMACS_FIND_FILE:
     if (record->event.pressed) {
-      SEND_STRING(SS_LCTRL("x")"f");
+      SEND_STRING(SS_LCTRL("x")SS_LCTRL("f"));
     }
     return true;
     break;
