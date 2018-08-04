@@ -43,6 +43,8 @@ enum custom_keycodes {
   EMACS_FLYC_NEXT,
   EMACS_FLYC_PREV,
   EMACS_FLYC_LIST,
+  EMACS_FIND_FILE,
+  EMACS_SWITCH_BUFFER,
   NEW_SAFE_RANGE  //use "NEW_SAFE_RANGE" for keymap specific codes
 };
 
