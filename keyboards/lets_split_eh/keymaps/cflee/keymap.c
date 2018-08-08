@@ -41,6 +41,8 @@ enum custom_keycodes {
 #define SDV_T TG(_SDV1)
 #define SDV_M MO(_SDV2)
 
+// We need to use this LAYOUT() macro from lets_split_eh/eh/eh.h because it needs
+// to be split into 8 rows of 6 (all the left hand rows followed by right hand rows).
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 /* Qwerty
@@ -113,6 +115,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------+------+------+------+------+------+------|
  * |      |      |      |      |      |      |      |      |      |      |      | RESET|
  * `-----------------------------------------------------------------------------------'
+ *
+ * Retain the bottom right reset for compatibility with default lets_split_eh keymap.
  */
 [_ADJUST] = LAYOUT( \
   _______, RESET,   _______, _______, _______, _______, _______,   SDV_T, RGB_VAI, RGB_SAI, RGB_HUI, KC_DEL, \
@@ -129,7 +133,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------|------+------+------+------+------+------|
  * | Caps |      |      |      |      |      |      |      |      |      |      |      |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * |      |      |      |      |      |      |      |      |      |      |      |
+ * |      |      |      |      |      |      |      |      |      |      |      |      |
  * `-----------------------------------------------------------------------------------'
  */
 [_FUNCTION] = LAYOUT( \
@@ -149,6 +153,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------+------+------+------+------+------+------|
  * |      |      |      |      |      | Items|      |      |      |      |      |      |
  * `-----------------------------------------------------------------------------------'
+ *
+ * Most of the keys are actually the same as Qwerty, except M, but let's just specify to be clear.
  */
 [_SDV1] = LAYOUT( \
   _______, _______,    KC_W,    KC_E, _______, _______, _______, _______, _______, _______, _______, _______, \
@@ -159,14 +165,17 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 /* Stardew Valley 2
  * ,-----------------------------------------------------------------------------------.
- * |      |   1  |   2  |   3  |   4  |      |      |      |        |      |      |      |
+ * |      |   1  |   2  |   3  |   4  |      |      |      |      |      |      |      |
  * |------+------+------+------+------+-------------+------+------+------+------+------|
- * |      |   5  |   6  |   7  |   8  |      |      |      |      |     |      |      |
+ * |      |   5  |   6  |   7  |   8  |      |      |      |      |      |      |      |
  * |------+------+------+------+------+------|------+------+------+------+------+------|
  * |      |   9  |   0  |   -  |   =  |      |      |      |      |      |      |      |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * |      |      |      |      |      |Toggle|      |      |      |      |      |
+ * |      |      |      |      |      | Items|      |      |      |      |      |      |
  * `-----------------------------------------------------------------------------------'
+ *
+ * The Toggle button must remain transparent so that releasing it will be detected by the momentary
+ * layer switch keycode on the layer below.
  */
 [_SDV2] = LAYOUT( \
   _______,    KC_1,    KC_2,    KC_3,    KC_4, _______, _______, _______, _______, _______, _______, _______, \
