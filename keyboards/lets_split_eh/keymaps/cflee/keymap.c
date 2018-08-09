@@ -1,6 +1,7 @@
 #include QMK_KEYBOARD_H
 #include "action_layer.h"
 #include "eeconfig.h"
+#include "split_flags.h"
 
 extern keymap_config_t keymap_config;
 
@@ -210,4 +211,24 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       break;
   }
   return true;
+}
+
+// This is run every time layers are changed.
+uint32_t layer_state_set_user(uint32_t state) {
+  // state is bitmask of active layers, of the max 32 layers
+  switch (biton32(state)) {
+    case _SDV1:
+      rgblight_sethsv_noeeprom_green();
+      RGB_DIRTY = true;
+      break;
+    case _SDV2:
+      rgblight_sethsv_noeeprom_green();
+      RGB_DIRTY = true;
+      break;
+    default:
+      rgblight_sethsv_noeeprom_blue();
+      RGB_DIRTY = true;
+      break;
+  }
+  return state;
 }
