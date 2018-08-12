@@ -215,18 +215,19 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
 // This is run every time layers are changed.
 uint32_t layer_state_set_user(uint32_t state) {
+  // get existing value to avoid changing the EEPROM-configured brightness
+  // hue and saturation need to be controlled here to fully control colour
+  uint8_t cur_val = rgblight_get_val();
+
   // state is bitmask of active layers, of the max 32 layers
   switch (biton32(state)) {
     case _SDV1:
-      rgblight_sethsv_noeeprom_green();
-      RGB_DIRTY = true;
-      break;
     case _SDV2:
-      rgblight_sethsv_noeeprom_green();
+      rgblight_sethsv_noeeprom(120, 255, cur_val);
       RGB_DIRTY = true;
       break;
     default:
-      rgblight_sethsv_noeeprom_blue();
+      rgblight_sethsv_noeeprom(240, 255, cur_val);
       RGB_DIRTY = true;
       break;
   }
