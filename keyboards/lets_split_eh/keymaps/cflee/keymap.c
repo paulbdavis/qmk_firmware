@@ -247,17 +247,24 @@ uint32_t layer_state_set_user(uint32_t state) {
   switch (biton32(state)) {
     case _SDV1:
     case _SDV2:
-      rgblight_sethsv_noeeprom(120, 255, cur_val);
-      RGB_DIRTY = true;
+      rgblight_sethsv_noeeprom(90, 255, cur_val); // chartreuse green
       break;
     case _OVCK:
-      rgblight_sethsv_noeeprom(39, 255, cur_val);
-      RGB_DIRTY = true;
+      rgblight_sethsv_noeeprom(30, 255, cur_val); // orange
+      break;
+    case _LOWER:
+      rgblight_sethsv_noeeprom(210, 255, cur_val); // azure
+      break;
+    case _RAISE:
+      rgblight_sethsv_noeeprom(150, 255, cur_val); // spring green
+      break;
+    case _ADJUST:
+      rgblight_sethsv_noeeprom(180, 255, cur_val); // cyan (blue + green)
       break;
     default:
-      rgblight_sethsv_noeeprom(240, 255, cur_val);
-      RGB_DIRTY = true;
+      rgblight_sethsv_noeeprom(0, 0, cur_val); // white
       break;
   }
+  RGB_DIRTY = true;
   return state;
 }
