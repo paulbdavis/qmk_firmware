@@ -195,7 +195,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------|  |------+------+------+------+------+------|
  * |Space |Shift | Ctrl | Alt  |      |      |  |      |Shift | Ctrl | Alt  |      |      |
  * |------+------+------+------+------+------|  |------+------+------+------+------+------|
- * |      |      |      |      |Lower |Space |  |      |Raise |      |      |      |      |
+ * |XXXXXX|      |      |      |Lower |Space |  |      |Raise |      |      |      |      |
  * `-----------------------------------------'  `-----------------------------------------'
  *
  * 1-player: pickup space, interact control, change chef shift, dash alt, move WASD/arrows
@@ -206,7 +206,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   _______, _______, _______, _______,    KC_W,    KC_E, _______, _______, _______, _______, KC_UP,   KC_I,    \
   _______, _______, _______,    KC_A,    KC_S,    KC_D, _______, _______, _______, KC_LEFT, KC_DOWN, KC_RGHT, \
   KC_SPC,  KC_LSFT, KC_LCTL, KC_LALT, _______, _______, _______, KC_RSFT, KC_RCTL, KC_RALT, _______, _______, \
-  _______, _______, _______, _______, _______, KC_SPC,  _______, _______, _______, _______, _______, _______  \
+  XXXXXXX, _______, _______, _______, _______, KC_SPC,  _______, _______, _______, _______, _______, _______  \
 )
 
 };
