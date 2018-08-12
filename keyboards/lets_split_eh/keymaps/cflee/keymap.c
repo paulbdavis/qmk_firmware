@@ -14,6 +14,7 @@ enum layers {
   _QWERTY,
   _SDV1,
   _SDV2,
+  _OVCK,
   _LOWER,
   _RAISE,
   _FUNCTION,
@@ -41,6 +42,7 @@ enum custom_keycodes {
 // Layer changes
 #define SDV_T TG(_SDV1)
 #define SDV_M MO(_SDV2)
+#define OVCK_T TG(_OVCK)
 
 // We need to use this LAYOUT() macro from lets_split_eh/eh/eh.h because it needs
 // to be split into 8 rows of 6 (all the left hand rows followed by right hand rows).
@@ -110,7 +112,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * ,-----------------------------------------------------------------------------------.
  * |      |Reset |      |      |      |      |      |SDV_T |RGBVAI|RGBSAI|RGBHUI| Del  |
  * |------+------+------+------+------+-------------+------+------+------+------+------|
- * |      |  SS  | SSA  |SS Cp |SSA Cp|      |      |      |RGBVAD|RGBSAD|RGBHUD|RGBTOG|
+ * |      |  SS  | SSA  |SS Cp |SSA Cp|      |      |OVCK_T|RGBVAD|RGBSAD|RGBHUD|RGBTOG|
  * |------+------+------+------+------+------|------+------+------+------+------+------|
  * |      |      |      |      |      |      |      |      |      |      |      |BLSTEP|
  * |------+------+------+------+------+------+------+------+------+------+------+------|
@@ -120,8 +122,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * Retain the bottom right reset for compatibility with default lets_split_eh keymap.
  */
 [_ADJUST] = LAYOUT( \
-  _______, C_SS,    C_SSA,   C_SSC,   C_SSAC,  _______, _______, _______, RGB_VAD, RGB_SAD, RGB_HUD, RGB_TOG, \
   _______, RESET,   _______, _______, _______, _______, _______,   SDV_T, RGB_VAI, RGB_SAI, RGB_HUI, KC_DEL,  \
+  _______, C_SS,    C_SSA,   C_SSC,   C_SSAC,  _______, _______,  OVCK_T, RGB_VAD, RGB_SAD, RGB_HUD, RGB_TOG, \
   _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, BL_STEP, \
   _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, RESET    \
 ),
@@ -183,6 +185,28 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   _______, KC_5,    KC_6,    KC_7,    KC_8,    _______, _______, _______, _______, _______, _______, _______, \
   _______, KC_9,    KC_0,    KC_MINS, KC_EQL,  _______, _______, _______, _______, _______, _______, _______, \
   _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______  \
+),
+
+/* Overcooked/Overcooked 2
+ * ,-----------------------------------------------------------------------------------.
+ * |      |      |      |      |   W  |   E  |      |      |      |      |   Up |   I  |
+ * |------+------+------+------+------+-------------+------+------+------+------+------|
+ * |      |      |      |   A  |   S  |   D  |      |      |      | Left | Down |Right |
+ * |------+------+------+------+------+------|------+------+------+------+------+------|
+ * |Space |Shift | Ctrl | Alt  |      |      |      |Shift | Ctrl | Alt  |      |      |
+ * |------+------+------+------+------+------+------+------+------+------+------+------|
+ * |      |      |      |      |Lower |Space |      |Raise |      |      |      |      |
+ * `-----------------------------------------------------------------------------------'
+ *
+ * 1-player: pickup space, interact control, change chef shift, dash alt, move WASD/arrows
+ * 2-player A: pickup shift, interact control, dash alt, move WASD, emote E (all left mods)
+ * 2-player B: pickup shift, interact control, dash alt, move arrows, emote I (all right mods)
+ */
+[_OVCK] = LAYOUT( \
+  _______, _______, _______, _______,    KC_W,    KC_E, _______, _______, _______, _______, KC_UP,   KC_I,    \
+  _______, _______, _______,    KC_A,    KC_S,    KC_D, _______, _______, _______, KC_LEFT, KC_DOWN, KC_RGHT, \
+  KC_SPC,  KC_LSFT, KC_LCTL, KC_LALT, _______, _______, _______, KC_RSFT, KC_RCTL, KC_RALT, _______, _______, \
+  _______, _______, _______, _______, _______, KC_SPC,  _______, _______, _______, _______, _______, _______  \
 )
 
 };
@@ -224,6 +248,10 @@ uint32_t layer_state_set_user(uint32_t state) {
     case _SDV1:
     case _SDV2:
       rgblight_sethsv_noeeprom(120, 255, cur_val);
+      RGB_DIRTY = true;
+      break;
+    case _OVCK:
+      rgblight_sethsv_noeeprom(39, 255, cur_val);
       RGB_DIRTY = true;
       break;
     default:
