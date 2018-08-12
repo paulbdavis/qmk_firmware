@@ -211,25 +211,47 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 };
 
+// typically the LOWER and RAISE keycodes just layer_on() and update_tri_layer(),
+// which causes two layer state changes in quick succession.
+// since there is some issue with updating the rgblight underglow LEDs so rapidly,
+// implement a more complicated function to compute the final state and set once.
+void layer_on_update_tri_layer(uint8_t layer_on, uint8_t layer1, uint8_t layer2, uint8_t layer3) {
+  uint32_t mask12 = (1UL << layer1) | (1UL << layer2);
+  uint32_t mask3 = 1UL << layer3;
+  uint32_t new_state = layer_state | (1UL << layer_on);
+  layer_state_set((new_state & mask12) == mask12 ? (new_state | mask3) : (new_state));
+}
+
+void layer_off_update_tri_layer(uint8_t layer_off, uint8_t layer1, uint8_t layer2, uint8_t layer3) {
+  uint32_t mask12 = (1UL << layer1) | (1UL << layer2);
+  uint32_t mask3 = 1UL << layer3;
+  uint32_t new_state = layer_state & ~(1UL << layer_off);
+  layer_state_set((new_state & mask12) != mask12 ? (new_state & ~mask3) : (new_state));
+}
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
     case LOWER:
       if (record->event.pressed) {
-        layer_on(_LOWER);
-        update_tri_layer(_LOWER, _RAISE, _ADJUST);
+        // layer_on(_LOWER);
+        // update_tri_layer(_LOWER, _RAISE, _ADJUST);
+        layer_on_update_tri_layer(_LOWER, _LOWER, _RAISE, _ADJUST);
       } else {
-        layer_off(_LOWER);
-        update_tri_layer(_LOWER, _RAISE, _ADJUST);
+        // layer_off(_LOWER);
+        // update_tri_layer(_LOWER, _RAISE, _ADJUST);
+        layer_off_update_tri_layer(_LOWER, _LOWER, _RAISE, _ADJUST);
       }
       return false;
       break;
     case RAISE:
       if (record->event.pressed) {
-        layer_on(_RAISE);
-        update_tri_layer(_LOWER, _RAISE, _ADJUST);
+        // layer_on(_RAISE);
+        // update_tri_layer(_LOWER, _RAISE, _ADJUST);
+        layer_on_update_tri_layer(_RAISE, _LOWER, _RAISE, _ADJUST);
       } else {
-        layer_off(_RAISE);
-        update_tri_layer(_LOWER, _RAISE, _ADJUST);
+        // layer_off(_RAISE);
+        // update_tri_layer(_LOWER, _RAISE, _ADJUST);
+        layer_off_update_tri_layer(_RAISE, _LOWER, _RAISE, _ADJUST);
       }
       return false;
       break;
@@ -244,6 +266,7 @@ uint32_t layer_state_set_user(uint32_t state) {
   uint8_t cur_val = rgblight_get_val();
 
   // state is bitmask of active layers, of the max 32 layers
+  // biton32() is most significant on-bit, i.e. highest enabled layer
   switch (biton32(state)) {
     case _SDV1:
     case _SDV2:
