@@ -55,30 +55,35 @@ void layer_off_update_tri_layer(uint8_t layer_off, uint8_t layer1, uint8_t layer
 
 uint32_t layer_state_set_user(uint32_t state) {
 #ifdef RGBLIGHT_ENABLE
+  // get existing value to avoid changing the EEPROM-configured brightness
+  // hue and saturation need to be controlled here to fully control colour
+  uint8_t cur_val = rgblight_get_val();
+  
   switch (biton32(state)) {
-  /* case _RAISE: */
-  /*   rgblight_sethsv_orange(); */
-  /*   break; */
-  /* case _LOWER: */
-  /*   rgblight_sethsv_azure(); */
-  /*   break; */
+  case _RAISE:
+    rgblight_sethsv_noeeprom(32, 255, cur_val); // orange
+    break;
+  case _LOWER:
+    rgblight_sethsv_noeeprom(186, 102, cur_val); // azure
+    break;
   case _ADJUST:
-    rgblight_sethsv_white();
+    rgblight_sethsv_noeeprom(0, 0, cur_val); // white
     break;
   case _NUMPAD:
-    rgblight_sethsv_red();
+    rgblight_sethsv_noeeprom(0, 255, cur_val); // red
     break;
-  /* case _EMACS: */
-  /*   rgblight_sethsv_magenta(); */
-  /*   break; */
+  case _EMACS:
+    rgblight_sethsv_noeeprom(300, 255, cur_val); // magenta
+    break;
   default:
-    rgblight_sethsv_green();
+    rgblight_sethsv_noeeprom(120, 255, cur_val); // green
     break;
   }
-#ifdef SPLIT_KEYBOARD
+  
   RGB_DIRTY = true;
+  
 #endif
-#endif
+  
   return state;
 }
 
