@@ -3,6 +3,7 @@
 #include "quantum.h"
 #include "action.h"
 #include "version.h"
+#include "split_flags.h"
 
 __attribute__ ((weak))
 bool process_record_keymap(uint16_t keycode, keyrecord_t *record) {
@@ -34,26 +35,44 @@ void play_adjust_sound(void) {
 }
 
 
+// typically the LOWER and RAISE keycodes just layer_on() and update_tri_layer(),
+// which causes two layer state changes in quick succession.
+// since there is some issue with updating the rgblight underglow LEDs so rapidly,
+// implement a more complicated function to compute the final state and set once.
+void layer_on_update_tri_layer(uint8_t layer_on, uint8_t layer1, uint8_t layer2, uint8_t layer3) {
+  uint32_t mask12 = (1UL << layer1) | (1UL << layer2);
+  uint32_t mask3 = 1UL << layer3;
+  uint32_t new_state = layer_state | (1UL << layer_on);
+  layer_state_set((new_state & mask12) == mask12 ? (new_state | mask3) : (new_state));
+}
+
+void layer_off_update_tri_layer(uint8_t layer_off, uint8_t layer1, uint8_t layer2, uint8_t layer3) {
+  uint32_t mask12 = (1UL << layer1) | (1UL << layer2);
+  uint32_t mask3 = 1UL << layer3;
+  uint32_t new_state = layer_state & ~(1UL << layer_off);
+  layer_state_set((new_state & mask12) != mask12 ? (new_state & ~mask3) : (new_state));
+}
+
 uint32_t layer_state_set_user(uint32_t state) {
 #ifdef RGBLIGHT_ENABLE
   switch (biton32(state)) {
-  case _RAISE:
-    rgblight_sethsv_noeeprom_orange();
-    break;
-  case _LOWER:
-    rgblight_sethsv_noeeprom_azure();
-    break;
+  /* case _RAISE: */
+  /*   rgblight_sethsv_orange(); */
+  /*   break; */
+  /* case _LOWER: */
+  /*   rgblight_sethsv_azure(); */
+  /*   break; */
   case _ADJUST:
-    rgblight_sethsv_noeeprom_yellow();
+    rgblight_sethsv_white();
     break;
   case _NUMPAD:
-    rgblight_sethsv_noeeprom_red();
+    rgblight_sethsv_red();
     break;
-  case _EMACS:
-    rgblight_sethsv_noeeprom_magenta();
-    break;
+  /* case _EMACS: */
+  /*   rgblight_sethsv_magenta(); */
+  /*   break; */
   default:
-    rgblight_sethsv_noeeprom_green();
+    rgblight_sethsv_green();
     break;
   }
 #ifdef SPLIT_KEYBOARD
@@ -471,21 +490,21 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     break;
   case LOWER:
     if (record->event.pressed) {
-      layer_on(_LOWER);
-      update_tri_layer(_LOWER, _RAISE, _EMACS);
+      /* layer_on(_LOWER); */
+      layer_on_update_tri_layer(_LOWER, _LOWER, _RAISE, _EMACS);
     } else {
-      layer_off(_LOWER);
-      update_tri_layer(_LOWER, _RAISE, _EMACS);
+      /* layer_off(_LOWER); */
+      layer_off_update_tri_layer(_LOWER, _LOWER, _RAISE, _EMACS);
     }
     return false;
     break;
   case RAISE:
     if (record->event.pressed) {
-      layer_on(_RAISE);
-      update_tri_layer(_LOWER, _RAISE, _EMACS);
+      /* layer_on(_RAISE); */
+      layer_on_update_tri_layer(_RAISE, _LOWER, _RAISE, _EMACS);
     } else {
-      layer_off(_RAISE);
-      update_tri_layer(_LOWER, _RAISE, _EMACS);
+      /* layer_off(_RAISE); */
+      layer_off_update_tri_layer(_RAISE, _LOWER, _RAISE, _EMACS);
     }
     return false;
     break;
