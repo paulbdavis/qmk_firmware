@@ -34,32 +34,33 @@ void play_adjust_sound(void) {
 }
 
 
-void set_bg_color (void) {
+uint32_t layer_state_set_user(uint32_t state) {
 #ifdef RGBLIGHT_ENABLE
-  switch (biton32(layer_state)) {
+  switch (biton32(state)) {
   case _RAISE:
-    rgblight_sethsv_orange();
+    rgblight_sethsv_noeeprom_orange();
     break;
   case _LOWER:
-    rgblight_sethsv_azure();
+    rgblight_sethsv_noeeprom_azure();
     break;
   case _ADJUST:
-    rgblight_sethsv_magenta();
+    rgblight_sethsv_noeeprom_yellow();
     break;
   case _NUMPAD:
-    rgblight_sethsv_red();
+    rgblight_sethsv_noeeprom_red();
     break;
   case _EMACS:
-    rgblight_sethsv_yellow();
+    rgblight_sethsv_noeeprom_magenta();
     break;
   default:
-    rgblight_sethsv_green();
+    rgblight_sethsv_noeeprom_green();
     break;
   }
 #ifdef SPLIT_KEYBOARD
   RGB_DIRTY = true;
 #endif
 #endif
+  return state;
 }
 
 typedef struct {
@@ -192,7 +193,6 @@ void numpad_finished (qk_tap_dance_state_t *state, void *user_data) {
   case SINGLE_TAP: 
   case SINGLE_HOLD:
     layer_on(_NUMPAD);
-    set_bg_color();
 #ifdef AUDIO_ENABLE
     play_numpad_sound();
 #endif
@@ -208,7 +208,6 @@ void numpad_finished (qk_tap_dance_state_t *state, void *user_data) {
 #endif
     }
     layer_on(_ADJUST);
-    set_bg_color();
     break;
   }
 }
@@ -219,7 +218,6 @@ void numpad_reset (qk_tap_dance_state_t *state, void *user_data) {
   case SINGLE_TAP: break;
   case SINGLE_HOLD:
     layer_off(_NUMPAD);
-    set_bg_color();
 #ifdef AUDIO_ENABLE
     play_numpad_exit_sound();
 #endif
@@ -236,7 +234,6 @@ void numpad_reset (qk_tap_dance_state_t *state, void *user_data) {
     }
     layer_off(_NUMPAD);
     layer_off(_ADJUST);
-    set_bg_color();
     break;
   }
   numpad_tap_state.state = 0;
