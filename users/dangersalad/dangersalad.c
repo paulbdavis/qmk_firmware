@@ -56,21 +56,21 @@ void layer_off_update_tri_layer(uint8_t layer_off, uint8_t layer1, uint8_t layer
 uint32_t layer_state_set_user(uint32_t state) {
 #ifdef RGBLIGHT_ENABLE
   switch (biton32(state)) {
-  /* case _RAISE: */
-  /*   rgblight_sethsv_orange(); */
-  /*   break; */
-  /* case _LOWER: */
-  /*   rgblight_sethsv_azure(); */
-  /*   break; */
+  case _RAISE:
+    rgblight_sethsv_orange();
+    break;
+  case _LOWER:
+    rgblight_sethsv_azure();
+    break;
   case _ADJUST:
     rgblight_sethsv_white();
     break;
   case _NUMPAD:
     rgblight_sethsv_red();
     break;
-  /* case _EMACS: */
-  /*   rgblight_sethsv_magenta(); */
-  /*   break; */
+  case _EMACS:
+    rgblight_sethsv_magenta();
+    break;
   default:
     rgblight_sethsv_green();
     break;
