@@ -211,12 +211,12 @@ void numpad_finished (qk_tap_dance_state_t *state, void *user_data) {
   switch (numpad_tap_state.state) {
   case SINGLE_TAP: 
   case SINGLE_HOLD:
+  case DOUBLE_TAP:
     layer_on(_NUMPAD);
 #ifdef AUDIO_ENABLE
     play_numpad_sound();
 #endif
     break;
-  case DOUBLE_TAP:
   case DOUBLE_SINGLE_TAP:
   case DOUBLE_HOLD: 
   case TRIPLE_TAP: 
@@ -234,14 +234,14 @@ void numpad_finished (qk_tap_dance_state_t *state, void *user_data) {
 void numpad_reset (qk_tap_dance_state_t *state, void *user_data) {
   pre_numpad_disable();
   switch (numpad_tap_state.state) {
-  case SINGLE_TAP: break;
+  case SINGLE_TAP:
   case SINGLE_HOLD:
     layer_off(_NUMPAD);
 #ifdef AUDIO_ENABLE
     play_numpad_exit_sound();
 #endif
     break;
-  case DOUBLE_TAP:
+  case DOUBLE_TAP: break;
   case DOUBLE_SINGLE_TAP:
   case DOUBLE_HOLD: 
   case TRIPLE_TAP: 
@@ -280,8 +280,8 @@ void dance_super_reset (qk_tap_dance_state_t *state, void *user_data) {
 qk_tap_dance_action_t tap_dance_actions[] = {
   [SUPER_LAYER_CHANGE] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_super_finished, dance_super_reset),
   [NUMPAD_ADJUST] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, numpad_finished, numpad_reset),
-  [SUPER_CTRL] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, ctrl_finished, ctrl_reset),
-  [SUPER_ALT] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, alt_finished, alt_reset),
+  [SUPER_CTRL] = ACTION_TAP_DANCE_FN_ADVANCED_TIME(NULL, ctrl_finished, ctrl_reset, 150),
+  [SUPER_ALT] = ACTION_TAP_DANCE_FN_ADVANCED_TIME(NULL, alt_finished, alt_reset, 150),
 };
 
 
