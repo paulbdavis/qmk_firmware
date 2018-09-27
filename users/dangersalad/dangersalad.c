@@ -280,8 +280,8 @@ void dance_super_reset (qk_tap_dance_state_t *state, void *user_data) {
 qk_tap_dance_action_t tap_dance_actions[] = {
   [SUPER_LAYER_CHANGE] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_super_finished, dance_super_reset),
   [NUMPAD_ADJUST] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, numpad_finished, numpad_reset),
-  [SUPER_CTRL] = ACTION_TAP_DANCE_FN_ADVANCED_TIME(NULL, ctrl_finished, ctrl_reset, 150),
-  [SUPER_ALT] = ACTION_TAP_DANCE_FN_ADVANCED_TIME(NULL, alt_finished, alt_reset, 150),
+  [SUPER_CTRL] = ACTION_TAP_DANCE_FN_ADVANCED_TIME(NULL, ctrl_finished, ctrl_reset, 170),
+  [SUPER_ALT] = ACTION_TAP_DANCE_FN_ADVANCED_TIME(NULL, alt_finished, alt_reset, 170),
 };
 
 
