@@ -282,6 +282,7 @@ qk_tap_dance_action_t tap_dance_actions[] = {
   [NUMPAD_ADJUST] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, numpad_finished, numpad_reset),
   [SUPER_CTRL] = ACTION_TAP_DANCE_FN_ADVANCED_TIME(NULL, ctrl_finished, ctrl_reset, 170),
   [SUPER_ALT] = ACTION_TAP_DANCE_FN_ADVANCED_TIME(NULL, alt_finished, alt_reset, 170),
+  [CTRL_ALT] = ACTION_TAP_DANCE_DOUBLE(KC_LALT, KC_LALT|KC_LCTL),
 };
 
 
@@ -299,10 +300,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * `-----------------------------------------'  `-----------------------------------------'
  */
 [_WORKMAN]  = LAYOUT_ortho_4x12(                                                   \
-  KC_ESC             , KC_Q   , KC_D     , KC_R                    , KC_W   , KC_B            , KC_J           , KC_F   , KC_U     , KC_P     , KC_SCLN  , KC_BSPC          , \
-  LCTL_T(KC_TAB)     , KC_A   , KC_S     , KC_H                    , KC_T   , KC_G            , KC_Y           , KC_N   , KC_E     , KC_O     , KC_I     , RCTL_T(KC_QUOT)  , \
-  KC_LSFT            , KC_Z   , KC_X     , KC_M                    , KC_C   , KC_V            , KC_K           , KC_L   , KC_COMM  , KC_DOT   , KC_SLSH  , RSFT_T(KC_ENT)   , \
-  TD(NUMPAD_ADJUST)  , EMACS  , KC_LALT  , TD(SUPER_LAYER_CHANGE)  , LOWER  , TD(SUPER_CTRL)  , TD(SUPER_ALT)  , RAISE  , KC_LEFT  , KC_DOWN  , KC_UP    , KC_RGHT \
+  KC_ESC             , KC_Q   , KC_D          , KC_R                    , KC_W   , KC_B            , KC_J           , KC_F   , KC_U     , KC_P     , KC_SCLN  , KC_BSPC          , \
+  LCTL_T(KC_TAB)     , KC_A   , KC_S          , KC_H                    , KC_T   , KC_G            , KC_Y           , KC_N   , KC_E     , KC_O     , KC_I     , RCTL_T(KC_QUOT)  , \
+  KC_LSFT            , KC_Z   , KC_X          , KC_M                    , KC_C   , KC_V            , KC_K           , KC_L   , KC_COMM  , KC_DOT   , KC_SLSH  , RSFT_T(KC_ENT)   , \
+  TD(NUMPAD_ADJUST)  , EMACS  , TD(CTRL_ALT)  , TD(SUPER_LAYER_CHANGE)  , LOWER  , TD(SUPER_CTRL)  , TD(SUPER_ALT)  , RAISE  , KC_LEFT  , KC_DOWN  , KC_UP    , KC_RGHT \
 ),
 
 /* Colemak

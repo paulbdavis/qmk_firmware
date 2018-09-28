@@ -53,6 +53,7 @@ enum  {
   NUMPAD_ADJUST,
   SUPER_CTRL,
   SUPER_ALT,
+  CTRL_ALT
 };
 
 
