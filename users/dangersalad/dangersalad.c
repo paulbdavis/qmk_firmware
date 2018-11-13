@@ -60,11 +60,13 @@ uint32_t layer_state_set_user(uint32_t state) {
     rgblight_sethsv_orange();
     break;
   case _LOWER:
+  case _LOWER_TTS:
     rgblight_sethsv_azure();
     break;
   case _ADJUST:
     rgblight_sethsv_white();
     break;
+  case _RAISE_TTS:
   case _NUMPAD:
     rgblight_sethsv_red();
     break;
@@ -306,42 +308,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   TD(NUMPAD_ADJUST)  , EMACS  , TD(CTRL_ALT)  , TD(SUPER_LAYER_CHANGE)  , LOWER  , TD(SUPER_CTRL)  , TD(SUPER_ALT)  , RAISE  , KC_LEFT  , KC_DOWN  , KC_UP    , KC_RGHT \
 ),
 
-/* Colemak
- * ,-----------------------------------------.  ,-----------------------------------------.
- * | Esc  |   Q  |   D  |   R  |   W  |   B  |  |   J  |   F  |   U  |   P  |   ;  | Bksp |
- * |------+------+------+------+------+------|  |------+------+------+------+------+------|
- * | Ctrl |   A  |   S  |   H  |   T  |   G  |  |   Y  |   N  |   E  |   O  |   I  |  '   |
- * |------+------+------+------+------+------|  |------+------+------+------+------+------|
- * | Shift|   Z  |   X  |   M  |   C  |   V  |  |   K  |   L  |   ,  |   .  |   /  |Enter |
- * |------+------+------+------+------+------|  |------+------+------+------+------+------|
- * |      |      | Alt  | GUI  |Lower |Sp/Ctl|  |Sp/Alt|Raise | Left | Down |  Up  |Right |
- * `-----------------------------------------'  `-----------------------------------------'
- */
-[_COLEMAK]  = LAYOUT_ortho_4x12(                                                   \
-  KC_ESC             ,  KC_Q  ,    KC_W  ,    KC_F                 ,    KC_P  ,    KC_G         ,    KC_J        ,    KC_L  ,    KC_U     ,    KC_Y  ,    KC_SCLN  , KC_BSPC             , \
-  LCTL_T(KC_TAB)     ,  KC_A  ,    KC_R  ,    KC_S                 ,    KC_T  ,    KC_D         ,    KC_H        ,    KC_N  ,    KC_E     ,    KC_I  ,    KC_O     ,    RCTL_T(KC_QUOT)  , \
-  KC_LSFT            , KC_Z   ,    KC_X  ,    KC_C                 ,    KC_V  ,    KC_B         ,    KC_K        ,    KC_M  ,    KC_COMM  , KC_DOT   ,  KC_SLSH    , RSFT_T(KC_ENT)      , \
-  TD(NUMPAD_ADJUST)  , EMACS  , KC_LALT  , TD(SUPER_LAYER_CHANGE)  , LOWER    , TD(SUPER_CTRL)  , TD(SUPER_ALT)  , RAISE    , KC_LEFT     , KC_DOWN  , KC_UP       , KC_RGHT \
-),
-
-/* Colemak
- * ,-----------------------------------------.  ,-----------------------------------------.
- * | Esc  |   Q  |   D  |   R  |   W  |   B  |  |   J  |   F  |   U  |   P  |   ;  | Bksp |
- * |------+------+------+------+------+------|  |------+------+------+------+------+------|
- * | Ctrl |   A  |   S  |   H  |   T  |   G  |  |   Y  |   N  |   E  |   O  |   I  |  '   |
- * |------+------+------+------+------+------|  |------+------+------+------+------+------|
- * | Shift|   Z  |   X  |   M  |   C  |   V  |  |   K  |   L  |   ,  |   .  |   /  |Enter |
- * |------+------+------+------+------+------|  |------+------+------+------+------+------|
- * |      |      | Alt  | GUI  |Lower |Sp/Ctl|  |Sp/Alt|Raise | Left | Down |  Up  |Right |
- * `-----------------------------------------'  `-----------------------------------------'
- */
-[_COLEMAK_MOD_DH]  = LAYOUT_ortho_4x12(                                                   \
-  KC_ESC             ,  KC_Q  ,    KC_W  ,    KC_F                 ,    KC_P  ,    KC_B         ,    KC_J        ,    KC_L  ,    KC_U     ,    KC_Y  ,    KC_SCLN  , KC_BSPC             , \
-  LCTL_T(KC_TAB)     ,  KC_A  ,    KC_R  ,    KC_S                 ,    KC_T  ,    KC_G         ,    KC_K        ,    KC_N  ,    KC_E     ,    KC_I  ,    KC_O     ,    RCTL_T(KC_QUOT)  , \
-  KC_LSFT            , KC_Z   ,    KC_X  ,    KC_C                 ,    KC_D  ,    KC_V         ,    KC_M        ,    KC_H  ,    KC_COMM  , KC_DOT   ,  KC_SLSH    , RSFT_T(KC_ENT)      , \
-  TD(NUMPAD_ADJUST)  , EMACS  , KC_LALT  , TD(SUPER_LAYER_CHANGE)  , LOWER    , TD(SUPER_CTRL)  , TD(SUPER_ALT)  , RAISE    , KC_LEFT     , KC_DOWN  , KC_UP       , KC_RGHT \
-),
-
 /* Qwerty
  * ,-----------------------------------------.  ,-----------------------------------------.
  * | Esc  |   Q  |   W  |   E  |   R  |   T  |  |   Y  |   U  |   I  |   O  |   P  | Bksp |
@@ -360,6 +326,24 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   TD(NUMPAD_ADJUST)  , XXXXXXX  , KC_LALT  , TD(SUPER_LAYER_CHANGE)  , LOWER  , TD(SUPER_CTRL)  , TD(SUPER_ALT)  , RAISE  , KC_LEFT  , KC_DOWN  , KC_UP    , KC_RGHT \
 ),
 
+[_TTS] = LAYOUT_ortho_4x12(
+   KC_ESC   , KC_Q     , KC_W  , KC_E                , KC_R       , KC_T       , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , \
+   KC_TAB   , KC_A     , KC_S  , KC_D                , KC_F       , KC_G       , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , \
+   KC_LSFT  , KC_L     , KC_H  , KC_C                , KC_V       , KC_B       , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , \
+   KC_LCTL  , KC_LALT  , KC_M  , LCTL(LSFT(KC_GRV))  , LOWER_TTS  , RAISE_TTS  , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX \
+),
+[_LOWER_TTS] = LAYOUT_ortho_4x12( \
+  KC_DEL   , KC_MINUS  , KC_UP    , KC_EQL    , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , \
+  _______  , KC_LEFT   , KC_DOWN  , KC_RIGHT  , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , \
+  _______  , XXXXXXX   , XXXXXXX  , XXXXXXX   , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , \
+  RESET    , WORKMAN   , QWERTY   , _______   , _______  , _______  , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX \
+),
+[_RAISE_TTS] = LAYOUT_ortho_4x12( \
+  KC_DEL   , XXXXXXX  , KC_1  , KC_2  , KC_3    ,  XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , \
+  KC_DEL   , XXXXXXX  , KC_4  , KC_5  , KC_6    ,  XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , \
+  _______  , XXXXXXX  , KC_7  , KC_8  , KC_9    ,  XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , \
+  _______  , _______  , KC_0  , KC_0  , KC_DOT  ,  _______  , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX  , XXXXXXX \
+),
 /* Lower
  * ,-----------------------------------------.  ,-----------------------------------------.
  * |   ~  |   !  |   @  |   #  |   $  |   %  |  |   ^  |   &  |   *  |   (  |   )  | Del  |
@@ -408,9 +392,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * `-----------------------------------------'  `-----------------------------------------'
  */
 [_ADJUST] =  LAYOUT_ortho_4x12( \
-  RESET   , XXXXXXX , XXXXXXX  , XXXXXXX , XXXXXXX , XXXXXXX , COLEMAK_MOD_DH , KC_HOME , KC_PGUP   , KC_PSCREEN , KC_SCROLLLOCK , KC_PAUSE , \
+  RESET   , XXXXXXX , XXXXXXX  , XXXXXXX , XXXXXXX , XXXXXXX , TTS     , KC_HOME , KC_PGUP   , KC_PSCREEN , KC_SCROLLLOCK , KC_PAUSE , \
   AG_SWAP , XXXXXXX , RGB_RMOD , XXXXXXX , XXXXXXX , XXXXXXX , WORKMAN , KC_END  , KC_PGDOWN , KC_INSERT  , XXXXXXX       , XXXXXXX  , \
-  AG_NORM , RGB_TOG , RGB_MOD  , RGB_HUI , RGB_SAI , RGB_VAI , COLEMAK , XXXXXXX , XXXXXXX   , XXXXXXX    , XXXXXXX       , XXXXXXX  , \
+  AG_NORM , RGB_TOG , RGB_MOD  , RGB_HUI , RGB_SAI , RGB_VAI , XXXXXXX , XXXXXXX , XXXXXXX   , XXXXXXX    , XXXXXXX       , XXXXXXX  , \
   _______ , AU_ON   , AU_OFF   , RGB_HUD , RGB_SAD , RGB_VAD , QWERTY  , XXXXXXX , XXXXXXX   , XXXXXXX    , XXXXXXX       , XXXXXXX \
                                 ),
 /* Emacs (Lower + Raise)
@@ -471,21 +455,28 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     }
     return false;
     break;
-  case COLEMAK:
+  case TTS:
     if (record->event.pressed) {
 #ifdef AUDIO_ENABLE
-      play_workman_sound();
+      play_dvorak_sound();
 #endif
-      set_single_persistent_default_layer(_COLEMAK);
+      set_single_persistent_default_layer(_TTS);
     }
     return false;
     break;
-  case COLEMAK_MOD_DH:
+  case LOWER_TTS:
     if (record->event.pressed) {
-#ifdef AUDIO_ENABLE
-      play_workman_sound();
-#endif
-      set_single_persistent_default_layer(_COLEMAK_MOD_DH);
+      layer_on(_LOWER_TTS);
+    } else {
+      layer_off(_LOWER_TTS);
+    }
+    return false;
+    break;
+  case RAISE_TTS:
+    if (record->event.pressed) {
+      layer_on(_RAISE_TTS);
+    } else {
+      layer_off(_RAISE_TTS);
     }
     return false;
     break;

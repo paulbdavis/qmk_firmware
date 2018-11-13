@@ -4,14 +4,15 @@
 #include "quantum.h"
 
 #define _WORKMAN 0
-#define _COLEMAK 1
-#define _COLEMAK_MOD_DH 2
-#define _QWERTY 3
-#define _LOWER 4
-#define _RAISE 5
-#define _EMACS 6
-#define _ADJUST 7
-#define _NUMPAD 8
+#define _QWERTY 1
+#define _TTS 2
+#define _LOWER_TTS 3
+#define _RAISE_TTS 4
+#define _LOWER 5
+#define _RAISE 6
+#define _EMACS 7
+#define _ADJUST 8
+#define _NUMPAD 9
 
 
 #define _______ KC_TRNS
@@ -20,9 +21,10 @@
 // Define all of
 enum custom_keycodes {
   WORKMAN = SAFE_RANGE,
-  COLEMAK,
-  COLEMAK_MOD_DH,
   QWERTY,
+  TTS,
+  LOWER_TTS,
+  RAISE_TTS,
   LOWER,
   RAISE,
   ADJUST,
