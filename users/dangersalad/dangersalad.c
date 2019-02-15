@@ -19,6 +19,10 @@ void play_workman_sound(void) {
 }
 
 __attribute__ ((weak))
+void play_dvorak_sound(void) {
+}
+
+__attribute__ ((weak))
 void play_numpad_sound(void) {
 }
 
