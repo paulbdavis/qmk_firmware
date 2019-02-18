@@ -1,55 +1,19 @@
 #include "lets_split.h"
 #include "dangersalad.h"
-#include "action_layer.h"
-#include "eeconfig.h"
 
-#ifdef AUDIO_ENABLE
-float tone_qwerty[][2]      = SONG(COIN_SOUND);
-float tone_workman[][2]     = SONG(ZELDA_TREASURE);
-float tone_numpad[][2]      = SONG(AUDIO_ON_SOUND);
-float tone_numpad_exit[][2] = SONG(AUDIO_OFF_SOUND);
-float tone_emacs[][2]       = SONG(BEEP);
-float tone_adjust[][2]      = SONG(ZELDA_PUZZLE);
-#endif
-
-extern keymap_config_t keymap_config;
-
-void play_qwerty_sound(void) {
-#ifdef AUDIO_ENABLE
-    PLAY_SONG(tone_qwerty);
-#endif
+void matrix_init_keymap (void) {
 }
 
-void play_workman_sound(void) {
-#ifdef AUDIO_ENABLE
-    PLAY_SONG(tone_workman);
-#endif
+uint32_t layer_state_set_keymap(uint32_t state) {
+    return state;
 }
 
-void play_numpad_sound(void) {
-#ifdef AUDIO_ENABLE
-    PLAY_SONG(tone_numpad);
-#endif
-}
-
-void play_numpad_exit_sound(void) {
-#ifdef AUDIO_ENABLE
-    PLAY_SONG(tone_numpad_exit);
-#endif
-}
-
-void play_emacs_sound(void) {
-#ifdef AUDIO_ENABLE
-    PLAY_SONG(tone_emacs);
-#endif
-}
-
-void play_adjust_sound(void) {
-#ifdef AUDIO_ENABLE
-    PLAY_SONG(tone_adjust);
-#endif
-}
-
-bool process_record_keymap(uint16_t keycode, keyrecord_t *record) {
-  return true;
-}
+const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
+    [_WORKMAN] = LAYOUT_letssplit_wrapper(KEYMAP_WORKMAN),
+    [_QWERTY] = LAYOUT_letssplit_wrapper(KEYMAP_QWERTY),
+    [_LOWER] = LAYOUT_letssplit_wrapper(KEYMAP_LOWER),
+    [_RAISE] = LAYOUT_letssplit_wrapper(KEYMAP_RAISE),
+    [_ADJUST] = LAYOUT_letssplit_wrapper(KEYMAP_ADJUST),
+    [_EMACS] = LAYOUT_letssplit_wrapper(KEYMAP_EMACS),
+    [_NUMPAD] = LAYOUT_letssplit_wrapper(KEYMAP_NUMPAD),
+};
