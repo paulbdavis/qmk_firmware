@@ -1,13 +1,6 @@
 #include QMK_KEYBOARD_H
 #include "version.h"
-
-#define _BASE 0 // default layer
-#define _LOWER = 1
-#define _RAISE = 2
-
-enum custom_keycodes {
-    START_HERE = SAFE_RANGE
-};
+#include "dangersalad.h"
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 /* Keymap 0: Basic layer
@@ -31,20 +24,21 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  *                                 |      |      |Super |       |Super |        |      |
  *                                 `--------------------'       `----------------------'
  */
-    [_BASE] = LAYOUT_ergodox_pretty(  // layer 0 : default (workman)
+    [_WORKMAN] = LAYOUT_ergodox_pretty(  // layer 0 : default (workman)
         
-        XXXXXXX,     XXXXXXX, XXXXXXX,       XXXXXXX,   XXXXXXX,   XXXXXXX, XXXXXXX, /**/ XXXXXXX, XXXXXXX, XXXXXXX,   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-        KC_ESC,      KC_Q,    KC_D,          KC_R,      KC_W,      KC_B,    XXXXXXX, /**/ XXXXXXX, KC_J,    KC_F,      KC_U,    KC_P,    KC_SCLN, KC_BSPC,
-        KC_TAB,      KC_A,    KC_S,          KC_H,      KC_T,      KC_G,             /**/          KC_Y,    KC_N,      KC_E,    KC_O,    KC_I,    KC_QUOT,
-        KC_LSFT,     KC_Z,    KC_X,          KC_M,      KC_C,      KC_V,    XXXXXXX, /**/ XXXXXXX, KC_K,    KC_L,      KC_COMM, KC_DOT,  KC_SLSH, RSFT_T(KC_ENT),
-        TD(NUM_ADJ), EMACS,   LALT(KC_LCTL), TD(SUPER), TD(LOWER),                   /**/                   TD(RAISE), KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT \
+        XXXXXXX,        XXXXXXX, XXXXXXX,       XXXXXXX,      XXXXXXX,     XXXXXXX, XXXXXXX, /**/ XXXXXXX, XXXXXXX, XXXXXXX,      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+        KC_ESC,         KC_Q,    KC_D,          KC_R,         KC_W,        KC_B,    XXXXXXX, /**/ XXXXXXX, KC_J,    KC_F,         KC_U,    KC_P,    KC_SCLN, KC_BSPC,
+        KC_TAB,         KC_A,    KC_S,          KC_H,         KC_T,        KC_G,             /**/          KC_Y,    KC_N,         KC_E,    KC_O,    KC_I,    KC_QUOT,
+        KC_LSFT,        KC_Z,    KC_X,          KC_M,         KC_C,        KC_V,    XXXXXXX, /**/ XXXXXXX, KC_K,    KC_L,         KC_COMM, KC_DOT,  KC_SLSH, RSFT_T(KC_ENT),
+        TD(TD_NUM_ADJ), EMACS,   LALT(KC_LCTL), TD(TD_SUPER), TD(TD_LOWER),                  /**/                   TD(TD_RAISE), KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT \
         
         
-        ,                                                          XXXXXXX, XXXXXXX, /**/ XXXXXXX, XXXXXXX \
-        ,                                                                   XXXXXXX, /**/ XXXXXXX \
-        ,                                          LCTL_T(KC_SPC), XXXXXXX, XXXXXXX, /**/ XXXXXXX, XXXXXXX, LALT_T(KC_SPC)
+        ,                                                                  XXXXXXX, XXXXXXX, /**/ XXXXXXX, XXXXXXX \
+        ,                                                                           XXXXXXX, /**/ XXXXXXX \
+        ,                                                  LCTL_T(KC_SPC), XXXXXXX, XXXXXXX, /**/ XXXXXXX, XXXXXXX, LALT_T(KC_SPC)
         
         ),
+    
     [_LOWER] = LAYOUT_ergodox_pretty(  // layer 1 
         
         _______,     _______, _______,       _______,   _______,   _______, _______, /**/ _______, _______, _______,   _______, _______, _______, _______,
@@ -59,6 +53,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         ,                                                 _______, _______, _______, /**/ _______, _______, _______
         
         ),
+    
     [_RAISE] = LAYOUT_ergodox_pretty(  // layer 2 
         
         _______,     _______, _______,       _______,   _______,   _______, _______, /**/ _______, _______, _______,   _______, _______, _______, _______,
@@ -73,44 +68,72 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         ,                                                 _______, _______, _______, /**/ _______, _______, _______
         
         ),
-/* Keymap 1: Symbol Layer
- *
- * ,---------------------------------------------------.           ,--------------------------------------------------.
- * |  Reset  |  F1  |  F2  |  F3  |  F4  |  F5  |      |           |      |  F6  |  F7  |  F8  |  F9  |  F10 |   F11  |
- * |---------+------+------+------+------+------+------|           |------+------+------+------+------+------+--------|
- * |  NumLk  |   !  |   @  |   {  |   }  |   |  |      |           |      |   _  |   7  |   8  |   9  |   *  |   F12  |
- * |---------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
- * |         |   #  |   $  |   (  |   )  |   &  |------|           |------|   -  |   4  |   5  |   6  |   +  |        |
- * |---------+------+------+------+------+------|      |           |      |------+------+------+------+------+--------|
- * | Insert  |   %  |   ^  |   [  |   ]  |   *  |      |           |      |   &  |   1  |   2  |   3  |   \  |        |
- * `---------+------+------+------+------+-------------'           `-------------+------+------+------+------+--------'
- * | EPP_RST |      |      |      |      |                                        |   0  |   0  |   .  |   =  |        |
- * `------------------------------------'                                        `------------------------------------'
- *                                        ,-------------.       ,-------------.
- *                                        |      |      |       |      |      |
- *                                 ,------|------|------|       |------+------+------.
- *                                 |      |      |      |       |      |      |      |
- *                                 |      |      |------|       |------|      |      |
- *                                 |      |      |      |       |      |      |      |
- *                                 `--------------------'       `--------------------'
- */
-    [SYMB] = LAYOUT_ergodox_pretty(
+    [_EMACS] = LAYOUT_ergodox_pretty(  // layer 2 
         
-        RESET,     KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   _______, /**/ _______, KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,
-        KC_NLCK,   KC_EXLM, KC_AT,   KC_LCBR, KC_RCBR, KC_PIPE, _______, /**/ _______, KC_UNDS, KC_KP_7, KC_KP_8, KC_KP_9, KC_PAST, KC_F12,
-        _______,   KC_HASH, KC_DLR,  KC_LPRN, KC_RPRN, KC_AMPR,          /**/          KC_PMNS, KC_KP_4, KC_KP_5, KC_KP_6, KC_PPLS, _______,
-        KC_INSERT, KC_PERC, KC_CIRC, KC_LBRC, KC_RBRC, KC_ASTR, _______, /**/ _______, KC_AMPR, KC_KP_1, KC_KP_2, KC_KP_3, KC_PSLS, _______,
-        EEP_RST,   _______, _______, _______, _______,                   /**/                   KC_KP_0, KC_KP_0, KC_PDOT, KC_EQL,  _______\
-    
+        _______,     _______, _______,       _______,   _______,   _______, _______, /**/ _______, _______, _______,   _______, _______, _______, _______,
+        RESET, EMACS_WIN_1, EMACS_WIN_2, EMACS_WIN_3, EMACS_WIN_4, XXXXXXX, _______, /**/ _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, EMACS_WIN_0, XXXXXXX,
+        EMACS_PROJ_GIT, EMACS_PROJ_SWITCH, EMACS_PROJ_FILE, EMACS_PROJ_SEARCH, EMACS_PROJ_COMPILE, EMACS_PROJ_SHELL, /**/          EMACS_FLYC_CHECK, EMACS_FLYC_NEXT,   EMACS_FLYC_PREV,  EMACS_FLYC_LIST, XXXXXXXX, XXXXXXXX,
+        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______, /**/ _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
+        _______, _______, _______, _______, _______,                   /**/                   _______, _______, _______, _______, _______, \
         
-        ,                                     _______, _______,          /**/          _______, _______\
-        ,                                     _______,                   /**/                   _______\
-        ,                                     _______, _______, _______, /**/ _______, _______, _______
+        
+        ,                                                          _______, _______, /**/ _______, _______ \
+        ,                                                                   _______, /**/ _______ \
+        ,                                                 _______, _______, _______, /**/ _______, _______, _______
         
         ),
+    
+    [_ADJUST] = LAYOUT_ergodox_pretty(  // layer 2
+        
+        _______, _______, _______, _______, _______, _______, _______, /**/ _______, _______, _______, _______, _______, _______, _______,
+        RESET,   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______, /**/ _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+        AG_SWAP, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,          /**/          XXXXXXX, XXXXXXX, KC_INSERT, XXXXXXX, XXXXXXX, XXXXXXX,
+        AG_NORM, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______, /**/ _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
+        _______, _______, _______, _______, _______,                   /**/                   _______, _______, _______, _______, _______, \
+        
+        
+        ,                                            _______, _______, /**/ _______, _______ \
+        ,                                                     _______, /**/ _______ \
+        ,                                   _______, _______, _______, /**/ _______, _______, _______
+        
+        ),
+    
+    
+    [_NUMPAD] = LAYOUT_ergodox_pretty(  // layer 2
+        
+        _______, _______, _______, _______, _______, _______, _______, /**/ _______, _______, _______, _______, _______, _______, _______,
+        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______, /**/ _______, KC_PSLS, KC_KP_7, KC_KP_8, KC_KP_9, KC_KP_PMNS, KC_BSPC,
+        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,          /**/          KC_PAST, KC_KP_4, KC_KP_5, KC_KP_6, KC_KP_PPLS, KC_NLCK,
+        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______, /**/ _______, KC_KP_0, KC_KP_1, KC_KP_2, KC_KP_3, KC_KP_DOT, KC_PENT,
+        _______, _______, _______, _______, _______,                   /**/                   _______, _______, _______, _______, _______, \
+        
+        
+        ,                                            _______, _______, /**/ _______, _______ \
+        ,                                                     _______, /**/ _______ \
+        ,                                   _______, _______, _______, /**/ _______, _______, _______
+        
+        ),
+    
+    
+    /* [_BLANK] = LAYOUT_ergodox_pretty(  // layer 2 */
+        
+    /*     _______, _______, _______, _______, _______, _______, _______, /\**\/ _______, _______, _______, _______, _______, _______, _______,  */
+    /*     XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______, /\**\/ _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,  */
+    /*     XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,          /\**\/          XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,  */
+    /*     XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______, /\**\/ _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,  */
+    /*     _______, _______, _______, _______, _______,                   /\**\/                   _______, _______, _______, _______, _______, \ */
+        
+        
+    /*     ,                                            _______, _______, /\**\/ _______, _______ \ */
+    /*     ,                                                     _______, /\**\/ _______ \ */
+    /*     ,                                   _______, _______, _______, /\**\/ _______, _______, _______ */
+        
+    /*     ), */
 };
 
-bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+extern keymap_config_t keymap_config;
+
+bool process_record_keymap(uint16_t keycode, keyrecord_t *record) {
     return true;
 }
 
