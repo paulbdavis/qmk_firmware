@@ -1,8 +1,9 @@
 #include QMK_KEYBOARD_H
 #include "version.h"
 
-#define BASE 0 // default layer
-#define SYMB 1 // symbols
+#define _BASE 0 // default layer
+#define _LOWER = 1
+#define _RAISE = 2
 
 enum custom_keycodes {
     START_HERE = SAFE_RANGE
@@ -30,18 +31,46 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  *                                 |      |      |Super |       |Super |        |      |
  *                                 `--------------------'       `----------------------'
  */
-    [BASE] = LAYOUT_ergodox_pretty(  // layer 0 : default (workman)
+    [_BASE] = LAYOUT_ergodox_pretty(  // layer 0 : default (workman)
         
-        KC_GRV,    KC_1,  KC_2,          KC_3,    KC_4,    KC_5,  KC_LEFT,   /**/ KC_RGHT,   KC_6,    KC_7,  KC_8,    KC_9,    KC_0,    KC_MINS,
-        KC_ESC,    KC_Q,  KC_D,          KC_R,    KC_W,    KC_B,  OSL(SYMB), /**/ OSL(SYMB), KC_J,    KC_F,  KC_U,    KC_P,    KC_SCLN, KC_BSPC,
-        KC_TAB,    KC_A,  KC_S,          KC_H,    KC_T,    KC_G,             /**/            KC_Y,    KC_N,  KC_E,    KC_O,    KC_I,    KC_QUOT,
-        KC_LSFT,   KC_Z,  KC_X,          KC_M,    KC_C,    KC_V,  C(KC_T),   /**/ C(KC_T),   KC_K,    KC_L,  KC_COMM, KC_DOT,  KC_SLSH, RSFT_T(KC_ENT),
-        OSL(SYMB), KC_NO, LALT(KC_LCTL), KC_LEFT, KC_RGHT,                   /**/                     KC_UP, KC_DOWN, KC_LBRC, KC_RBRC, OSL(SYMB) \
+        XXXXXXX,     XXXXXXX, XXXXXXX,       XXXXXXX,   XXXXXXX,   XXXXXXX, XXXXXXX, /**/ XXXXXXX, XXXXXXX, XXXXXXX,   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+        KC_ESC,      KC_Q,    KC_D,          KC_R,      KC_W,      KC_B,    XXXXXXX, /**/ XXXXXXX, KC_J,    KC_F,      KC_U,    KC_P,    KC_SCLN, KC_BSPC,
+        KC_TAB,      KC_A,    KC_S,          KC_H,      KC_T,      KC_G,             /**/          KC_Y,    KC_N,      KC_E,    KC_O,    KC_I,    KC_QUOT,
+        KC_LSFT,     KC_Z,    KC_X,          KC_M,      KC_C,      KC_V,    XXXXXXX, /**/ XXXXXXX, KC_K,    KC_L,      KC_COMM, KC_DOT,  KC_SLSH, RSFT_T(KC_ENT),
+        TD(NUM_ADJ), EMACS,   LALT(KC_LCTL), TD(SUPER), TD(LOWER),                   /**/                   TD(RAISE), KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT \
         
         
-        ,                                          KC_NO,  KC_NO,            /**/            KC_NO, KC_NO \
-        ,                                          KC_NO,                    /**/                   KC_NO \
-        ,                                          KC_SPC, KC_LCTL, KC_LGUI, /**/ KC_LGUI, KC_LALT, KC_SPC
+        ,                                                          XXXXXXX, XXXXXXX, /**/ XXXXXXX, XXXXXXX \
+        ,                                                                   XXXXXXX, /**/ XXXXXXX \
+        ,                                          LCTL_T(KC_SPC), XXXXXXX, XXXXXXX, /**/ XXXXXXX, XXXXXXX, LALT_T(KC_SPC)
+        
+        ),
+    [_LOWER] = LAYOUT_ergodox_pretty(  // layer 1 
+        
+        _______,     _______, _______,       _______,   _______,   _______, _______, /**/ _______, _______, _______,   _______, _______, _______, _______,
+        KC_TILD,     KC_EXLM, KC_AT,         KC_HASH,   KC_DLR,    KC_PERC, _______, /**/ _______, KC_CIRC, KC_AMPR,   KC_ASTR, KC_LPRN, KC_RPRN, KC_DEL,
+        KC_F1,       KC_F2,   KC_F3,         KC_F4,     KC_F5,     KC_F6,            /**/          KC_COLN, KC_UNDS,   KC_PLUS, KC_LCBR, KC_RCBR, KC_PIPE,
+        KC_F7,       KC_F8,   KC_F9,         KC_F10,    KC_F11,    KC_F12,  _______, /**/ _______, XXXXXXX, XXXXXXX,   XXXXXXX, XXXXXXX, XXXXXXX, _______,
+        _______,     _______, _______,       _______,   _______,                     /**/                   _______,   KC_HOME, KC_PGDN, KC_PGUP, KC_END, \
+        
+        
+        ,                                                          _______, _______, /**/ _______, _______ \
+        ,                                                                   _______, /**/ _______ \
+        ,                                                 _______, _______, _______, /**/ _______, _______, _______
+        
+        ),
+    [_RAISE] = LAYOUT_ergodox_pretty(  // layer 2 
+        
+        _______,     _______, _______,       _______,   _______,   _______, _______, /**/ _______, _______, _______,   _______, _______, _______, _______,
+        KC_GRV,      KC_1,    KC_2,          KC_3,      KC_4,      KC_5,    _______, /**/ _______, KC_6,    KC_7,      KC_8,    KC_9,    KC_0,    KC_DEL,
+        KC_F1,       KC_F2,   KC_F3,         KC_F4,     KC_F5,     KC_F6,            /**/          KC_SCLN, KC_MINS,   KC_EQL,  KC_LBRC, KC_RBRC, KC_BSLS,
+        KC_F7,       KC_F8,   KC_F9,         KC_F10,    KC_F11,    KC_F12,  _______, /**/ _______, XXXXXXX, XXXXXXX,   XXXXXXX, XXXXXXX, XXXXXXX, _______,
+        _______,     _______, _______,       _______,   _______,                     /**/                   _______,   _______, _______, _______, _______, \
+        
+        
+        ,                                                          _______, _______, /**/ _______, _______ \
+        ,                                                                   _______, /**/ _______ \
+        ,                                                 _______, _______, _______, /**/ _______, _______, _______
         
         ),
 /* Keymap 1: Symbol Layer
