@@ -45,7 +45,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_TILD,     KC_EXLM, KC_AT,         KC_HASH,   KC_DLR,    KC_PERC, _______, /**/ _______, KC_CIRC, KC_AMPR,   KC_ASTR, KC_LPRN, KC_RPRN, KC_DEL,
         KC_F1,       KC_F2,   KC_F3,         KC_F4,     KC_F5,     KC_F6,            /**/          KC_COLN, KC_UNDS,   KC_PLUS, KC_LCBR, KC_RCBR, KC_PIPE,
         KC_F7,       KC_F8,   KC_F9,         KC_F10,    KC_F11,    KC_F12,  _______, /**/ _______, XXXXXXX, XXXXXXX,   XXXXXXX, XXXXXXX, XXXXXXX, _______,
-        _______,     _______, _______,       _______,   _______,                     /**/                   _______,   KC_HOME, KC_PGDN, KC_PGUP, KC_END, \
+        _______,     _______, _______,       _______,   _______,                     /**/                   _______,   KC_HOME, KC_PGDN, KC_PGUP, KC_END \
         
         
         ,                                                          _______, _______, /**/ _______, _______ \
@@ -60,7 +60,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_GRV,      KC_1,    KC_2,          KC_3,      KC_4,      KC_5,    _______, /**/ _______, KC_6,    KC_7,      KC_8,    KC_9,    KC_0,    KC_DEL,
         KC_F1,       KC_F2,   KC_F3,         KC_F4,     KC_F5,     KC_F6,            /**/          KC_SCLN, KC_MINS,   KC_EQL,  KC_LBRC, KC_RBRC, KC_BSLS,
         KC_F7,       KC_F8,   KC_F9,         KC_F10,    KC_F11,    KC_F12,  _______, /**/ _______, XXXXXXX, XXXXXXX,   XXXXXXX, XXXXXXX, XXXXXXX, _______,
-        _______,     _______, _______,       _______,   _______,                     /**/                   _______,   _______, _______, _______, _______, \
+        _______,     _______, _______,       _______,   _______,                     /**/                   _______,   _______, _______, _______, _______ \
         
         
         ,                                                          _______, _______, /**/ _______, _______ \
@@ -72,9 +72,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         
         _______,     _______, _______,       _______,   _______,   _______, _______, /**/ _______, _______, _______,   _______, _______, _______, _______,
         RESET, EMACS_WIN_1, EMACS_WIN_2, EMACS_WIN_3, EMACS_WIN_4, XXXXXXX, _______, /**/ _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, EMACS_WIN_0, XXXXXXX,
-        EMACS_PROJ_GIT, EMACS_PROJ_SWITCH, EMACS_PROJ_FILE, EMACS_PROJ_SEARCH, EMACS_PROJ_COMPILE, EMACS_PROJ_SHELL, /**/          EMACS_FLYC_CHECK, EMACS_FLYC_NEXT,   EMACS_FLYC_PREV,  EMACS_FLYC_LIST, XXXXXXXX, XXXXXXXX,
+        EMACS_PROJ_GIT, EMACS_PROJ_SWITCH, EMACS_PROJ_FILE, EMACS_PROJ_SEARCH, EMACS_PROJ_COMPILE, EMACS_PROJ_SHELL, /**/          EMACS_FLYC_CHECK, EMACS_FLYC_NEXT,   EMACS_FLYC_PREV,  EMACS_FLYC_LIST, XXXXXXX, XXXXXXX,
         XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______, /**/ _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
-        _______, _______, _______, _______, _______,                   /**/                   _______, _______, _______, _______, _______, \
+        _______, _______, _______, _______, _______,                   /**/                   _______, _______, _______, _______, _______ \
         
         
         ,                                                          _______, _______, /**/ _______, _______ \
@@ -89,7 +89,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         RESET,   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______, /**/ _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
         AG_SWAP, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,          /**/          XXXXXXX, XXXXXXX, KC_INSERT, XXXXXXX, XXXXXXX, XXXXXXX,
         AG_NORM, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______, /**/ _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
-        _______, _______, _______, _______, _______,                   /**/                   _______, _______, _______, _______, _______, \
+        _______, _______, _______, _______, _______,                   /**/                   _______, _______, _______, _______, _______ \
         
         
         ,                                            _______, _______, /**/ _______, _______ \
@@ -101,11 +101,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     
     [_NUMPAD] = LAYOUT_ergodox_pretty(  // layer 2
         
-        _______, _______, _______, _______, _______, _______, _______, /**/ _______, _______, _______, _______, _______, _______, _______,
-        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______, /**/ _______, KC_PSLS, KC_KP_7, KC_KP_8, KC_KP_9, KC_KP_PMNS, KC_BSPC,
-        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,          /**/          KC_PAST, KC_KP_4, KC_KP_5, KC_KP_6, KC_KP_PPLS, KC_NLCK,
+        _______, _______, _______, _______, _______, _______, _______, /**/ _______, _______, _______, _______, _______, _______,   _______,
+        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______, /**/ _______, KC_PSLS, KC_KP_7, KC_KP_8, KC_KP_9, KC_PMNS,   KC_BSPC,
+        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,          /**/          KC_PAST, KC_KP_4, KC_KP_5, KC_KP_6, KC_PPLS,   KC_NLCK,
         XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______, /**/ _______, KC_KP_0, KC_KP_1, KC_KP_2, KC_KP_3, KC_KP_DOT, KC_PENT,
-        _______, _______, _______, _______, _______,                   /**/                   _______, _______, _______, _______, _______, \
+        _______, _______, _______, _______, _______,                   /**/                   _______, _______, _______, _______,   _______ \
         
         
         ,                                            _______, _______, /**/ _______, _______ \
