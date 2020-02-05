@@ -30,12 +30,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_ESC,         KC_Q,    KC_D,          KC_R,         KC_W,        KC_B,    XXXXXXX, /**/ XXXXXXX, KC_J,    KC_F,         KC_U,    KC_P,    KC_SCLN, KC_BSPC,
         KC_TAB,         KC_A,    KC_S,          KC_H,         KC_T,        KC_G,             /**/          KC_Y,    KC_N,         KC_E,    KC_O,    KC_I,    KC_QUOT,
         KC_LSFT,        KC_Z,    KC_X,          KC_M,         KC_C,        KC_V,    XXXXXXX, /**/ XXXXXXX, KC_K,    KC_L,         KC_COMM, KC_DOT,  KC_SLSH, RSFT_T(KC_ENT),
-        TD(TD_NUM_ADJ), EMACS,   LALT(KC_LCTL), TD(TD_SUPER), TD(TD_LOWER),                  /**/                   TD(TD_RAISE), KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT \
+        TD(TD_NUM_ADJ), EMACS,   LALT(KC_LCTL), TD(TD_SUPER), LOWER,                         /**/                   RAISE,        KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT \
         
         
         ,                                                                  XXXXXXX, XXXXXXX, /**/ XXXXXXX, XXXXXXX \
         ,                                                                           XXXXXXX, /**/ XXXXXXX \
-        ,                                                  LCTL_T(KC_SPC), XXXXXXX, XXXXXXX, /**/ XXXXXXX, XXXXXXX, LALT_T(KC_SPC)
+        ,                                                          KC_SPC, KC_LCTL, XXXXXXX, /**/ XXXXXXX, KC_LALT, KC_SPC
         
         ),
     
