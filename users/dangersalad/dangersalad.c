@@ -289,103 +289,103 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         }
         return false;
         break;
-    case EMACS_WIN_1:
+    case E_WIN_1:
         if (record->event.pressed) {
             SEND_STRING(SS_LCTRL("x")"1");
         }
         return true;
         break;
-    case EMACS_WIN_2:
+    case E_WIN_2:
         if (record->event.pressed) {
             SEND_STRING(SS_LCTRL("x")"2");
         }
         return true;
         break;
-    case EMACS_WIN_3:
+    case E_WIN_3:
         if (record->event.pressed) {
             SEND_STRING(SS_LCTRL("x")"3");
         }
         return true;
         break;
-    case EMACS_WIN_4:
+    case E_WIN_4:
         if (record->event.pressed) {
             SEND_STRING(SS_LCTRL("x")"4");
         }
         return true;
         break;
-    case EMACS_WIN_0:
+    case E_WIN_0:
         if (record->event.pressed) {
             SEND_STRING(SS_LCTRL("x")"0");
         }
         return true;
         break;
-    case EMACS_PROJ_SWITCH:
+    case E_PROJ_SWITCH:
         if (record->event.pressed) {
             SEND_STRING(SS_LCTRL("c")"pp");
         }
         return true;
         break;
-    case EMACS_PROJ_SHELL:
+    case E_PROJ_SHELL:
         if (record->event.pressed) {
             SEND_STRING(SS_LCTRL("c")"pxe");
         }
         return true;
         break;
-    case EMACS_PROJ_FILE:
+    case E_PROJ_FILE:
         if (record->event.pressed) {
             SEND_STRING(SS_LCTRL("c")"pf");
         }
         return true;
         break;
-    case EMACS_PROJ_SEARCH:
+    case E_PROJ_SEARCH:
         if (record->event.pressed) {
             SEND_STRING(SS_LCTRL("c")"pss");
         }
         return true;
         break;
-    case EMACS_PROJ_COMPILE:
+    case E_PROJ_COMPILE:
         if (record->event.pressed) {
             SEND_STRING(SS_LCTRL("c")"pc");
         }
         return true;
         break;
-    case EMACS_PROJ_GIT:
+    case E_PROJ_GIT:
         if (record->event.pressed) {
             SEND_STRING(SS_LCTRL("c")"pv");
         }
         return true;
         break;
-    case EMACS_FLYC_CHECK:
+    case E_FLYC_CHECK:
         if (record->event.pressed) {
             SEND_STRING(SS_LCTRL("c")"!c");
         }
         return true;
         break;
-    case EMACS_FLYC_NEXT:
+    case E_FLYC_NEXT:
         if (record->event.pressed) {
             SEND_STRING(SS_LCTRL("c")"!n");
         }
         return true;
         break;
-    case EMACS_FLYC_PREV:
+    case E_FLYC_PREV:
         if (record->event.pressed) {
             SEND_STRING(SS_LCTRL("c")"!p");
         }
         return true;
         break;
-    case EMACS_FLYC_LIST:
+    case E_FLYC_LIST:
         if (record->event.pressed) {
             SEND_STRING(SS_LCTRL("c")"!l");
         }
         return true;
         break;
-    case EMACS_FIND_FILE:
+    case E_FIND_FILE:
         if (record->event.pressed) {
             SEND_STRING(SS_LCTRL("x")SS_LCTRL("f"));
         }
         return true;
         break;
-    case EMACS_SWITCH_BUFFER:
+    case E_SWITCH_BUFFER:
         if (record->event.pressed) {
             SEND_STRING(SS_LCTRL("x")"b");
         }
