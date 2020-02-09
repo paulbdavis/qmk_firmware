@@ -86,11 +86,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * `-----------------------------------------'  `-----------------------------------------'
  */
     [_EMACS] =  LAYOUT_ortho_4x12( \
-        RESET          , EMACS_WIN_1       , EMACS_WIN_2     , EMACS_WIN_3       , EMACS_WIN_4         , XXXXXXX          , XXXXXXX          , XXXXXXX         , XXXXXXX         , XXXXXXX         , EMACS_WIN_0 , XXXXXXX , \
-        EMACS_PROJ_GIT , EMACS_PROJ_SWITCH , EMACS_PROJ_FILE , EMACS_PROJ_SEARCH , EMACS_PROJ_COMPILE  , EMACS_PROJ_SHELL , EMACS_FLYC_CHECK , EMACS_FLYC_NEXT , EMACS_FLYC_PREV , EMACS_FLYC_LIST , XXXXXXX     , XXXXXXX , \
-        XXXXXXX        , XXXXXXX           , XXXXXXX         , XXXXXXX           , EMACS_SWITCH_BUFFER , XXXXXXX          , XXXXXXX          , EMACS_FIND_FILE , XXXXXXX         , XXXXXXX         , XXXXXXX     , XXXXXXX , \
-        _______        , _______           , XXXXXXX         , XXXXXXX           , _______             , XXXXXXX          , XXXXXXX          , _______         , XXXXXXX         , XXXXXXX         , XXXXXXX     , XXXXXXX \
-        )               ,
+        RESET      , E_WIN_1       , E_WIN_2     , E_WIN_3       , E_WIN_4         , XXXXXXX      , XXXXXXX      , XXXXXXX     , XXXXXXX     , XXXXXXX     , E_WIN_0 , XXXXXXX , \
+        E_PROJ_GIT , E_PROJ_SWITCH , E_PROJ_FILE , E_PROJ_SEARCH , E_PROJ_COMPILE  , E_PROJ_SHELL , E_FLYC_CHECK , E_FLYC_NEXT , E_FLYC_PREV , E_FLYC_LIST , XXXXXXX , XXXXXXX , \
+        XXXXXXX    , XXXXXXX       , XXXXXXX     , XXXXXXX       , E_SWITCH_BUFFER , XXXXXXX      , XXXXXXX      , E_FIND_FILE , XXXXXXX     , XXXXXXX     , XXXXXXX , XXXXXXX , \
+        _______    , _______       , XXXXXXX     , XXXXXXX       , _______         , XXXXXXX      , XXXXXXX      , _______     , XXXXXXX     , XXXXXXX     , XXXXXXX , XXXXXXX \
+        ),
 
 /* Number Pad
  * ,-----------------------------------------.  ,-----------------------------------------.
