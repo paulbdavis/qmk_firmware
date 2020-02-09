@@ -20,4 +20,5 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
- // place overrides here
+#define RGBLIGHT_LED_MAP { 1, 0, 2, 3, 5, 4, 10, 7, 6, 8, 9, 11 }
+
