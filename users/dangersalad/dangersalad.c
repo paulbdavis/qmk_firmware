@@ -34,7 +34,7 @@ uint32_t layer_state_set_user(uint32_t state) {
         rgblight_sethsv_orange();
         break;
     case _LOWER:
-        rgblight_sethsv_azure();
+        rgblight_sethsv_cyan();
         break;
     case _ADJUST:
         rgblight_sethsv_white();
