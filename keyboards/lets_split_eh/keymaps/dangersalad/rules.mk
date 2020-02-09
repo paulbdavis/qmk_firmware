@@ -1,2 +1,3 @@
+RGBLIGHT_ENABLE = yes
 
 DS_ORTHO_4x12 := yes

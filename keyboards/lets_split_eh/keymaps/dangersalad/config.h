@@ -20,5 +20,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
-#define RGBLIGHT_LED_MAP { 1, 0, 2, 3, 5, 4, 10, 7, 6, 8, 9, 11 }
+/* #define RGBLIGHT_LED_MAP { 1, 0, 2, 3, 5, 4, 10, 7, 6, 8, 9, 11 } */
+#define RGBLIGHT_LED_MAP { 0, 1, 2, 3, 4, 5, 11, 6, 7, 8, 9, 10 }
+
+/* #define RGBLIGHT_EFFECT_KNIGHT_LED_NUM 6 */
 
