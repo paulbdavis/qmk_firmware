@@ -17,7 +17,7 @@
 #endif
 
 #ifdef RGBLIGHT_ENABLE
-/* #define RGBLIGHT_ANIMATIONS */
+#define RGBLIGHT_ANIMATIONS
 #endif
 
 #endif // !USERSPACE_CONFIG_H
