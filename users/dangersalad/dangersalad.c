@@ -83,10 +83,10 @@ uint32_t layer_state_set_user(uint32_t state) {
 #endif
         break;
     case _NUMPAD:
-        rgblight_sethsv_noeeprom(HSV_RED);
 #ifdef RGBLIGHT_EFFECT_KNIGHT
         rgblight_mode_noeeprom(RGBLIGHT_MODE_KNIGHT + 1);
 #endif
+        rgblight_sethsv_noeeprom(HSV_RED);
         break;
     case _EMACS:
 #ifdef RGBLIGHT_EFFECT_STATIC_GRADIENT
