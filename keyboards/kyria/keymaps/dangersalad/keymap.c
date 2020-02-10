@@ -84,9 +84,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         ),
     
     [_ADJUST] = LAYOUT(
-        RESET,   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                                     XXXXXXX, XXXXXXX,   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-        AG_SWAP, RGB_TOG, RGB_SAI, RGB_HUI, RGB_VAI, RGB_MOD,                                     XXXXXXX, KC_INSERT, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-        AG_NORM, XXXXXXX, RGB_SAD, RGB_HUD, RGB_VAD, RGB_RMOD, _______, _______, _______, _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX \
+        RESET,   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                                      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,   XXXXXXX, XXXXXXX,
+        AG_SWAP, RGB_TOG, RGB_SAI, RGB_HUI, RGB_VAI, RGB_MOD,                                      XXXXXXX, XXXXXXX, XXXXXXX, KC_INSERT, XXXXXXX, XXXXXXX,
+        AG_NORM, XXXXXXX, RGB_SAD, RGB_HUD, RGB_VAD, RGB_RMOD, _______, _______, _______, _______, XXXXXXX, RGB_M_P, RGB_M_B, RGB_M_SW,  RGB_M_G, XXXXXXX \
         ,                          _______, _______, _______,  _______, _______, _______, _______, _______, _______, _______
         ),
     
