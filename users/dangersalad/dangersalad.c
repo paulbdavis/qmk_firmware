@@ -27,26 +27,57 @@ void layer_off_update_tri_layer(uint8_t layer_off, uint8_t layer1, uint8_t layer
     layer_state_set((new_state & mask12) != mask12 ? (new_state & ~mask3) : (new_state));
 }
 
+uint8_t last_mode;
+
+#ifdef RGBLIGHT_ENABLE
+
+static inline void restore_light(void) {
+    rgblight_config_t saved = { .raw = eeconfig_read_rgblight() };
+    rgblight_sethsv_noeeprom(saved.hue, saved.sat, saved.val);
+    rgblight_mode_noeeprom(saved.mode);
+}
+
+//Following line allows macro to read current RGB settings
+extern rgblight_config_t rgblight_config;
+#endif
+
 uint32_t layer_state_set_user(uint32_t state) {
 #ifdef RGBLIGHT_ENABLE
     switch (biton32(state)) {
     case _RAISE:
-        rgblight_sethsv_orange();
+#ifdef RGBLIGHT_EFFECT_STATIC_GRADIENT
+        last_mode = rgblight_get_mode();
+        rgblight_mode_noeeprom(RGBLIGHT_MODE_STATIC_GRADIENT + 9);
+#endif
+        rgblight_sethsv_noeeprom(HSV_ORANGE);
         break;
     case _LOWER:
-        rgblight_sethsv_cyan();
+#ifdef RGBLIGHT_EFFECT_STATIC_GRADIENT
+        last_mode = rgblight_get_mode();
+        rgblight_mode_noeeprom(RGBLIGHT_MODE_STATIC_GRADIENT + 9);
+#endif
+        rgblight_sethsv_noeeprom(HSV_CYAN);
         break;
     case _ADJUST:
-        rgblight_sethsv_white();
+#ifdef RGBLIGHT_EFFECT_ALTERNATING
+        last_mode = rgblight_get_mode();
+        rgblight_mode_noeeprom(RGBLIGHT_MODE_ALTERNATING);
+#else
+        rgblight_sethsv_noeeprom(HSV_WHITE);
+#endif
         break;
     case _NUMPAD:
-        rgblight_sethsv_red();
+        rgblight_sethsv_noeeprom(HSV_RED);
+#ifdef RGBLIGHT_EFFECT_KNIGHT
+        last_mode = rgblight_get_mode();
+        rgblight_mode_noeeprom(RGBLIGHT_MODE_KNIGHT + 1);
+#endif
         break;
     case _EMACS:
-        rgblight_sethsv_magenta();
+        rgblight_sethsv_noeeprom(HSV_MAGENTA);
         break;
     default:
-        rgblight_sethsv_green();
+        restore_light();
         break;
     }
 #endif
