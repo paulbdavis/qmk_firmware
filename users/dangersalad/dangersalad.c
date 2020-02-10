@@ -4,6 +4,30 @@
 #include "action.h"
 #include "version.h"
 
+#ifdef AUDIO_ENABLE
+float tone_numpad[][2]      = SONG(PUZZLE);
+float tone_adjust[][2]      = SONG(TREASURE);
+float tone_numpad_exit[][2] = SONG(BEEP_BEEP);
+#endif
+
+void play_numpad_sound(void) {
+#ifdef AUDIO_ENABLE
+    PLAY_SONG(tone_numpad);
+#endif
+}
+
+void play_adjust_sound(void) {
+#ifdef AUDIO_ENABLE
+    PLAY_SONG(tone_adjust);
+#endif
+}
+
+void play_numpad_exit_sound(void) {
+#ifdef AUDIO_ENABLE
+    PLAY_SONG(tone_numpad_exit);
+#endif
+}
+
 __attribute__ ((weak))
 bool process_record_keymap(uint16_t keycode, keyrecord_t *record) {
     return true;
@@ -27,8 +51,6 @@ void layer_off_update_tri_layer(uint8_t layer_off, uint8_t layer1, uint8_t layer
     layer_state_set((new_state & mask12) != mask12 ? (new_state & ~mask3) : (new_state));
 }
 
-uint8_t last_mode;
-
 #ifdef RGBLIGHT_ENABLE
 
 static inline void restore_light(void) {
@@ -36,9 +58,6 @@ static inline void restore_light(void) {
     rgblight_sethsv_noeeprom(saved.hue, saved.sat, saved.val);
     rgblight_mode_noeeprom(saved.mode);
 }
-
-//Following line allows macro to read current RGB settings
-extern rgblight_config_t rgblight_config;
 #endif
 
 uint32_t layer_state_set_user(uint32_t state) {
@@ -46,21 +65,18 @@ uint32_t layer_state_set_user(uint32_t state) {
     switch (biton32(state)) {
     case _RAISE:
 #ifdef RGBLIGHT_EFFECT_STATIC_GRADIENT
-        last_mode = rgblight_get_mode();
         rgblight_mode_noeeprom(RGBLIGHT_MODE_STATIC_GRADIENT + 9);
 #endif
         rgblight_sethsv_noeeprom(HSV_ORANGE);
         break;
     case _LOWER:
 #ifdef RGBLIGHT_EFFECT_STATIC_GRADIENT
-        last_mode = rgblight_get_mode();
         rgblight_mode_noeeprom(RGBLIGHT_MODE_STATIC_GRADIENT + 9);
 #endif
         rgblight_sethsv_noeeprom(HSV_CYAN);
         break;
     case _ADJUST:
 #ifdef RGBLIGHT_EFFECT_ALTERNATING
-        last_mode = rgblight_get_mode();
         rgblight_mode_noeeprom(RGBLIGHT_MODE_ALTERNATING);
 #else
         rgblight_sethsv_noeeprom(HSV_WHITE);
@@ -69,11 +85,13 @@ uint32_t layer_state_set_user(uint32_t state) {
     case _NUMPAD:
         rgblight_sethsv_noeeprom(HSV_RED);
 #ifdef RGBLIGHT_EFFECT_KNIGHT
-        last_mode = rgblight_get_mode();
         rgblight_mode_noeeprom(RGBLIGHT_MODE_KNIGHT + 1);
 #endif
         break;
     case _EMACS:
+#ifdef RGBLIGHT_EFFECT_STATIC_GRADIENT
+        rgblight_mode_noeeprom(RGBLIGHT_MODE_STATIC_GRADIENT + 9);
+#endif
         rgblight_sethsv_noeeprom(HSV_MAGENTA);
         break;
     default:
@@ -218,11 +236,17 @@ void numpad_finished (qk_tap_dance_state_t *state, void *user_data) {
     case SINGLE_HOLD:
     case DOUBLE_TAP:
         layer_on(_NUMPAD);
+#ifdef AUDIO_ENABLE
+        play_numpad_sound();
+#endif
         break;
     case DOUBLE_SINGLE_TAP:
     case DOUBLE_HOLD: 
     case TRIPLE_TAP: 
     case TRIPLE_HOLD:
+#ifdef AUDIO_ENABLE
+        play_adjust_sound();
+#endif
         layer_on(_ADJUST);
         break;
     }
@@ -234,12 +258,18 @@ void numpad_reset (qk_tap_dance_state_t *state, void *user_data) {
     case SINGLE_TAP:
     case SINGLE_HOLD:
         layer_off(_NUMPAD);
+#ifdef AUDIO_ENABLE
+        play_numpad_exit_sound();
+#endif
         break;
     case DOUBLE_TAP: break;
     case DOUBLE_SINGLE_TAP:
     case DOUBLE_HOLD: 
     case TRIPLE_TAP: 
     case TRIPLE_HOLD:
+#ifdef AUDIO_ENABLE
+        play_numpad_exit_sound();
+#endif
         layer_off(_NUMPAD);
         layer_off(_ADJUST);
         break;
