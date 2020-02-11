@@ -396,6 +396,9 @@ void rgblight_timer_toggle(void);
 typedef struct _rgblight_syncinfo_t {
     rgblight_config_t config;
     rgblight_status_t status;
+#        ifdef VELOCIKEY_ENABLE
+    uint8_t typing_speed;
+#        endif
 } rgblight_syncinfo_t;
 
 /* for split keyboard master side */

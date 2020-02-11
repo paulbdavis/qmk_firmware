@@ -26,6 +26,14 @@ void velocikey_accelerate(void) {
     if (typing_speed < TYPING_SPEED_MAX_VALUE) typing_speed += (TYPING_SPEED_MAX_VALUE / 100);
 }
 
+void velocikey_set_typing_speed(uint8_t new_speed) {
+    typing_speed = new_speed;
+}
+
+uint8_t velocikey_get_typing_speed(void) {
+    return typing_speed;
+}
+
 void velocikey_decelerate(void) {
     static uint16_t decay_timer = 0;
 
