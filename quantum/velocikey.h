@@ -4,6 +4,8 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+uint8_t typing_speed;
+
 bool    velocikey_enabled(void);
 void    velocikey_toggle(void);
 void    velocikey_accelerate(void);

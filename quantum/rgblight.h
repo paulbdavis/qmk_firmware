@@ -151,7 +151,7 @@ extern bool           is_rgblight_initialized;
 
 // Should stay in sycn with rgb matrix config as we reuse eeprom storage for both (for now)
 typedef union {
-    uint32_t raw;
+    uint64_t raw;
     struct {
         bool    enable : 1;
         uint8_t mode : 7;
@@ -246,10 +246,10 @@ uint8_t rgblight_get_val(void);
 
 /* === qmk_firmware (core)internal Functions === */
 void     rgblight_init(void);
-uint32_t rgblight_read_dword(void);
-void     rgblight_update_dword(uint32_t dword);
-uint32_t eeconfig_read_rgblight(void);
-void     eeconfig_update_rgblight(uint32_t val);
+uint64_t rgblight_read_dword(void);
+void     rgblight_update_dword(uint64_t dword);
+uint64_t eeconfig_read_rgblight(void);
+void     eeconfig_update_rgblight(uint64_t val);
 void     eeconfig_update_rgblight_current(void);
 void     eeconfig_update_rgblight_default(void);
 void     eeconfig_debug_rgblight(void);
@@ -275,6 +275,9 @@ void rgblight_timer_toggle(void);
 #        define RGBLIGHT_STATUS_CHANGE_HSVS (1 << 1)
 #        define RGBLIGHT_STATUS_CHANGE_TIMER (1 << 2)
 #        define RGBLIGHT_STATUS_ANIMATION_TICK (1 << 3)
+#        ifdef VELOCIKEY_ENABLE
+#                define RGBLIGHT_STATUS_CHANGE_SPEED (1 << 4)
+#        endif
 
 typedef struct _rgblight_syncinfo_t {
     rgblight_config_t config;

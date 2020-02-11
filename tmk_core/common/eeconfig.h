@@ -34,22 +34,22 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define EECONFIG_MOUSEKEY_ACCEL (uint8_t *)5
 #define EECONFIG_BACKLIGHT (uint8_t *)6
 #define EECONFIG_AUDIO (uint8_t *)7
-#define EECONFIG_RGBLIGHT (uint32_t *)8
-#define EECONFIG_UNICODEMODE (uint8_t *)12
-#define EECONFIG_STENOMODE (uint8_t *)13
+#define EECONFIG_RGBLIGHT (uint64_t *)8
+#define EECONFIG_UNICODEMODE (uint8_t *)16
+#define EECONFIG_STENOMODE (uint8_t *)17
 // EEHANDS for two handed boards
-#define EECONFIG_HANDEDNESS (uint8_t *)14
-#define EECONFIG_KEYBOARD (uint32_t *)15
-#define EECONFIG_USER (uint32_t *)19
-#define EECONFIG_VELOCIKEY (uint8_t *)23
+#define EECONFIG_HANDEDNESS (uint8_t *)18
+#define EECONFIG_KEYBOARD (uint32_t *)19
+#define EECONFIG_USER (uint32_t *)23
+#define EECONFIG_VELOCIKEY (uint8_t *)27
 
-#define EECONFIG_HAPTIC (uint32_t *)24
-#define EECONFIG_RGB_MATRIX (uint32_t *)28
-#define EECONFIG_RGB_MATRIX_SPEED (uint8_t *)32
+#define EECONFIG_HAPTIC (uint32_t *)28
+#define EECONFIG_RGB_MATRIX (uint32_t *)32
+#define EECONFIG_RGB_MATRIX_SPEED (uint8_t *)36
 // TODO: Combine these into a single word and single block of EEPROM
-#define EECONFIG_KEYMAP_UPPER_BYTE (uint8_t *)33
+#define EECONFIG_KEYMAP_UPPER_BYTE (uint8_t *)37
 // Size of EEPROM being used, other code can refer to this for available EEPROM
-#define EECONFIG_SIZE 34
+#define EECONFIG_SIZE 38
 /* debug bit */
 #define EECONFIG_DEBUG_ENABLE (1 << 0)
 #define EECONFIG_DEBUG_MATRIX (1 << 1)

@@ -45,12 +45,18 @@
 #    define RGBLIGHT_SPLIT_SET_CHANGE_MODEHSVS rgblight_status.change_flags |= (RGBLIGHT_STATUS_CHANGE_MODE | RGBLIGHT_STATUS_CHANGE_HSVS)
 #    define RGBLIGHT_SPLIT_SET_CHANGE_TIMER_ENABLE rgblight_status.change_flags |= RGBLIGHT_STATUS_CHANGE_TIMER
 #    define RGBLIGHT_SPLIT_ANIMATION_TICK rgblight_status.change_flags |= RGBLIGHT_STATUS_ANIMATION_TICK
+#    ifdef VELOCIKEY_ENABLE
+#        define RGBLIGHT_SPLIT_SET_CHANGE_SPEED rgblight_status.change_flags |= RGBLIGHT_STATUS_CHANGE_SPEED
+#    endif
 #else
 #    define RGBLIGHT_SPLIT_SET_CHANGE_MODE
 #    define RGBLIGHT_SPLIT_SET_CHANGE_HSVS
 #    define RGBLIGHT_SPLIT_SET_CHANGE_MODEHSVS
 #    define RGBLIGHT_SPLIT_SET_CHANGE_TIMER_ENABLE
 #    define RGBLIGHT_SPLIT_ANIMATION_TICK
+#    ifdef VELOCIKEY_ENABLE
+#        define RGBLIGHT_SPLIT_SET_CHANGE_SPEED
+#    endif
 #endif
 
 #define _RGBM_SINGLE_STATIC(sym) RGBLIGHT_MODE_##sym,
@@ -147,18 +153,18 @@ void rgblight_check_config(void) {
     }
 }
 
-uint32_t eeconfig_read_rgblight(void) {
+uint64_t eeconfig_read_rgblight(void) {
 #ifdef EEPROM_ENABLE
-    return eeprom_read_dword(EECONFIG_RGBLIGHT);
+    return eeprom_read_ddword(EECONFIG_RGBLIGHT);
 #else
     return 0;
 #endif
 }
 
-void eeconfig_update_rgblight(uint32_t val) {
+void eeconfig_update_rgblight(uint64_t val) {
 #ifdef EEPROM_ENABLE
     rgblight_check_config();
-    eeprom_update_dword(EECONFIG_RGBLIGHT, val);
+    eeprom_update_ddword(EECONFIG_RGBLIGHT, val);
 #endif
 }
 
@@ -222,9 +228,9 @@ void rgblight_init(void) {
     is_rgblight_initialized = true;
 }
 
-uint32_t rgblight_read_dword(void) { return rgblight_config.raw; }
+uint64_t rgblight_read_dword(void) { return rgblight_config.raw; }
 
-void rgblight_update_dword(uint32_t dword) {
+void rgblight_update_dword(uint64_t dword) {
     RGBLIGHT_SPLIT_SET_CHANGE_MODEHSVS;
     rgblight_config.raw = dword;
     if (rgblight_config.enable)
@@ -570,6 +576,10 @@ void rgblight_sethsv_at(uint8_t hue, uint8_t sat, uint8_t val, uint8_t index) {
 #if defined(RGBLIGHT_EFFECT_BREATHING) || defined(RGBLIGHT_EFFECT_RAINBOW_MOOD) || defined(RGBLIGHT_EFFECT_RAINBOW_SWIRL) || defined(RGBLIGHT_EFFECT_SNAKE) || defined(RGBLIGHT_EFFECT_KNIGHT)
 
 static uint8_t get_interval_time(const uint8_t *default_interval_address, uint8_t velocikey_min, uint8_t velocikey_max) {
+#    ifdef VELOCIKEY_ENABLE
+    rgblight_config.speed = typing_speed;
+    RGBLIGHT_SPLIT_SET_CHANGE_SPEED;
+#    endif
     return
 #    ifdef VELOCIKEY_ENABLE
         velocikey_enabled() ? velocikey_match_speed(velocikey_min, velocikey_max) :
@@ -687,6 +697,9 @@ void rgblight_update_sync(rgblight_syncinfo_t *syncinfo, bool write_to_eeprom) {
 #        ifndef RGBLIGHT_SPLIT_NO_ANIMATION_SYNC
     if (syncinfo->status.change_flags & RGBLIGHT_STATUS_ANIMATION_TICK) {
         animation_status.restart = true;
+    }
+    if (syncinfo->status.change_flags & RGBLIGHT_STATUS_CHANGE_SPEED) {
+        typing_speed = syncinfo->config.speed;
     }
 #        endif /* RGBLIGHT_SPLIT_NO_ANIMATION_SYNC */
 #    endif     /* RGBLIGHT_USE_TIMER */
@@ -849,6 +862,7 @@ void rgblight_task(void) {
             if (animation_status.pos16 == 0 && oldpos16 != 0) {
                 tick_flag = true;
             }
+            
 #    endif
         }
     }
