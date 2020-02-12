@@ -11,8 +11,14 @@
 #endif
 
 #define TYPING_SPEED_MAX_VALUE 200
+
+#ifndef VELOCIKEY_STEP
+#    define VELOCIKEY_STEP 1
+#endif
+
 uint8_t typing_speed = 0;
 uint8_t last_query = 0;
+uint8_t step_cache = 0;
 
 bool velocikey_enabled(void) { return eeprom_read_byte(EECONFIG_VELOCIKEY) == 1; }
 
@@ -24,7 +30,13 @@ void velocikey_toggle(void) {
 }
 
 void velocikey_accelerate(void) {
-    if (typing_speed < TYPING_SPEED_MAX_VALUE) typing_speed += (TYPING_SPEED_MAX_VALUE / 100);
+    step_cache++;
+    if (step_cache >= VELOCIKEY_STEP) {
+        if (typing_speed < TYPING_SPEED_MAX_VALUE) {
+            typing_speed += (TYPING_SPEED_MAX_VALUE / 100) * VELOCIKEY_STEP;
+        }
+        step_cache = 0;
+    }
 }
 
 void velocikey_set_typing_speed(uint8_t new_speed) {
