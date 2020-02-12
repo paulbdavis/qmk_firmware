@@ -2,6 +2,7 @@
 #include "timer.h"
 #include "eeconfig.h"
 #include "eeprom.h"
+#include "rgblight.h"
 
 #ifndef MIN
 #    define MIN(a, b) (((a) < (b)) ? (a) : (b))
@@ -38,6 +39,7 @@ void velocikey_accelerate(void) {
             typing_speed += (VELOCIKEY_MAX_VALUE / 100) * VELOCIKEY_STEP;
         }
         step_cache = 0;
+        rgblight_alter_change_flags(RGBLIGHT_STATUS_CHANGE_VELOCIKEY);
     }
 }
 
@@ -65,6 +67,7 @@ void velocikey_decelerate(void) {
         // Decay even faster at 3/4 of max speed
         if (typing_speed > VELOCIKEY_MAX_VALUE / 4 * 3) typing_speed -= 2;
         decay_timer = timer_read();
+        rgblight_alter_change_flags(RGBLIGHT_STATUS_CHANGE_VELOCIKEY);
     }
 }
 

@@ -409,6 +409,7 @@ typedef struct _rgblight_syncinfo_t {
 
 /* for split keyboard master side */
 uint8_t rgblight_get_change_flags(void);
+void    rgblight_alter_change_flags(uint8_t);
 void    rgblight_clear_change_flags(void);
 void    rgblight_get_syncinfo(rgblight_syncinfo_t *syncinfo);
 /* for split keyboard slave side */

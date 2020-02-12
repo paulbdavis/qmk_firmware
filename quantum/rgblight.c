@@ -754,6 +754,9 @@ void rgblight_set(void) {
 #ifdef RGBLIGHT_SPLIT
 /* for split keyboard master side */
 uint8_t rgblight_get_change_flags(void) { return rgblight_status.change_flags; }
+void rgblight_alter_change_flags(uint8_t bits) {
+    rgblight_status.change_flags |= bits;
+}
 
 void rgblight_clear_change_flags(void) { rgblight_status.change_flags = 0; }
 
@@ -761,9 +764,8 @@ void rgblight_get_syncinfo(rgblight_syncinfo_t *syncinfo) {
     syncinfo->config = rgblight_config;
     syncinfo->status = rgblight_status;
 #        ifdef VELOCIKEY_ENABLE
-    if (velocikey_enabled() && velocikey_typing_speed_changed()) {
+    if (velocikey_enabled()) {
         syncinfo->typing_speed = velocikey_get_typing_speed();
-        RGBLIGHT_SPLIT_SET_CHANGE_VELOCIKEY;
     }
 #        endif
 }
