@@ -51,6 +51,9 @@
 #    define RGBLIGHT_SPLIT_SET_CHANGE_LAYERS rgblight_status.change_flags |= RGBLIGHT_STATUS_CHANGE_LAYERS
 #    define RGBLIGHT_SPLIT_SET_CHANGE_TIMER_ENABLE rgblight_status.change_flags |= RGBLIGHT_STATUS_CHANGE_TIMER
 #    define RGBLIGHT_SPLIT_ANIMATION_TICK rgblight_status.change_flags |= RGBLIGHT_STATUS_ANIMATION_TICK
+#    ifdef VELOCIKEY_ENABLE
+#        define RGBLIGHT_SPLIT_SET_CHANGE_VELOCIKEY rgblight_status.change_flags |= RGBLIGHT_STATUS_CHANGE_VELOCIKEY
+#    endif
 #else
 #    define RGBLIGHT_SPLIT_SET_CHANGE_MODE
 #    define RGBLIGHT_SPLIT_SET_CHANGE_HSVS
@@ -58,6 +61,9 @@
 #    define RGBLIGHT_SPLIT_SET_CHANGE_LAYERS
 #    define RGBLIGHT_SPLIT_SET_CHANGE_TIMER_ENABLE
 #    define RGBLIGHT_SPLIT_ANIMATION_TICK
+#    ifdef VELOCIKEY_ENABLE
+#        define RGBLIGHT_SPLIT_SET_CHANGE_VELOCIKEY
+#    endif
 #endif
 
 #define _RGBM_SINGLE_STATIC(sym) RGBLIGHT_MODE_##sym,
@@ -755,7 +761,10 @@ void rgblight_get_syncinfo(rgblight_syncinfo_t *syncinfo) {
     syncinfo->config = rgblight_config;
     syncinfo->status = rgblight_status;
 #        ifdef VELOCIKEY_ENABLE
-    syncinfo->typing_speed = velocikey_get_typing_speed();
+    if (velocikey_enabled() && velocikey_typing_speed_changed()) {
+        syncinfo->typing_speed = velocikey_get_typing_speed();
+        RGBLIGHT_SPLIT_SET_CHANGE_VELOCIKEY;
+    }
 #        endif
 }
 
@@ -769,7 +778,9 @@ void rgblight_update_sync(rgblight_syncinfo_t *syncinfo, bool write_to_eeprom) {
 #    endif
 
 #        ifdef VELOCIKEY_ENABLE
-    velocikey_set_typing_speed(syncinfo->typing_speed);
+    if (syncinfo->status.change_flags & RGBLIGHT_STATUS_CHANGE_VELOCIKEY) {
+        velocikey_set_typing_speed(syncinfo->typing_speed);
+    }
 #        endif
 
     if (syncinfo->status.change_flags & RGBLIGHT_STATUS_CHANGE_MODE) {

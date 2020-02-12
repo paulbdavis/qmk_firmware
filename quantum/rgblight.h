@@ -391,7 +391,13 @@ void rgblight_timer_toggle(void);
 #        define RGBLIGHT_STATUS_CHANGE_HSVS (1 << 1)
 #        define RGBLIGHT_STATUS_CHANGE_TIMER (1 << 2)
 #        define RGBLIGHT_STATUS_ANIMATION_TICK (1 << 3)
+
 #        define RGBLIGHT_STATUS_CHANGE_LAYERS (1 << 4)
+
+#        ifdef VELOCIKEY_ENABLE
+#            define RGBLIGHT_STATUS_CHANGE_VELOCIKEY (1 << 5)
+#        endif
+
 
 typedef struct _rgblight_syncinfo_t {
     rgblight_config_t config;

@@ -12,6 +12,7 @@
 
 #define TYPING_SPEED_MAX_VALUE 200
 uint8_t typing_speed = 0;
+uint8_t last_query = 0;
 
 bool velocikey_enabled(void) { return eeprom_read_byte(EECONFIG_VELOCIKEY) == 1; }
 
@@ -32,6 +33,12 @@ void velocikey_set_typing_speed(uint8_t new_speed) {
 
 uint8_t velocikey_get_typing_speed(void) {
     return typing_speed;
+}
+
+bool velocikey_typing_speed_changed(void) {
+    bool changed = last_query != typing_speed;
+    last_query = typing_speed;
+    return changed;
 }
 
 void velocikey_decelerate(void) {
