@@ -415,9 +415,15 @@ MATRIX_LOOP_END:
 #endif
 
 #ifdef VELOCIKEY_ENABLE
+#    ifdef RGBLIGHT_SPLIT
+    if (is_keyboard_master() && velocikey_enabled()) {
+        velocikey_decelerate();
+    }
+#    else
     if (velocikey_enabled()) {
         velocikey_decelerate();
     }
+#    endif
 #endif
 
     // update LED

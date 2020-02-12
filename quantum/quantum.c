@@ -192,9 +192,15 @@ bool process_record_quantum(keyrecord_t *record) {
     // }
 
 #ifdef VELOCIKEY_ENABLE
+#    ifdef RGBLIGHT_SPLIT
+    if (is_keyboard_master() && velocikey_enabled() && record->event.pressed) {
+        velocikey_accelerate();
+    }
+#    else
     if (velocikey_enabled() && record->event.pressed) {
         velocikey_accelerate();
     }
+#    endif
 #endif
 
 #ifdef WPM_ENABLE
