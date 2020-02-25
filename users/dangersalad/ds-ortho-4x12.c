@@ -18,7 +18,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_ESC             , KC_Q   , KC_D          , KC_R     , KC_W   , KC_B            , KC_J           , KC_F   , KC_U     , KC_P     , KC_SCLN  , KC_BSPC       , \
         KC_TAB             , KC_A   , KC_S          , KC_H     , KC_T   , KC_G            , KC_Y           , KC_N   , KC_E     , KC_O     , KC_I     , KC_QUOT       , \
         KC_LSFT            , KC_Z   , KC_X          , KC_M     , KC_C   , KC_V            , KC_K           , KC_L   , KC_COMM  , KC_DOT   , KC_SLSH  , RSFT_T(KC_ENT) , \
-        TD(TD_NUM_ADJ)     , EMACS  , KC_LALT       , KC_LGUI  , LOWER  , LCTL_T(KC_SPC)  , LALT_T(KC_SPC) , RAISE  , KC_LEFT  , KC_DOWN  , KC_UP    , KC_RGHT \
+        TD(TD_NUM_ADJ)     , EMACS  , KC_LALT       , KC_LGUI  , LOWER  , LCTL_T(KC_SPC)  , LALT_T(KC_SPC) , RAISE  , KC_RCTL  , KC_RALT  , XXXXXXX  , XXXXXXX \
         ),
 
 /* Lower
@@ -70,7 +70,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  */
     [_ADJUST] =  LAYOUT_ortho_4x12( \
         RESET   , XXXXXXX , XXXXXXX  , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , KC_HOME , KC_PGUP   , KC_PSCREEN , KC_SCROLLLOCK , KC_PAUSE , \
-        AG_SWAP , XXXXXXX , RGB_RMOD , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , KC_END  , KC_PGDOWN , KC_INSERT  , XXXXXXX       , XXXXXXX  , \
+        AG_SWAP , VLK_TOG , RGB_RMOD , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , KC_END  , KC_PGDOWN , KC_INSERT  , XXXXXXX       , XXXXXXX  , \
         AG_NORM , RGB_TOG , RGB_MOD  , RGB_HUI , RGB_SAI , RGB_VAI , XXXXXXX , RGB_M_P , RGB_M_B   , RGB_M_SW   , RGB_M_G       , XXXXXXX  , \
         _______ , AU_ON   , AU_OFF   , RGB_HUD , RGB_SAD , RGB_VAD , XXXXXXX , XXXXXXX , XXXXXXX   , XXXXXXX    , XXXXXXX       , XXXXXXX \
         ),
