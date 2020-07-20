@@ -39,22 +39,8 @@ void velocikey_accelerate(void) {
             typing_speed += (VELOCIKEY_MAX_VALUE / 100) * VELOCIKEY_STEP;
         }
         step_cache = 0;
-        rgblight_alter_change_flags(RGBLIGHT_STATUS_CHANGE_VELOCIKEY);
+        rgblight_set_typing_speed_changed();
     }
-}
-
-void velocikey_set_typing_speed(uint8_t new_speed) {
-    typing_speed = new_speed;
-}
-
-uint8_t velocikey_get_typing_speed(void) {
-    return typing_speed;
-}
-
-bool velocikey_typing_speed_changed(void) {
-    bool changed = last_query != typing_speed;
-    last_query = typing_speed;
-    return changed;
 }
 
 void velocikey_decelerate(void) {
@@ -67,8 +53,16 @@ void velocikey_decelerate(void) {
         // Decay even faster at 3/4 of max speed
         if (typing_speed > VELOCIKEY_MAX_VALUE / 4 * 3) typing_speed -= 2;
         decay_timer = timer_read();
-        rgblight_alter_change_flags(RGBLIGHT_STATUS_CHANGE_VELOCIKEY);
+        rgblight_set_typing_speed_changed();
     }
 }
 
 uint8_t velocikey_match_speed(uint8_t minValue, uint8_t maxValue) { return MAX(minValue, maxValue - (maxValue - minValue) * ((float)typing_speed / VELOCIKEY_MAX_VALUE)); }
+
+void velocikey_set_typing_speed(uint8_t new_speed) {
+    typing_speed = new_speed;
+}
+
+uint8_t velocikey_get_typing_speed(void) {
+    return typing_speed;
+}
