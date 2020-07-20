@@ -20,11 +20,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
-/* Use I2C or Serial, not both */
-#define USE_I2C
+/* Use I2C or Serial. Default is Serial */
+// #define USE_I2C
 
 /* Select hand configuration */
-#define MASTER_RIGHT
-/* #define MASTER_LEFT */
+// Defaults:
+// Rev1: EE_HANDS
+// Rev2: SPLIT_HAND_PIN B4
 
-#define C6_AUDIO
+// You can override the defaults (rev1 doesn't support SPLIT_HAND_PIN)
+//#define EE_HANDS
+//#define MASTER_LEFT
+//#define MASTER_RIGHT
+
+
+#define RGBLIGHT_LED_MAP { 0, 1, 2, 3, 4, 5, 11, 6, 7, 8, 9, 10 }
+
