@@ -25,3 +25,5 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 /* #define RGBLIGHT_EFFECT_KNIGHT_LED_NUM 6 */
 
+#define BOOTMAGIC_KEY_SALT KC_RALT
+#define BOOTMAGIC_KEY_SWAP_RALT_RGUI KC_SPACE
