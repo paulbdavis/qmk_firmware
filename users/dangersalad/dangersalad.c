@@ -33,6 +33,14 @@ bool process_record_keymap(uint16_t keycode, keyrecord_t *record) {
     return true;
 }
 
+__attribute__ ((weak))
+void keyboard_post_init_keymap(void) {
+}
+
+void keyboard_post_init_user(void) {
+    keyboard_post_init_keymap();
+}
+
 // typically the LOWER and RAISE keycodes just layer_on() and update_tri_layer(),
 // which causes two layer state changes in quick succession.
 // since there is some issue with updating the rgblight underglow LEDs so rapidly,
