@@ -2,80 +2,24 @@
 #include "dangersalad.h"
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-/* 
- * Base Layer: QWERTY
- *
- * ,-------------------------------------------.                              ,-------------------------------------------.
- * |RAIS/ESC|   Q  |   W  |   E  |   R  |   T  |                              |   Y  |   U  |   I  |   O  |   P  |  | \   |
- * |--------+------+------+------+------+------|                              |------+------+------+------+------+--------|
- * |Ctrl/BS |   A  |   S  |  D   |   F  |   G  |                              |   H  |   J  |   K  |   L  | ;  : |  ' "   |
- * |--------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+--------|
- * | LShift |   Z  |   X  |   C  |   V  |   B  |LShift|LShift|  |LShift|LShift|   N  |   M  | ,  < | . >  | /  ? |  - _   |
- * `----------------------+------+------+------+------+------|  |------+------+------+------+------+----------------------'
- *                        | GUI  | Del  | Enter| Space| Esc  |  | Enter| Space| Tab  | Bksp | AltGr|
- *                        |      |      | Alt  | Lower| Raise|  | Lower| Raise|      |      |      |
- *                        `----------------------------------'  `----------------------------------'
- */
     [_WORKMAN] = LAYOUT(
-        KC_ESC,  KC_Q,    KC_D,    KC_R,           KC_W,    KC_B,                                      KC_J,  KC_F,    KC_U,    KC_P,    KC_SCLN, KC_BSPC ,
-        KC_TAB,  KC_A,    KC_S,    KC_H,           KC_T,    KC_G,                                      KC_Y,  KC_N,    KC_E,    KC_O,    KC_I,    KC_QUOT    ,
-        KC_LSFT, KC_Z,    KC_X,    KC_M,           KC_C,    KC_V,  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_K,  KC_L,    KC_COMM, KC_DOT,  KC_SLSH, RSFT_T(KC_ENT) \
-        ,                          TD(TD_NUM_ADJ), KC_LGUI, LOWER, KC_SPC,  KC_LCTL, KC_LALT, KC_SPC,  RAISE, KC_RCTL, KC_RALT
+        KC_ESC,  KC_Q,    KC_D,    KC_R,           KC_W,    KC_B,                                              KC_J,  KC_F,    KC_U,    KC_P,    KC_SCLN, KC_BSPC ,
+        KC_TAB,  KC_A,    KC_S,    KC_H,           KC_T,    KC_G,                                              KC_Y,  KC_N,    KC_E,    KC_O,    KC_I,    KC_QUOT    ,
+        KC_LSFT, KC_Z,    KC_X,    KC_M,           KC_C,    KC_V,  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,         KC_K,  KC_L,    KC_COMM, KC_DOT,  KC_SLSH, RSFT_T(KC_ENT) \
+        ,                          TD(TD_NUM_ADJ), KC_LGUI, LOWER, KC_LCTL, XXXXXXX, XXXXXXX, LALT_T(KC_SPC),  RAISE, KC_RCTL, KC_RALT
         ),
-/*
- * Lower Layer: Symbols
- *
- * ,-------------------------------------------.                              ,-------------------------------------------.
- * |        |  !   |  @   |  {   |  }   |  |   |                              |      |      |      |      |      |  | \   |
- * |--------+------+------+------+------+------|                              |------+------+------+------+------+--------|
- * |        |  #   |  $   |  (   |  )   |  `   |                              |   +  |  -   |  /   |  *   |  %   |  ' "   |
- * |--------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+--------|
- * |        |  %   |  ^   |  [   |  ]   |  ~   |      |      |  |      |      |   &  |  =   |  ,   |  .   |  / ? | - _    |
- * `----------------------+------+------+------+------+------|  |------+------+------+------+------+----------------------'
- *                        |      |      |      |  ;   |  =   |  |  =   |  ;   |      |      |      |
- *                        |      |      |      |      |      |  |      |      |      |      |      |
- *                        `----------------------------------'  `----------------------------------'
- */
     [_LOWER] = LAYOUT(
         KC_TILD, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC,                                     KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_DEL,
         KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,                                       KC_COLN, KC_UNDS, KC_PLUS, KC_LCBR, KC_RCBR, KC_PIPE,
         KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  _______, _______, _______, _______, XXXXXXX, KC_HOME, KC_PGDN, KC_PGUP, KC_END,  _______ \
         ,                          _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
         ),
-/*
- * Raise Layer: Number keys, media, navigation
- *
- * ,-------------------------------------------.                              ,-------------------------------------------.
- * |        |   1  |  2   |  3   |  4   |  5   |                              |  6   |  7   |  8   |  9   |  0   |        |
- * |--------+------+------+------+------+------|                              |------+------+------+------+------+--------|
- * |        |      | Prev | Play | Next | VolUp|                              | Left | Down | Up   | Right|      |        |
- * |--------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+--------|
- * |        |      |      |      | Mute | VolDn|      |      |  |      |      | MLeft| Mdown| MUp  |MRight|      |        |
- * `----------------------+------+------+------+------+------|  |------+------+------+------+------+----------------------'
- *                        |      |      |      |      |      |  |      |      |      |      |      |
- *                        |      |      |      |      |      |  |      |      |      |      |      |
- *                        `----------------------------------'  `----------------------------------'
- */
     [_RAISE] = LAYOUT(
         KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                                        KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_DEL,
         KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,                                       KC_SCLN, KC_MINS, KC_EQL,  KC_LBRC, KC_RBRC, KC_BSLS,
         KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  _______, _______, _______, _______, XXXXXXX, KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, _______ \
         ,                          _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
         ),
-/*
- * Adjust Layer: Function keys, RGB
- *
- * ,-------------------------------------------.                              ,-------------------------------------------.
- * |        | F1   |  F2  | F3   | F4   | F5   |                              | F6   | F7   |  F8  | F9   | F10  |        |
- * |--------+------+------+------+------+------|                              |------+------+------+------+------+--------|
- * |        | TOG  | SAI  | HUI  | VAI  | MOD  |                              |      |      |      | F11  | F12  |        |
- * |--------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+--------|
- * |        |      | SAD  | HUD  | VAD  | RMOD |      |      |  |      |      |      |      |      |      |      |        |
- * `----------------------+------+------+------+------+------|  |------+------+------+------+------+----------------------'
- *                        |      |      |      |      |      |  |      |      |      |      |      |
- *                        |      |      |      |      |      |  |      |      |      |      |      |
- *                        `----------------------------------'  `----------------------------------'
- */
     [_EMACS] = LAYOUT(
         RESET,      E_WIN_1,       E_WIN_2,     E_WIN_3,       E_WIN_4,        XXXXXXX,                                          XXXXXXX,      XXXXXXX,     XXXXXXX,     XXXXXXX,     XXXXXXX, XXXXXXX,
         E_PROJ_GIT, E_PROJ_SWITCH, E_PROJ_FILE, E_PROJ_SEARCH, E_PROJ_COMPILE, E_PROJ_SHELL,                                     E_FLYC_CHECK, E_FLYC_NEXT, E_FLYC_PREV, E_FLYC_LIST, XXXXXXX, XXXXXXX,
