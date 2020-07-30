@@ -311,7 +311,7 @@ qk_tap_dance_action_t tap_dance_actions[] = {
     [TD_RAISE] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, raise_finished, raise_reset)
 };
 
-uint16_t get_tapping_term(uint16_t keycode) {
+uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
     case LCTL_T(KC_SPC):
     case LALT_T(KC_SPC):
