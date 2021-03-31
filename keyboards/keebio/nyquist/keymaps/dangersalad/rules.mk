@@ -1,0 +1,6 @@
+RGBLIGHT_ENABLE = yes
+# VELOCIKEY_ENABLE = yes
+
+DS_ORTHO_4x12 := yes
+
+BOOTMAGIC_ENABLE = full
