@@ -110,6 +110,8 @@ uint32_t layer_state_set_user(uint32_t state) {
     return state;
 }
 
+// Tap Dance Stuff
+
 typedef struct {
     bool is_press_action;
     int state;
@@ -143,97 +145,12 @@ static tap numpad_tap_state = {
     .state = 0
 };
 
-static tap raise_tap_state = {
-    .is_press_action = true,
-    .state = 0
-};
-
-static tap lower_tap_state = {
-    .is_press_action = true,
-    .state = 0
-};
-
 void pre_numpad_disable (void) {
     // always deactivate these to prevent them getting stuck on since
     // the numpad overrides them
     layer_off(_RAISE);
     unregister_code(KC_LALT);
     unregister_code(KC_LGUI);
-}
-
-void lower_finished (qk_tap_dance_state_t *state, void *user_data) {
-    lower_tap_state.state = cur_dance(state);
-    switch (lower_tap_state.state) {
-    case SINGLE_HOLD:
-        layer_on_update_tri_layer(_LOWER, _LOWER, _RAISE, _EMACS);
-        break;
-    case DOUBLE_HOLD:
-        layer_on(_RAISE);
-        register_code (KC_LGUI);
-        break;
-    case TRIPLE_HOLD:
-        layer_on(_RAISE);
-        register_code(KC_LCTRL);
-        register_code (KC_LGUI);
-        break;
-    }
-}
-
-void lower_reset (qk_tap_dance_state_t *state, void *user_data) {
-    switch (lower_tap_state.state) {
-    case SINGLE_HOLD:
-        layer_off_update_tri_layer(_LOWER, _LOWER, _RAISE, _EMACS);
-        break;
-    case DOUBLE_HOLD:
-        layer_off(_RAISE);
-        unregister_code (KC_LGUI);
-        break;
-    case TRIPLE_HOLD:
-        layer_off(_RAISE);
-        unregister_code(KC_LCTRL);
-        unregister_code (KC_LGUI);
-        break;
-    }
-    lower_tap_state.state = 0;
-}
-
-
-void raise_finished (qk_tap_dance_state_t *state, void *user_data) {
-    raise_tap_state.state = cur_dance(state);
-    switch (raise_tap_state.state) {
-    case SINGLE_TAP:
-        register_code(KC_ENTER);
-        break;
-    case SINGLE_HOLD:
-        layer_on_update_tri_layer(_RAISE, _LOWER, _RAISE, _EMACS);
-        break;
-    case DOUBLE_HOLD:
-        register_code (KC_LGUI);
-        break;
-    case TRIPLE_HOLD:
-        register_code(KC_LCTRL);
-        register_code (KC_LGUI);
-        break;
-    }
-}
-
-void raise_reset (qk_tap_dance_state_t *state, void *user_data) {
-    switch (raise_tap_state.state) {
-    case SINGLE_TAP:
-        unregister_code(KC_ENTER);
-        break;
-    case SINGLE_HOLD:
-        layer_off_update_tri_layer(_RAISE, _LOWER, _RAISE, _EMACS);
-        break;
-    case DOUBLE_HOLD:
-        unregister_code (KC_LGUI);
-        break;
-    case TRIPLE_HOLD:
-        unregister_code(KC_LCTRL);
-        unregister_code (KC_LGUI);
-        break;
-    }
-    raise_tap_state.state = 0;
 }
 
 void numpad_finished (qk_tap_dance_state_t *state, void *user_data) {
@@ -285,30 +202,8 @@ void numpad_reset (qk_tap_dance_state_t *state, void *user_data) {
     numpad_tap_state.state = 0;
 }
 
-void dance_super_finished (qk_tap_dance_state_t *state, void *user_data) {
-    if (state->count == 1) {
-        register_code (KC_LGUI);
-    } else {
-        layer_on(_RAISE);
-        register_code (KC_LGUI);
-    }
-}
-
-void dance_super_reset (qk_tap_dance_state_t *state, void *user_data) {
-    if (state->count == 1) {
-        unregister_code (KC_LGUI);
-    } else {
-        layer_off(_RAISE);
-        unregister_code (KC_LGUI);
-    }
-}
-
-
 qk_tap_dance_action_t tap_dance_actions[] = {
-    [TD_SUPER] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dance_super_finished, dance_super_reset),
     [TD_NUM_ADJ] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, numpad_finished, numpad_reset),
-    [TD_LOWER] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, lower_finished, lower_reset),
-    [TD_RAISE] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, raise_finished, raise_reset)
 };
 
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
@@ -322,6 +217,7 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
 }
 
 
+// Main key handling process
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
     case WORKMAN:
