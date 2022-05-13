@@ -284,37 +284,37 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         }
         return true;
         break;
-    case E_PROJ_SWITCH:
+    case E_P_SW:
         if (record->event.pressed) {
             SEND_STRING(SS_LCTRL("c")"pp");
         }
         return true;
         break;
-    case E_PROJ_SHELL:
+    case E_P_SHELL:
         if (record->event.pressed) {
             SEND_STRING(SS_LCTRL("c")"pxe");
         }
         return true;
         break;
-    case E_PROJ_FILE:
+    case E_P_FILE:
         if (record->event.pressed) {
             SEND_STRING(SS_LCTRL("c")"pf");
         }
         return true;
         break;
-    case E_PROJ_SEARCH:
+    case E_P_SRCH:
         if (record->event.pressed) {
             SEND_STRING(SS_LCTRL("c")"pss");
         }
         return true;
         break;
-    case E_PROJ_COMPILE:
+    case E_P_COMP:
         if (record->event.pressed) {
             SEND_STRING(SS_LCTRL("c")"pc");
         }
         return true;
         break;
-    case E_PROJ_GIT:
+    case E_P_GIT:
         if (record->event.pressed) {
             SEND_STRING(SS_LCTRL("c")"pv");
         }

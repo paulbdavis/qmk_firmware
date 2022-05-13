@@ -86,9 +86,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * `-----------------------------------------'  `-----------------------------------------'
  */
     [_EMACS] =  LAYOUT_ortho_4x12( \
-        RESET      , E_WIN_1       , E_WIN_2     , E_WIN_3       , E_WIN_4         , XXXXXXX      , XXXXXXX      , XXXXXXX     , XXXXXXX     , XXXXXXX     , E_WIN_0 , XXXXXXX , \
-        E_PROJ_GIT , E_PROJ_SWITCH , E_PROJ_FILE , E_PROJ_SEARCH , E_PROJ_COMPILE  , E_PROJ_SHELL , E_FLYC_CHECK , E_FLYC_NEXT , E_FLYC_PREV , E_FLYC_LIST , XXXXXXX , XXXXXXX , \
-        XXXXXXX    , XXXXXXX       , XXXXXXX     , XXXXXXX       , E_SWITCH_BUFFER , XXXXXXX      , XXXXXXX      , E_FIND_FILE , XXXXXXX     , XXXXXXX     , XXXXXXX , XXXXXXX , \
+        RESET   , E_WIN_1 , E_WIN_2  , E_WIN_3  , E_WIN_4         , XXXXXXX   , XXXXXXX      , XXXXXXX     , XXXXXXX     , XXXXXXX     , E_WIN_0 , XXXXXXX , \
+        E_P_GIT , E_P_SW  , E_P_FILE , E_P_SRCH , E_P_COMP        , E_P_SHELL , E_FLYC_CHECK , E_FLYC_NEXT , E_FLYC_PREV , E_FLYC_LIST , XXXXXXX , XXXXXXX , \
+        XXXXXXX , XXXXXXX , XXXXXXX  , XXXXXXX  , E_SWITCH_BUFFER , XXXXXXX   , XXXXXXX      , E_FIND_FILE , XXXXXXX     , XXXXXXX     , XXXXXXX , XXXXXXX , \
         _______ , _______ , _______ , _______ , _______ , _______ , _______ , _______ , _______ , _______ , _______ , _______ \
         ),
 
