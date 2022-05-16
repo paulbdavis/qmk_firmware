@@ -60,7 +60,6 @@ void layer_off_update_tri_layer(uint8_t layer_off, uint8_t layer1, uint8_t layer
 }
 
 #ifdef RGBLIGHT_ENABLE
-
 static inline void restore_light(void) {
     rgblight_config_t saved = { .raw = eeconfig_read_rgblight() };
     rgblight_sethsv_noeeprom(saved.hue, saved.sat, saved.val);
@@ -68,7 +67,14 @@ static inline void restore_light(void) {
 }
 #endif
 
+#ifdef RGB_MATRIX_ENABLE
+static inline void restore_light(void) {
+    rgb_matrix_reload_from_eeprom();
+}
+#endif
+
 uint32_t layer_state_set_user(uint32_t state) {
+    
 #ifdef RGBLIGHT_ENABLE
     switch (biton32(state)) {
     case _RAISE:
@@ -107,6 +113,32 @@ uint32_t layer_state_set_user(uint32_t state) {
         break;
     }
 #endif
+
+    
+#ifdef RGB_MATRIX_ENABLE
+    switch (biton32(state)) {
+    case _RAISE:
+        rgblight_sethsv_noeeprom(HSV_ORANGE);
+        break;
+    case _LOWER:
+        rgblight_sethsv_noeeprom(HSV_CYAN);
+        break;
+    case _ADJUST:
+        rgblight_sethsv_noeeprom(HSV_WHITE);
+        break;
+    case _NUMPAD:
+        rgblight_sethsv_noeeprom(HSV_RED);
+        break;
+    case _EMACS:
+        rgblight_sethsv_noeeprom(HSV_MAGENTA);
+        break;
+    default:
+        restore_light();
+        break;
+    }
+#endif
+
+    
     return state;
 }
 
