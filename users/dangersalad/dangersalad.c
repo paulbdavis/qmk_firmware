@@ -38,6 +38,14 @@ void keyboard_post_init_keymap(void) {
 }
 
 void keyboard_post_init_user(void) {
+#ifdef RGB_MATRIX_ENABLE
+#ifdef ENABLE_RGB_MATRIX_TYPING_HEATMAP
+        rgb_matrix_mode(RGB_MATRIX_TYPING_HEATMAP);
+#endif
+        /* rgblight_sethsv(HSV_PURPLE); */
+        rgblight_sethsv(185, 255, 255);
+#endif
+        
     keyboard_post_init_keymap();
 }
 
@@ -115,28 +123,39 @@ uint32_t layer_state_set_user(uint32_t state) {
 #endif
 
     
-#ifdef RGB_MATRIX_ENABLE
-    switch (biton32(state)) {
-    case _RAISE:
-        rgblight_sethsv_noeeprom(HSV_ORANGE);
-        break;
-    case _LOWER:
-        rgblight_sethsv_noeeprom(HSV_CYAN);
-        break;
-    case _ADJUST:
-        rgblight_sethsv_noeeprom(HSV_WHITE);
-        break;
-    case _NUMPAD:
-        rgblight_sethsv_noeeprom(HSV_RED);
-        break;
-    case _EMACS:
-        rgblight_sethsv_noeeprom(HSV_MAGENTA);
-        break;
-    default:
-        restore_light();
-        break;
-    }
-#endif
+/* #ifdef RGB_MATRIX_ENABLE */
+/*     switch (biton32(state)) { */
+/*     case _RAISE: */
+/* #ifdef ENABLE_RGB_MATRIX_GRADIENT_UP_DOWN */
+/*         rgb_matrix_mode_noeeprom(RGB_MATRIX_GRADIENT_UP_DOWN); */
+/* #endif */
+/*         rgblight_sethsv_noeeprom(HSV_ORANGE); */
+/*         break; */
+/*     case _LOWER: */
+/* #ifdef ENABLE_RGB_MATRIX_GRADIENT_UP_DOWN */
+/*         rgb_matrix_mode_noeeprom(RGB_MATRIX_GRADIENT_UP_DOWN); */
+/* #endif */
+/*         rgblight_sethsv_noeeprom(HSV_CYAN); */
+/*         break; */
+/*     case _ADJUST: */
+/*         break; */
+/*     case _NUMPAD: */
+/* #ifdef ENABLE_RGB_MATRIX_GRADIENT_UP_DOWN */
+/*         rgb_matrix_mode_noeeprom(RGB_MATRIX_GRADIENT_UP_DOWN); */
+/* #endif */
+/*         rgblight_sethsv_noeeprom(HSV_RED); */
+/*         break; */
+/*     case _EMACS: */
+/* #ifdef ENABLE_RGB_MATRIX_GRADIENT_UP_DOWN */
+/*         rgb_matrix_mode_noeeprom(RGB_MATRIX_GRADIENT_UP_DOWN); */
+/* #endif */
+/*         rgblight_sethsv_noeeprom(HSV_MAGENTA); */
+/*         break; */
+/*     default: */
+/*         restore_light(); */
+/*         break; */
+/*     } */
+/* #endif */
 
     
     return state;
@@ -173,6 +192,11 @@ int cur_dance (qk_tap_dance_state_t *state) {
 
 //instanalize an instance of 'tap' for the 'x' tap dance.
 static tap numpad_tap_state = {
+    .is_press_action = true,
+    .state = 0
+};
+
+static tap lgui_num_tap_state = {
     .is_press_action = true,
     .state = 0
 };
@@ -234,7 +258,50 @@ void numpad_reset (qk_tap_dance_state_t *state, void *user_data) {
     numpad_tap_state.state = 0;
 }
 
+void lgui_num_finished (qk_tap_dance_state_t *state, void *user_data) {
+    pre_numpad_disable();
+    lgui_num_tap_state.state = cur_dance(state);
+    switch (lgui_num_tap_state.state) {
+    case SINGLE_TAP: 
+    case SINGLE_HOLD:
+        layer_on(_NUMPAD);
+#ifdef AUDIO_ENABLE
+        play_numpad_sound();
+#endif
+        break;
+    case DOUBLE_TAP:
+    case DOUBLE_SINGLE_TAP:
+    case DOUBLE_HOLD: 
+    case TRIPLE_TAP: 
+    case TRIPLE_HOLD:
+        register_code(KC_LGUI);
+        break;
+    }
+}
+
+void lgui_num_reset (qk_tap_dance_state_t *state, void *user_data) {
+    pre_numpad_disable();
+    switch (lgui_num_tap_state.state) {
+    case SINGLE_TAP:
+    case SINGLE_HOLD:
+        layer_off(_NUMPAD);
+#ifdef AUDIO_ENABLE
+        play_numpad_exit_sound();
+#endif
+        break;
+    case DOUBLE_TAP:
+    case DOUBLE_SINGLE_TAP:
+    case DOUBLE_HOLD: 
+    case TRIPLE_TAP: 
+    case TRIPLE_HOLD:
+        unregister_code(KC_LGUI);
+        break;
+    }
+    lgui_num_tap_state.state = 0;
+}
+
 qk_tap_dance_action_t tap_dance_actions[] = {
+    [TD_LGUI_NUM] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, lgui_num_finished, lgui_num_reset),
     [TD_NUM_ADJ] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, numpad_finished, numpad_reset),
 };
 
