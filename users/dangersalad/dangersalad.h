@@ -41,7 +41,8 @@ enum  {
   TD_SUPER = 0,
   TD_NUM_ADJ,
   TD_LOWER,
-  TD_RAISE
+  TD_RAISE,
+  TD_LGUI_NUM
 };
 
 //**************** Definitions needed for quad function to work *********************//
